@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #070614; --ink: #ffffff; --gold: #f6c453; --gold-2: #ffe7a3;
+        --violet: #a77bff; --violet-2: #6d3df0; --cyan: #6fe3ff; --red: #ff4d6d;
+        --glass: rgba(14, 10, 40, 0.82);
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-cap: "Montserrat", sans-serif;
+        --font-label: "Oswald", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* top: talking head · bottom: gameplay */
+      #facepanel { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; z-index: 10; }
+      #facewrap { position: absolute; inset: 0; transform-origin: 55% 45%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
+      #gamepanel { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 12; background: #0b0a1e; }
+      .shotwrap { position: absolute; inset: 0; transform-origin: 50% 60%; }
+      .shot { position: absolute; left: 0; top: -44px; width: 1080px; height: 1004px; object-fit: cover; }
+      #seam { position: absolute; left: 0; right: 0; top: 954px; height: 12px; z-index: 40;
+        background: linear-gradient(90deg, var(--violet-2), var(--cyan), var(--gold)); box-shadow: 0 0 34px rgba(167,123,255,0.9); }
+      #shade-face { position: absolute; left: 0; right: 0; top: 0; height: 960px; z-index: 30; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,6,20,0.5) 0%, rgba(7,6,20,0) 26%, rgba(7,6,20,0) 70%, rgba(7,6,20,0.6) 100%); }
+      #shade-game { position: absolute; left: 0; right: 0; top: 960px; height: 960px; z-index: 30; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,6,20,0.55) 0%, rgba(7,6,20,0) 22%, rgba(7,6,20,0) 60%, rgba(7,6,20,0.85) 100%); }
+      .dim { position: absolute; left: 0; right: 0; top: 960px; height: 960px; z-index: 32; background: rgba(8,6,26,0.62); }
+      #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+      #standin { position: absolute; right: 28px; top: 330px; z-index: 92; font-family: var(--font-label); font-weight: 700;
+        font-size: 26px; letter-spacing: 0.08em; color: #fff; background: rgba(255,77,109,0.92); padding: 6px 14px; border-radius: 8px; }
+
+      /* progress bar */
+      #prog { position: absolute; left: 90px; right: 90px; top: 196px; height: 10px; z-index: 70; border-radius: 10px; background: rgba(255,255,255,0.2); }
+      #prog-fill { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(90deg, var(--violet), var(--cyan)); transform-origin: 0 50%; }
+
+      /* section tags */
+      .sec { position: absolute; left: 0; right: 0; top: 232px; height: 90px; z-index: 72; }
+      .sec-in { position: absolute; left: 90px; top: 0; display: flex; align-items: center; gap: 16px; padding: 12px 24px 12px 14px;
+        border-radius: 14px; background: var(--glass); border: 2px solid rgba(167,123,255,0.7); }
+      .sec-num { font-family: var(--font-display); font-size: 36px; color: #0b0f22; background: var(--gold); border-radius: 10px; padding: 2px 12px; }
+      .sec-label { font-family: var(--font-label); font-weight: 700; font-size: 36px; color: #fff; letter-spacing: 0.05em; }
+
+      /* captions on the seam */
+      #captions { position: absolute; left: 0; right: 0; top: 850px; height: 220px; z-index: 80; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 220px; text-align: center; }
+      .cap-in { position: absolute; left: 70px; right: 70px; top: 46px; text-align: center; transform-origin: 50% 60%; }
+      .w { font-family: var(--font-cap); font-weight: 900; font-size: 100px; line-height: 1.05; color: #fff;
+        -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000, 0 0 26px rgba(0,0,0,0.7); }
+      .w.g { color: var(--gold); }
+      .w + .w { margin-left: 0.26em; }
+
+      /* cards in the game panel */
+      .card { position: absolute; left: 0; right: 0; top: 1090px; height: 600px; z-index: 76; text-align: center; }
+      .card-in { position: absolute; left: 60px; right: 60px; top: 0; height: 600px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 22px; }
+      .big { font-family: var(--font-display); line-height: 0.95; -webkit-text-stroke: 6px #000; paint-order: stroke fill;
+        text-shadow: 0 10px 0 #000, 0 0 60px rgba(167,123,255,0.85); }
+      .sub { font-family: var(--font-display); font-size: 62px; color: #fff; -webkit-text-stroke: 3px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      .gold { color: var(--gold); } .cyan { color: var(--cyan); } .violet { color: #c9b0ff; } .white { color: #fff; } .red { color: var(--red); }
+      .chip { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.12em; color: #0b0f22;
+        background: var(--gold); padding: 8px 22px; border-radius: 10px; }
+      .chip.v { background: linear-gradient(90deg, var(--violet-2), #b04cff); color: #fff; }
+      .row { display: flex; gap: 20px; align-items: stretch; justify-content: center; width: 100%; }
+      .tile { flex: 1; padding: 22px 14px 24px; border-radius: 26px; background: var(--glass); border: 3px solid rgba(167,123,255,0.75);
+        box-shadow: 0 0 40px rgba(109,61,240,0.45), inset 0 0 0 1px rgba(255,255,255,0.08); }
+      .tile.hot { border-color: var(--gold); box-shadow: 0 0 50px rgba(246,196,83,0.5); }
+      .t-k { font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.12em; color: var(--cyan); }
+      .t-v { font-family: var(--font-display); font-size: 84px; line-height: 1; color: #fff; margin-top: 6px; }
+      .t-v small { font-size: 44px; color: var(--gold); }
+      .t-s { font-family: var(--font-cap); font-weight: 800; font-size: 32px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+      .bar { width: 100%; display: flex; align-items: center; gap: 22px; padding: 20px 28px; border-radius: 24px; background: var(--glass);
+        border: 3px solid rgba(167,123,255,0.75); text-align: left; box-shadow: 0 0 40px rgba(109,61,240,0.4); }
+      .bar.hot { border-color: var(--gold); box-shadow: 0 0 50px rgba(246,196,83,0.45); }
+      .b-n { flex: none; min-width: 84px; height: 84px; padding: 0 14px; border-radius: 18px; background: var(--gold); color: #0b0f22; font-family: var(--font-display);
+        font-size: 46px; display: flex; align-items: center; justify-content: center; }
+      .b-n.v { background: linear-gradient(135deg, var(--violet-2), #b04cff); color: #fff; }
+      .b-t { font-family: var(--font-display); font-size: 50px; line-height: 1.05; color: #fff; }
+      .b-t small { display: block; font-family: var(--font-cap); font-weight: 800; font-size: 30px; color: var(--cyan); margin-top: 4px; letter-spacing: 0.02em; }
+      .pips { display: flex; gap: 26px; justify-content: center; }
+      .pip { width: 110px; height: 110px; border-radius: 50%; border: 8px solid rgba(255,255,255,0.85); background: rgba(10,8,30,0.6); position: relative; }
+      .pip i { position: absolute; inset: 10px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--cyan) 35%, var(--violet-2) 100%);
+        box-shadow: 0 0 40px var(--violet); }
+      .slot { flex: 1; padding: 18px 8px 20px; border-radius: 24px; background: var(--glass); border: 3px solid rgba(167,123,255,0.75); }
+      .slot .s-ic { width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-size: 44px; color: #fff; }
+      .slot .s-n { font-family: var(--font-display); font-size: 36px; color: #fff; }
+      .slot .s-r { font-family: var(--font-cap); font-weight: 800; font-size: 24px; color: var(--cyan); margin-top: 2px; }
+      .el-electro { background: linear-gradient(135deg, #b04cff, #6d3df0); } .el-cryo { background: linear-gradient(135deg, #9fe8ff, #3fa9d8); }
+      .el-anemo { background: linear-gradient(135deg, #8ff0c8, #2fae8a); } .el-flex { background: linear-gradient(135deg, #8a8fa8, #4a4f68); }
+      #follow-btn { display: inline-block; font-family: var(--font-display); font-size: 66px; color: #0b0f22; background: var(--gold);
+        padding: 22px 60px; border-radius: 999px; box-shadow: 0 10px 0 #8a5c00; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="55.38" data-width="1080" data-height="1920">
+      <div id="facepanel"><div id="facewrap">
+        <video id="face" class="clip face" src="assets/face/standin.mp4" data-start="0" data-duration="55.38" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.12,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.7,&quot;whites&quot;:-0.3,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.34}}"></video>
+      </div></div>
+      <div id="gamepanel">
+        <div class="shotwrap" id="w-0" style="z-index:20"><video id="v-0-A" class="clip shot" src="assets/clips/A.mp4" data-start="0" data-duration="2.4" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.03,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-1" style="z-index:21"><video id="v-1-A2" class="clip shot" src="assets/clips/A2.mp4" data-start="2.4" data-duration="2.884" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-2" style="z-index:22"><video id="v-2-S1" class="clip shot" src="assets/clips/S1.mp4" data-start="5.284" data-duration="1.923" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.03,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-3" style="z-index:23"><video id="v-3-S2" class="clip shot" src="assets/clips/S2.mp4" data-start="7.207" data-duration="2.691" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.07,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.2,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-4" style="z-index:24"><video id="v-4-M1" class="clip shot" src="assets/clips/M1.mp4" data-start="9.898" data-duration="2.308" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.03,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.22,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-5" style="z-index:25"><video id="v-5-M2" class="clip shot" src="assets/clips/M2.mp4" data-start="12.206" data-duration="2.635" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-6" style="z-index:26"><video id="v-6-M3" class="clip shot" src="assets/clips/M3.mp4" data-start="14.841" data-duration="2.812" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-7" style="z-index:27"><video id="v-7-M4" class="clip shot" src="assets/clips/M4.mp4" data-start="17.653" data-duration="3.107" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.03,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.3,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-8" style="z-index:28"><video id="v-8-M5" class="clip shot" src="assets/clips/M5.mp4" data-start="20.76" data-duration="2.414" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-9" style="z-index:29"><video id="v-9-M5b" class="clip shot" src="assets/clips/M5b.mp4" data-start="23.174" data-duration="2.677" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-10" style="z-index:30"><video id="v-10-M6" class="clip shot" src="assets/clips/M6.mp4" data-start="25.851" data-duration="2.628" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.22,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.2,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-11" style="z-index:31"><video id="v-11-B0" class="clip shot" src="assets/clips/B0.mp4" data-start="28.479" data-duration="4.613" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-12" style="z-index:32"><video id="v-12-B1" class="clip shot" src="assets/clips/B1.mp4" data-start="33.092" data-duration="4.456" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-13" style="z-index:33"><video id="v-13-B2" class="clip shot" src="assets/clips/B2.mp4" data-start="37.548" data-duration="3.834" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-14" style="z-index:34"><video id="v-14-B3" class="clip shot" src="assets/clips/B3.mp4" data-start="41.382" data-duration="5.061" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.14,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.2,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-15" style="z-index:35"><video id="v-15-T1" class="clip shot" src="assets/clips/T1.mp4" data-start="46.443" data-duration="2.546" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-16" style="z-index:36"><video id="v-16-Z" class="clip shot" src="assets/clips/Z.mp4" data-start="48.989" data-duration="3.335" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.03,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+        <div class="shotwrap" id="w-17" style="z-index:37"><video id="v-17-A2" class="clip shot" src="assets/clips/A2.mp4" data-start="52.324" data-duration="3.056" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.02,&quot;contrast&quot;:0.14,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.12,&quot;blacks&quot;:-0.06,&quot;vibrance&quot;:0.24,&quot;saturation&quot;:0.04,&quot;temperature&quot;:-0.03,&quot;tint&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.26},&quot;effects&quot;:{&quot;bloom&quot;:0.2}}"></video></div>
+      </div>
+      <div id="shade-face"></div>
+      <div id="shade-game"></div>
+      <div id="seam"></div>
+      <div id="dim-hook2" class="clip dim" data-start="2.4" data-duration="2.884" data-track-index="3"></div>
+      <div id="dim-modes" class="clip dim" data-start="12.206" data-duration="5.447" data-track-index="3"></div>
+      <div id="dim-talent" class="clip dim" data-start="28.479" data-duration="4.613" data-track-index="3"></div>
+      <div id="dim-stats" class="clip dim" data-start="33.092" data-duration="4.456" data-track-index="3"></div>
+      <div id="dim-arti" class="clip dim" data-start="37.548" data-duration="3.834" data-track-index="3"></div>
+      <div id="dim-weapon" class="clip dim" data-start="41.382" data-duration="5.061" data-track-index="3"></div>
+      <div id="dim-team" class="clip dim" data-start="46.443" data-duration="2.546" data-track-index="3"></div>
+      <div id="dim-end" class="clip dim" data-start="52.324" data-duration="3.056" data-track-index="3"></div>
+      <div id="prog"><div id="prog-fill"></div></div>
+      <div id="standin">STAND-IN · GANTI DGN TALKING HEAD KAU</div>
+      <div id="sec-01" class="clip sec" data-start="5.254" data-duration="4.614" data-track-index="5"><div class="sec-in"><span class="sec-num">#01</span><span class="sec-label">SHOWCASE</span></div></div>
+      <div id="sec-02" class="clip sec" data-start="9.868" data-duration="18.581" data-track-index="5"><div class="sec-in"><span class="sec-num">#02</span><span class="sec-label">CARA MAIN</span></div></div>
+      <div id="sec-03" class="clip sec" data-start="28.449" data-duration="17.964" data-track-index="5"><div class="sec-in"><span class="sec-num">#03</span><span class="sec-label">BUILD</span></div></div>
+      <div id="sec-04" class="clip sec" data-start="46.413" data-duration="2.546" data-track-index="5"><div class="sec-in"><span class="sec-num">#04</span><span class="sec-label">TEAM COMP</span></div></div>
+      <div id="sec-05" class="clip sec" data-start="48.959" data-duration="3.335" data-track-index="5"><div class="sec-in"><span class="sec-num">#05</span><span class="sec-label">TEAM MASA DEPAN</span></div></div>
+      <div id="card-hook" class="clip card" data-start="0" data-duration="2.4" data-track-index="7"><div class="card-in"><span class="chip" data-at="0">GUIDE 60 SAAT</span><div class="big white" style="font-size:96px" data-at="0">JANGAN PULL</div><div class="big gold" style="font-size:210px" data-at="0" data-fx="slam">MITYA</div><div class="sub" data-at="0">SEBELUM TENGOK NI!</div></div></div>
+      <div id="card-hook2" class="clip card" data-start="2.4" data-duration="2.884" data-track-index="7"><div class="card-in"><div class="row"><div class="tile hot" data-at="2.4" data-fx="left"><div class="t-k">01</div><div class="t-v" style="font-size:70px">CARA MAIN</div></div><div class="tile hot" data-at="3.087" data-fx="right"><div class="t-k">02</div><div class="t-v" style="font-size:70px">BUILD</div></div></div><div class="big cyan" style="font-size:120px" data-at="3.866" data-fx="slam">&lt; 60 SAAT</div></div></div>
+      <div id="card-name" class="clip card" data-start="5.284" data-duration="1.923" data-track-index="7"><div class="card-in"><div class="big white" style="font-size:170px" data-at="5.284" data-fx="slam">MITYA</div><div class="sub gold" data-at="5.797">★★★★★</div><span class="chip v" data-at="6.34">ELECTRO · CATALYST</span></div></div>
+      <div id="card-idle" class="clip card" data-start="8.08" data-duration="1.818" data-track-index="7"><div class="card-in"><div style="height:330px"></div><span class="chip" data-at="8.08">RUPA + IDLE ANIMATION</span><div class="sub" data-at="8.991">NAMPAK MAHAL ✦</div></div></div>
+      <div id="card-twomode" class="clip card" data-start="11.115" data-duration="1.091" data-track-index="7"><div class="card-in"><div class="big gold" style="font-size:230px" data-at="11.535" data-fx="slam">2 MODE</div></div></div>
+      <div id="card-modes" class="clip card" data-start="12.206" data-duration="5.447" data-track-index="7"><div class="card-in"><div class="bar" data-at="12.206" data-fx="left"><div class="b-n v">TAP</div><div class="b-t">SUB DPS<small>OFF-FIELD · ikon kiub</small></div></div><div class="bar hot" data-at="14.841" data-fx="right"><div class="b-n">HOLD</div><div class="b-t">MAIN DPS<small>ON-FIELD · ikon ∞ infinity</small></div></div></div></div>
+      <div id="card-swap" class="clip card" data-start="17.653" data-duration="3.107" data-track-index="7"><div class="card-in"><div class="sub red" data-at="17.653">TERSALAH TEKAN?</div><div class="big cyan" style="font-size:118px" data-at="18.45" data-fx="slam">TEKAN SKILL<br/>LAGI ⇄</div><span class="chip" data-at="19.946">TERUS TUKAR MODE</span></div></div>
+      <div id="card-stack" class="clip card" data-start="20.76" data-duration="3.153" data-track-index="7"><div class="card-in"><span class="chip v" data-at="21.385">STELLAR-CONDUCT = +STACK</span><div class="pips"><div class="pip"><i data-at="22.072" data-fx="fill"></i></div><div class="pip"><i data-at="22.328" data-fx="fill"></i></div><div class="pip"><i data-at="22.646" data-fx="fill"></i></div><div class="pip"><i data-at="23.462" data-fx="fill"></i></div></div><div class="sub" data-at="23.124">STACK PENUH…</div></div></div>
+      <div id="card-meteor" class="clip card" data-start="23.913" data-duration="1.938" data-track-index="7"><div class="card-in"><div class="big gold" style="font-size:190px" data-at="23.913" data-fx="slam">METEOR!</div><div class="big red" style="font-size:130px" data-at="25.334" data-fx="slam">GILA!</div></div></div>
+      <div id="card-burst" class="clip card" data-start="25.851" data-duration="2.628" data-track-index="7"><div class="card-in"><span class="chip v" data-at="25.851">ELEMENTAL BURST</span><div class="big cyan" style="font-size:200px" data-at="27.665" data-fx="slam">+3 STACK</div></div></div>
+      <div id="card-talent" class="clip card" data-start="28.479" data-duration="4.613" data-track-index="7"><div class="card-in"><span class="chip" data-at="29.091">TALENT PRIORITY</span><div class="bar hot" data-at="29.901" data-fx="left"><div class="b-n">1</div><div class="b-t">NORMAL ATTACK</div></div><div class="bar" data-at="31.53" data-fx="left"><div class="b-n v">2</div><div class="b-t">ELEMENTAL BURST</div></div><div class="bar" data-at="32.514" data-fx="left"><div class="b-n v">3</div><div class="b-t">ELEMENTAL SKILL</div></div></div></div>
+      <div id="card-stats" class="clip card" data-start="33.092" data-duration="4.456" data-track-index="7"><div class="card-in"><span class="chip" data-at="33.092">TARGET STAT</span><div class="row"><div class="tile hot" data-at="33.554"><div class="t-k">CRIT</div><div class="t-v">70<small> / </small>200</div><div class="t-s">Rate / DMG</div></div></div><div class="row"><div class="tile" data-at="35.18"><div class="t-k">EM</div><div class="t-v">500<small>+</small></div><div class="t-s">Elemental Mastery</div></div><div class="tile" data-at="36.181"><div class="t-k">ER</div><div class="t-v">140<small>%</small></div><div class="t-s">Energy Recharge</div></div></div></div></div>
+      <div id="card-arti" class="clip card" data-start="37.548" data-duration="3.834" data-track-index="7"><div class="card-in"><span class="chip" data-at="37.548">ARTIFACT</span><div class="bar hot" data-at="38.693" data-fx="left"><div class="b-n">4PC</div><div class="b-t">DISENCHANTMENT IN DEEP SHADOW<small>pilihan utama</small></div></div><div class="bar" data-at="39.943" data-fx="right"><div class="b-n v">ATAU</div><div class="b-t">GILDED DREAMS<small>2pc + 2pc Wanderer's Troupe</small></div></div><div class="sub" style="font-size:40px" data-at="40.373">SANDS EM · GOBLET EM · CIRCLET CRIT</div></div></div>
+      <div id="card-weapon" class="clip card" data-start="41.382" data-duration="5.061" data-track-index="7"><div class="card-in"><span class="chip" data-at="41.382">WEAPON</span><div class="bar hot" data-at="41.956" data-fx="left"><div class="b-n">BiS</div><div class="b-t">SIGNATURE MITYA<small>paling padu</small></div></div><div class="bar" data-at="43.795" data-fx="right"><div class="b-n v">5★</div><div class="b-t">KAGURA'S VERITY</div></div><div class="bar" data-at="45.281" data-fx="right"><div class="b-n v">F2P</div><div class="b-t">THE WIDSITH</div></div></div></div>
+      <div id="card-team" class="clip card" data-start="46.443" data-duration="2.546" data-track-index="7"><div class="card-in"><span class="chip" data-at="46.443">TEAM STELLAR-CONDUCT</span><div class="row"><div class="slot" data-at="46.443"><div class="s-ic el-electro">⚡</div><div class="s-n">MITYA</div><div class="s-r">DPS</div></div><div class="slot" data-at="47.437"><div class="s-ic el-cryo">❄</div><div class="s-n">CRYO</div><div class="s-r">trigger</div></div><div class="slot" data-at="48.206"><div class="s-ic el-anemo">🜁</div><div class="s-n">SUCROSE</div><div class="s-r">EM buff</div></div><div class="slot" data-at="48.456"><div class="s-ic el-flex">+</div><div class="s-n">FLEX</div><div class="s-r">Cryo / healer</div></div></div><div class="sub" style="font-size:42px" data-at="47.693">ELECTRO + CRYO = STELLAR-CONDUCT</div></div></div>
+      <div id="card-tsar" class="clip card" data-start="48.989" data-duration="3.335" data-track-index="7"><div class="card-in"><span class="chip v" data-at="48.989">TEKAAN AKU · VERSION AKAN DATANG</span><div style="height:150px"></div><div class="big white" style="font-size:112px" data-at="49.871" data-fx="slam">MITYA <span class="gold">×</span></div><div class="big cyan" style="font-size:150px" data-at="51.397" data-fx="slam">TSARITSA?</div></div></div>
+      <div id="card-end" class="clip card" data-start="52.324" data-duration="3.056" data-track-index="7"><div class="card-in"><div class="big gold" style="font-size:120px" data-at="52.324" data-fx="slam">SIMPAN PRIMO!</div><div id="follow-btn" data-at="53.408" data-pulse="1">FOLLOW FOR MORE</div></div></div>
+      <div id="captions" data-track-kind="captions">
+        <div id="cap-0" class="clip cap" data-start="2.43" data-duration="0.522"><div class="cap-in"><span class="w">Cara</span><span class="w g">main</span></div></div>
+        <div id="cap-1" class="clip cap" data-start="2.963" data-duration="0.389"><div class="cap-in"><span class="w">dan</span><span class="w g">build</span></div></div>
+        <div id="cap-2" class="clip cap" data-start="3.362" data-duration="0.359"><div class="cap-in"><span class="w g">Mitya</span></div></div>
+        <div id="cap-3" class="clip cap" data-start="3.916" data-duration="0.799"><div class="cap-in"><span class="w">bawah</span><span class="w g">60</span></div></div>
+        <div id="cap-4" class="clip cap" data-start="4.725" data-duration="0.379"><div class="cap-in"><span class="w g">second</span></div></div>
+        <div id="cap-5" class="clip cap" data-start="5.314" data-duration="0.389"><div class="cap-in"><span class="w g">Mitya</span></div></div>
+        <div id="cap-6" class="clip cap" data-start="5.847" data-duration="0.522"><div class="cap-in"><span class="w g">5</span><span class="w g">star</span></div></div>
+        <div id="cap-7" class="clip cap" data-start="6.39" data-duration="0.697"><div class="cap-in"><span class="w g">Electro</span><span class="w">baru</span></div></div>
+        <div id="cap-8" class="clip cap" data-start="7.207" data-duration="0.461"><div class="cap-in"><span class="w">Tengok</span><span class="w">rupa</span></div></div>
+        <div id="cap-9" class="clip cap" data-start="7.689" data-duration="0.3"><div class="cap-in"><span class="w">dia</span></div></div>
+        <div id="cap-10" class="clip cap" data-start="8.13" data-duration="0.481"><div class="cap-in"><span class="w">idle</span><span class="w">dia</span></div></div>
+        <div id="cap-11" class="clip cap" data-start="8.632" data-duration="0.389"><div class="cap-in"><span class="w">pun</span><span class="w">dah</span></div></div>
+        <div id="cap-12" class="clip cap" data-start="9.041" data-duration="0.677"><div class="cap-in"><span class="w">nampak</span><span class="w g">mahal</span></div></div>
+        <div id="cap-13" class="clip cap" data-start="9.928" data-duration="0.564"><div class="cap-in"><span class="w">Mechanic</span><span class="w">dia</span></div></div>
+        <div id="cap-14" class="clip cap" data-start="10.502" data-duration="0.543"><div class="cap-in"><span class="w">senang</span><span class="w">je</span></div></div>
+        <div id="cap-15" class="clip cap" data-start="11.165" data-duration="0.389"><div class="cap-in"><span class="w">Dia</span><span class="w">ada</span></div></div>
+        <div id="cap-16" class="clip cap" data-start="11.585" data-duration="0.441"><div class="cap-in"><span class="w g">2</span><span class="w g">mode</span></div></div>
+        <div id="cap-17" class="clip cap" data-start="12.236" data-duration="0.563"><div class="cap-in"><span class="w g">Tap</span><span class="w g">skill</span></div></div>
+        <div id="cap-18" class="clip cap" data-start="12.919" data-duration="0.461"><div class="cap-in"><span class="w">dia</span><span class="w">jadi</span></div></div>
+        <div id="cap-19" class="clip cap" data-start="13.4" data-duration="0.769"><div class="cap-in"><span class="w g">sub</span><span class="w g">DPS</span></div></div>
+        <div id="cap-20" class="clip cap" data-start="14.179" data-duration="0.482"><div class="cap-in"><span class="w g">off-field</span></div></div>
+        <div id="cap-21" class="clip cap" data-start="14.871" data-duration="0.604"><div class="cap-in"><span class="w g">Hold</span><span class="w g">skill</span></div></div>
+        <div id="cap-22" class="clip cap" data-start="15.691" data-duration="0.461"><div class="cap-in"><span class="w">dia</span><span class="w">jadi</span></div></div>
+        <div id="cap-23" class="clip cap" data-start="16.172" data-duration="0.81"><div class="cap-in"><span class="w g">main</span><span class="w g">DPS</span></div></div>
+        <div id="cap-24" class="clip cap" data-start="16.992" data-duration="0.481"><div class="cap-in"><span class="w g">on-field</span></div></div>
+        <div id="cap-25" class="clip cap" data-start="17.683" data-duration="0.697"><div class="cap-in"><span class="w">Tersalah</span><span class="w">tekan</span></div></div>
+        <div id="cap-26" class="clip cap" data-start="18.5" data-duration="0.522"><div class="cap-in"><span class="w">Tekan</span><span class="w g">skill</span></div></div>
+        <div id="cap-27" class="clip cap" data-start="19.043" data-duration="0.553"><div class="cap-in"><span class="w">sekali</span><span class="w">lagi</span></div></div>
+        <div id="cap-28" class="clip cap" data-start="19.739" data-duration="0.533"><div class="cap-in"><span class="w">terus</span><span class="w g">tukar</span></div></div>
+        <div id="cap-29" class="clip cap" data-start="20.293" data-duration="0.3"><div class="cap-in"><span class="w g">mode</span></div></div>
+        <div id="cap-30" class="clip cap" data-start="20.79" data-duration="0.635"><div class="cap-in"><span class="w">Buat</span><span class="w">reaction</span></div></div>
+        <div id="cap-31" class="clip cap" data-start="21.435" data-duration="0.677"><div class="cap-in"><span class="w g">Stellar</span><span class="w g">Conduct</span></div></div>
+        <div id="cap-32" class="clip cap" data-start="22.122" data-duration="0.563"><div class="cap-in"><span class="w">untuk</span><span class="w">kumpul</span></div></div>
+        <div id="cap-33" class="clip cap" data-start="22.696" data-duration="0.358"><div class="cap-in"><span class="w g">stack</span></div></div>
+        <div id="cap-34" class="clip cap" data-start="23.174" data-duration="0.635"><div class="cap-in"><span class="w g">Stack</span><span class="w">penuh</span></div></div>
+        <div id="cap-35" class="clip cap" data-start="23.963" data-duration="0.717"><div class="cap-in"><span class="w g">meteor</span><span class="w">jatuh</span></div></div>
+        <div id="cap-36" class="clip cap" data-start="24.8" data-duration="0.554"><div class="cap-in"><span class="w">Damage</span><span class="w">dia</span></div></div>
+        <div id="cap-37" class="clip cap" data-start="25.384" data-duration="0.3"><div class="cap-in"><span class="w g">gila</span></div></div>
+        <div id="cap-38" class="clip cap" data-start="25.881" data-duration="0.727"><div class="cap-in"><span class="w g">Burst</span><span class="w">dia</span></div></div>
+        <div id="cap-39" class="clip cap" data-start="26.629" data-duration="0.3"><div class="cap-in"><span class="w">pula</span></div></div>
+        <div id="cap-40" class="clip cap" data-start="27.09" data-duration="0.594"><div class="cap-in"><span class="w">terus</span><span class="w">bagi</span></div></div>
+        <div id="cap-41" class="clip cap" data-start="27.715" data-duration="0.584"><div class="cap-in"><span class="w g">3</span><span class="w g">stack</span></div></div>
+        <div id="cap-42" class="clip cap" data-start="28.509" data-duration="0.512"><div class="cap-in"><span class="w g">Build</span><span class="w">pula</span></div></div>
+        <div id="cap-43" class="clip cap" data-start="29.141" data-duration="0.339"><div class="cap-in"><span class="w g">Talent</span></div></div>
+        <div id="cap-44" class="clip cap" data-start="29.613" data-duration="0.686"><div class="cap-in"><span class="w">naikkan</span><span class="w g">normal</span></div></div>
+        <div id="cap-45" class="clip cap" data-start="30.309" data-duration="0.584"><div class="cap-in"><span class="w g">attack</span><span class="w">dulu</span></div></div>
+        <div id="cap-46" class="clip cap" data-start="31.109" data-duration="0.45"><div class="cap-in"><span class="w">lepas</span><span class="w">tu</span></div></div>
+        <div id="cap-47" class="clip cap" data-start="31.58" data-duration="0.533"><div class="cap-in"><span class="w g">burst</span></div></div>
+        <div id="cap-48" class="clip cap" data-start="32.297" data-duration="0.615"><div class="cap-in"><span class="w">baru</span><span class="w g">skill</span></div></div>
+        <div id="cap-49" class="clip cap" data-start="33.122" data-duration="0.338"><div class="cap-in"><span class="w">Stat</span></div></div>
+        <div id="cap-50" class="clip cap" data-start="33.604" data-duration="0.727"><div class="cap-in"><span class="w g">Crit</span><span class="w g">70</span></div></div>
+        <div id="cap-51" class="clip cap" data-start="34.495" data-duration="0.615"><div class="cap-in"><span class="w g">200</span></div></div>
+        <div id="cap-52" class="clip cap" data-start="35.23" data-duration="0.881"><div class="cap-in"><span class="w g">EM</span><span class="w g">500</span></div></div>
+        <div id="cap-53" class="clip cap" data-start="36.231" data-duration="1.137"><div class="cap-in"><span class="w g">ER</span><span class="w g">140%</span></div></div>
+        <div id="cap-54" class="clip cap" data-start="37.578" data-duration="0.738"><div class="cap-in"><span class="w g">Artifact</span></div></div>
+        <div id="cap-55" class="clip cap" data-start="38.436" data-duration="0.43"><div class="cap-in"><span class="w">pakai</span><span class="w g">Deep</span></div></div>
+        <div id="cap-56" class="clip cap" data-start="38.897" data-duration="0.594"><div class="cap-in"><span class="w g">Shadow</span><span class="w g">4</span></div></div>
+        <div id="cap-57" class="clip cap" data-start="39.511" data-duration="0.318"><div class="cap-in"><span class="w">piece</span></div></div>
+        <div id="cap-58" class="clip cap" data-start="39.993" data-duration="0.789"><div class="cap-in"><span class="w">ataupun</span><span class="w g">Gilded</span></div></div>
+        <div id="cap-59" class="clip cap" data-start="40.792" data-duration="0.41"><div class="cap-in"><span class="w g">Dreams</span></div></div>
+        <div id="cap-60" class="clip cap" data-start="41.412" data-duration="0.43"><div class="cap-in"><span class="w g">Weapon</span></div></div>
+        <div id="cap-61" class="clip cap" data-start="42.006" data-duration="0.717"><div class="cap-in"><span class="w g">signature</span><span class="w">dia</span></div></div>
+        <div id="cap-62" class="clip cap" data-start="42.734" data-duration="0.533"><div class="cap-in"><span class="w">paling</span><span class="w">padu</span></div></div>
+        <div id="cap-63" class="clip cap" data-start="43.387" data-duration="0.338"><div class="cap-in"><span class="w">Takde</span></div></div>
+        <div id="cap-64" class="clip cap" data-start="43.845" data-duration="1.045"><div class="cap-in"><span class="w g">Kagura&#x27;s</span><span class="w g">Verity</span></div></div>
+        <div id="cap-65" class="clip cap" data-start="44.89" data-duration="0.768"><div class="cap-in"><span class="w">ataupun</span><span class="w g">Widsith</span></div></div>
+        <div id="cap-66" class="clip cap" data-start="45.679" data-duration="0.584"><div class="cap-in"><span class="w">pun</span><span class="w">jalan</span></div></div>
+        <div id="cap-67" class="clip cap" data-start="46.473" data-duration="0.3"><div class="cap-in"><span class="w g">Team</span></div></div>
+        <div id="cap-68" class="clip cap" data-start="46.852" data-duration="0.441"><div class="cap-in"><span class="w">gandingkan</span></div></div>
+        <div id="cap-69" class="clip cap" data-start="47.303" data-duration="0.41"><div class="cap-in"><span class="w">dengan</span><span class="w">unit</span></div></div>
+        <div id="cap-70" class="clip cap" data-start="47.743" data-duration="0.503"><div class="cap-in"><span class="w g">Cryo</span><span class="w">dan</span></div></div>
+        <div id="cap-71" class="clip cap" data-start="48.256" data-duration="0.553"><div class="cap-in"><span class="w g">Sucrose</span></div></div>
+        <div id="cap-72" class="clip cap" data-start="49.019" data-duration="0.4"><div class="cap-in"><span class="w">Dan</span><span class="w">aku</span></div></div>
+        <div id="cap-73" class="clip cap" data-start="49.449" data-duration="0.3"><div class="cap-in"><span class="w">rasa</span></div></div>
+        <div id="cap-74" class="clip cap" data-start="49.921" data-duration="0.379"><div class="cap-in"><span class="w g">Mitya</span><span class="w">ni</span></div></div>
+        <div id="cap-75" class="clip cap" data-start="50.33" data-duration="0.38"><div class="cap-in"><span class="w">ngam</span><span class="w g">gila</span></div></div>
+        <div id="cap-76" class="clip cap" data-start="50.74" data-duration="0.472"><div class="cap-in"><span class="w">satu</span><span class="w g">team</span></div></div>
+        <div id="cap-77" class="clip cap" data-start="51.222" data-duration="0.574"><div class="cap-in"><span class="w">dengan</span><span class="w g">Tsaritsa</span></div></div>
+        <div id="cap-78" class="clip cap" data-start="51.816" data-duration="0.328"><div class="cap-in"><span class="w">nanti</span></div></div>
+        <div id="cap-79" class="clip cap" data-start="52.354" data-duration="0.625"><div class="cap-in"><span class="w">Simpan</span><span class="w g">primo</span></div></div>
+        <div id="cap-80" class="clip cap" data-start="52.989" data-duration="0.349"><div class="cap-in"><span class="w">korang</span></div></div>
+        <div id="cap-81" class="clip cap" data-start="53.458" data-duration="0.533"><div class="cap-in"><span class="w g">Follow</span><span class="w">for</span></div></div>
+        <div id="cap-82" class="clip cap" data-start="54.001" data-duration="0.556"><div class="cap-in"><span class="w">more</span></div></div>
+      </div>
+      <div id="flash"></div>
+      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="55.38" data-volume="0.12"
+        data-fade-in="0.2" data-fade-out="1.4" data-track-index="11"></audio>
+      <audio id="vo-h1" class="clip" src="assets/voice/h1.wav" data-start="0.1" data-duration="2.24" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-h2" class="clip" src="assets/voice/h2.wav" data-start="2.4" data-duration="2.824" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-s1" class="clip" src="assets/voice/s1.wav" data-start="5.284" data-duration="4.554" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m1" class="clip" src="assets/voice/m1.wav" data-start="9.898" data-duration="2.248" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m2" class="clip" src="assets/voice/m2.wav" data-start="12.206" data-duration="2.575" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m3" class="clip" src="assets/voice/m3.wav" data-start="14.841" data-duration="2.752" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m4" class="clip" src="assets/voice/m4.wav" data-start="17.653" data-duration="3.047" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m5" class="clip" src="assets/voice/m5.wav" data-start="20.76" data-duration="5.031" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-m6" class="clip" src="assets/voice/m6.wav" data-start="25.851" data-duration="2.568" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-b0" class="clip" src="assets/voice/b0.wav" data-start="28.479" data-duration="4.553" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-b1" class="clip" src="assets/voice/b1.wav" data-start="33.092" data-duration="4.396" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-b2" class="clip" src="assets/voice/b2.wav" data-start="37.548" data-duration="3.774" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-b3" class="clip" src="assets/voice/b3.wav" data-start="41.382" data-duration="5.001" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-t1" class="clip" src="assets/voice/t1.wav" data-start="46.443" data-duration="2.486" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-z1" class="clip" src="assets/voice/z1.wav" data-start="48.989" data-duration="3.275" data-volume="1" data-track-index="10"></audio>
+      <audio id="vo-e1" class="clip" src="assets/voice/e1.wav" data-start="52.324" data-duration="2.053" data-volume="1" data-track-index="10"></audio>
+      <audio id="sfx-0" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="0" data-duration="2.12" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-1" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="0.301" data-duration="2.59" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-2" class="clip" src="assets/sfx/whoosh.mp3" data-start="2.3" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-3" class="clip" src="assets/sfx/pop.mp3" data-start="2.43" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-4" class="clip" src="assets/sfx/pop.mp3" data-start="3.137" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-5" class="clip" src="assets/sfx/ping.mp3" data-start="3.916" data-duration="1.32" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-6" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="5.204" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-7" class="clip" src="assets/sfx/sparkle.mp3" data-start="5.847" data-duration="1.8" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-8" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="7.107" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-9" class="clip" src="assets/sfx/chime.mp3" data-start="9.041" data-duration="2.5" data-volume="0.25" data-track-index="12"></audio>
+      <audio id="sfx-10" class="clip" src="assets/sfx/whoosh.mp3" data-start="9.798" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-11" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="11.285" data-duration="2.59" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-12" class="clip" src="assets/sfx/pop.mp3" data-start="12.236" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-13" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="14.741" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-14" class="clip" src="assets/sfx/pop.mp3" data-start="14.871" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-15" class="clip" src="assets/sfx/glitch-1.mp3" data-start="17.653" data-duration="2.64" data-volume="0.28" data-track-index="12"></audio>
+      <audio id="sfx-16" class="clip" src="assets/sfx/whoosh.mp3" data-start="18.4" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-17" class="clip" src="assets/sfx/ping.mp3" data-start="19.996" data-duration="1.32" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-18" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="20.68" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-19" class="clip" src="assets/sfx/pop.mp3" data-start="22.122" data-duration="0.72" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-20" class="clip" src="assets/sfx/pop.mp3" data-start="22.378" data-duration="0.72" data-volume="0.38" data-track-index="12"></audio>
+      <audio id="sfx-21" class="clip" src="assets/sfx/pop.mp3" data-start="22.696" data-duration="0.72" data-volume="0.41" data-track-index="12"></audio>
+      <audio id="sfx-22" class="clip" src="assets/sfx/pop.mp3" data-start="23.512" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-23" class="clip" src="assets/sfx/riser.mp3" data-start="13.933" data-duration="10.03" data-volume="0.28" data-track-index="12"></audio>
+      <audio id="sfx-24" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="23.913" data-duration="2.12" data-volume="0.6" data-track-index="12"></audio>
+      <audio id="sfx-25" class="clip" src="assets/sfx/pop.mp3" data-start="25.384" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-26" class="clip" src="assets/sfx/whoosh.mp3" data-start="25.751" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-27" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="27.415" data-duration="2.59" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-28" class="clip" src="assets/sfx/sparkle.mp3" data-start="27.715" data-duration="1.8" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-29" class="clip" src="assets/sfx/whoosh.mp3" data-start="28.379" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-30" class="clip" src="assets/sfx/pop.mp3" data-start="29.951" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-31" class="clip" src="assets/sfx/pop.mp3" data-start="31.58" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-32" class="clip" src="assets/sfx/pop.mp3" data-start="32.564" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-33" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="33.012" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-34" class="clip" src="assets/sfx/ping.mp3" data-start="33.604" data-duration="1.32" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-35" class="clip" src="assets/sfx/pop.mp3" data-start="35.23" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-36" class="clip" src="assets/sfx/pop.mp3" data-start="36.231" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-37" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="37.468" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-38" class="clip" src="assets/sfx/pop.mp3" data-start="38.743" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-39" class="clip" src="assets/sfx/pop.mp3" data-start="39.993" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-40" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="41.302" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-41" class="clip" src="assets/sfx/sparkle.mp3" data-start="42.006" data-duration="1.8" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-42" class="clip" src="assets/sfx/pop.mp3" data-start="43.845" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-43" class="clip" src="assets/sfx/pop.mp3" data-start="45.331" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-44" class="clip" src="assets/sfx/whoosh.mp3" data-start="46.343" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-45" class="clip" src="assets/sfx/pop.mp3" data-start="47.487" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-46" class="clip" src="assets/sfx/pop.mp3" data-start="48.256" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-47" class="clip" src="assets/sfx/whoosh.mp3" data-start="48.889" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-48" class="clip" src="assets/sfx/chime.mp3" data-start="48.989" data-duration="2.5" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-49" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="51.397" data-duration="2.12" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-50" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="52.244" data-duration="0.57" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-51" class="clip" src="assets/sfx/pop.mp3" data-start="52.354" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-52" class="clip" src="assets/sfx/notification.mp3" data-start="53.458" data-duration="1.922" data-volume="0.35" data-track-index="12"></audio>
+    </div>
+    <script>
+      const T = {"total": 55.38, "lines": [{"id": "h1", "start": 0.1}, {"id": "h2", "start": 2.4}, {"id": "s1", "start": 5.284}, {"id": "m1", "start": 9.898}, {"id": "m2", "start": 12.206}, {"id": "m3", "start": 14.841}, {"id": "m4", "start": 17.653}, {"id": "m5", "start": 20.76}, {"id": "m6", "start": 25.851}, {"id": "b0", "start": 28.479}, {"id": "b1", "start": 33.092}, {"id": "b2", "start": 37.548}, {"id": "b3", "start": 41.382}, {"id": "t1", "start": 46.443}, {"id": "z1", "start": 48.989}, {"id": "e1", "start": 52.324}], "shots": [{"sid": "A", "start": 0.0, "end": 2.4, "idx": 0, "slam": true}, {"sid": "A2", "start": 2.4, "end": 5.284, "idx": 1, "slam": false}, {"sid": "S1", "start": 5.284, "end": 7.207, "idx": 2, "slam": false}, {"sid": "S2", "start": 7.207, "end": 9.898, "idx": 3, "slam": false}, {"sid": "M1", "start": 9.898, "end": 12.206, "idx": 4, "slam": false}, {"sid": "M2", "start": 12.206, "end": 14.841, "idx": 5, "slam": false}, {"sid": "M3", "start": 14.841, "end": 17.653, "idx": 6, "slam": false}, {"sid": "M4", "start": 17.653, "end": 20.76, "idx": 7, "slam": false}, {"sid": "M5", "start": 20.76, "end": 23.174, "idx": 8, "slam": false}, {"sid": "M5b", "start": 23.174, "end": 25.851, "idx": 9, "slam": true}, {"sid": "M6", "start": 25.851, "end": 28.479, "idx": 10, "slam": true}, {"sid": "B0", "start": 28.479, "end": 33.092, "idx": 11, "slam": false}, {"sid": "B1", "start": 33.092, "end": 37.548, "idx": 12, "slam": false}, {"sid": "B2", "start": 37.548, "end": 41.382, "idx": 13, "slam": false}, {"sid": "B3", "start": 41.382, "end": 46.443, "idx": 14, "slam": false}, {"sid": "T1", "start": 46.443, "end": 48.989, "idx": 15, "slam": false}, {"sid": "Z", "start": 48.989, "end": 52.324, "idx": 16, "slam": true}, {"sid": "A2", "start": 52.324, "end": 55.38, "idx": 17, "slam": false}], "punch": [25.384, 51.447], "flash": [[23.963, 0.85], [51.447, 0.5], [0.601, 0.5]]};
+      const tl = gsap.timeline({ paused: true });
+
+      // talking head: jump-cut punch-in every line (alternate wide / tight)
+      let zoom = 1.0;
+      T.lines.forEach((ln, i) => { zoom = i % 2 ? 1.12 : 1.0; tl.set("#facewrap", { scale: zoom }, ln.start); });
+      tl.fromTo("#facewrap", { scale: 1.12 }, { scale: 1.0, duration: 0.4, ease: "power3.out" }, 0);
+      T.punch.forEach((t) => { tl.fromTo("#facewrap", { scale: 1.3 }, { scale: 1.14, duration: 0.3, ease: "power3.out" }, t); });
+
+      // b-roll: push-in per shot, slam + shake on the big hits
+      T.shots.forEach((o) => {
+        const el = "#w-" + o.idx, d = o.end - o.start;
+        if (o.slam) {
+          tl.fromTo(el, { scale: 1.3, x: 0 }, { scale: 1.06, duration: 0.4, ease: "power3.out" }, o.start);
+          [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.04, ease: "none" }, o.start + i * 0.04));
+          tl.to(el, { scale: 1.12, duration: Math.max(0.1, d - 0.4), ease: "none" }, o.start + 0.4);
+        } else {
+          tl.fromTo(el, { scale: 1.02 }, { scale: 1.1, duration: d, ease: "none" }, o.start);
+        }
+      });
+      T.flash.forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.04, ease: "none" }, Math.max(0, t - 0.04));
+        tl.to("#flash", { opacity: 0, duration: 0.28, ease: "power2.out" }, t);
+      });
+      tl.fromTo("#prog-fill", { scaleX: 0 }, { scaleX: 1, duration: T.total, ease: "none" }, 0);
+      tl.fromTo("#seam", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0);
+
+      document.querySelectorAll(".dim").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.2 }, s);
+        tl.to(el, { opacity: 0, duration: 0.12 }, s + d - 0.13);
+      });
+      document.querySelectorAll(".sec").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".sec-in");
+        tl.fromTo(inner, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, s);
+        tl.to(inner, { opacity: 0, x: -30, duration: 0.15, ease: "power2.in" }, s + d - 0.17);
+      });
+
+      // cards: each [data-at] item pops at its own time; whole card leaves together
+      document.querySelectorAll(".card").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".card-in");
+        el.querySelectorAll("[data-at]").forEach((it, i) => {
+          const at = Math.max(s, parseFloat(it.dataset.at)), fx = it.dataset.fx || "pop";
+          if (at <= 0.001) tl.fromTo(it, { scale: 1.12, opacity: 1 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power3.out" }, 0);
+          else if (fx === "slam") tl.fromTo(it, { scale: 2.4, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.2, ease: "back.out(1.8)" }, at);
+          else if (fx === "left") tl.fromTo(it, { x: -160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.24, ease: "back.out(1.6)" }, at);
+          else if (fx === "right") tl.fromTo(it, { x: 160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.24, ease: "back.out(1.6)" }, at);
+          else if (fx === "fill") tl.fromTo(it, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(3)" }, at);
+          else tl.fromTo(it, { scale: 0.5, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.2, ease: "back.out(2.2)" }, at);
+          if (it.dataset.pulse) tl.fromTo(it, { scale: 1 }, { scale: 1.07, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, at + 0.3);
+        });
+        tl.to(inner, { opacity: 0, scale: 1.06, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+      });
+
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Montserrat", fontWeight: 900, maxWidth: 900, baseSize: 100, minSize: 60 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.55, opacity: 0, y: 16 }, { scale: 1, opacity: 1, y: 0, duration: 0.13, ease: "back.out(2.6)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.05, ease: "power2.in" }, s + d - 0.05);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #070614; --ink: #ffffff; --gold: #f6c453; --gold-2: #ffe7a3;
+        --violet: #a77bff; --violet-2: #6d3df0; --cyan: #6fe3ff; --red: #ff4d6d;
+        --glass: rgba(14, 10, 40, 0.82);
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-cap: "Montserrat", sans-serif;
+        --font-label: "Oswald", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* top: talking head · bottom: gameplay */
+      #facepanel { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; z-index: 10; }
+      #facewrap { position: absolute; inset: 0; transform-origin: 55% 45%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
+      #gamepanel { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 12; background: #0b0a1e; }
+      .shotwrap { position: absolute; inset: 0; transform-origin: 50% 60%; }
+      .shot { position: absolute; left: 0; top: -44px; width: 1080px; height: 1004px; object-fit: cover; }
+      #seam { position: absolute; left: 0; right: 0; top: 954px; height: 12px; z-index: 40;
+        background: linear-gradient(90deg, var(--violet-2), var(--cyan), var(--gold)); box-shadow: 0 0 34px rgba(167,123,255,0.9); }
+      #shade-face { position: absolute; left: 0; right: 0; top: 0; height: 960px; z-index: 30; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,6,20,0.5) 0%, rgba(7,6,20,0) 26%, rgba(7,6,20,0) 70%, rgba(7,6,20,0.6) 100%); }
+      #shade-game { position: absolute; left: 0; right: 0; top: 960px; height: 960px; z-index: 30; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,6,20,0.55) 0%, rgba(7,6,20,0) 22%, rgba(7,6,20,0) 60%, rgba(7,6,20,0.85) 100%); }
+      .dim { position: absolute; left: 0; right: 0; top: 960px; height: 960px; z-index: 32; background: rgba(8,6,26,0.62); }
+      #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+      #standin { position: absolute; right: 28px; top: 330px; z-index: 92; font-family: var(--font-label); font-weight: 700;
+        font-size: 26px; letter-spacing: 0.08em; color: #fff; background: rgba(255,77,109,0.92); padding: 6px 14px; border-radius: 8px; }
+
+      /* progress bar */
+      #prog { position: absolute; left: 90px; right: 90px; top: 196px; height: 10px; z-index: 70; border-radius: 10px; background: rgba(255,255,255,0.2); }
+      #prog-fill { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(90deg, var(--violet), var(--cyan)); transform-origin: 0 50%; }
+
+      /* section tags */
+      .sec { position: absolute; left: 0; right: 0; top: 232px; height: 90px; z-index: 72; }
+      .sec-in { position: absolute; left: 90px; top: 0; display: flex; align-items: center; gap: 16px; padding: 12px 24px 12px 14px;
+        border-radius: 14px; background: var(--glass); border: 2px solid rgba(167,123,255,0.7); }
+      .sec-num { font-family: var(--font-display); font-size: 36px; color: #0b0f22; background: var(--gold); border-radius: 10px; padding: 2px 12px; }
+      .sec-label { font-family: var(--font-label); font-weight: 700; font-size: 36px; color: #fff; letter-spacing: 0.05em; }
+
+      /* captions on the seam */
+      #captions { position: absolute; left: 0; right: 0; top: 850px; height: 220px; z-index: 80; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 220px; text-align: center; }
+      .cap-in { position: absolute; left: 70px; right: 70px; top: 46px; text-align: center; transform-origin: 50% 60%; }
+      .w { font-family: var(--font-cap); font-weight: 900; font-size: 100px; line-height: 1.05; color: #fff;
+        -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000, 0 0 26px rgba(0,0,0,0.7); }
+      .w.g { color: var(--gold); }
+      .w + .w { margin-left: 0.26em; }
+
+      /* cards in the game panel */
+      .card { position: absolute; left: 0; right: 0; top: 1090px; height: 600px; z-index: 76; text-align: center; }
+      .card-in { position: absolute; left: 60px; right: 60px; top: 0; height: 600px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 22px; }
+      .big { font-family: var(--font-display); line-height: 0.95; -webkit-text-stroke: 6px #000; paint-order: stroke fill;
+        text-shadow: 0 10px 0 #000, 0 0 60px rgba(167,123,255,0.85); }
+      .sub { font-family: var(--font-display); font-size: 62px; color: #fff; -webkit-text-stroke: 3px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      .gold { color: var(--gold); } .cyan { color: var(--cyan); } .violet { color: #c9b0ff; } .white { color: #fff; } .red { color: var(--red); }
+      .chip { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.12em; color: #0b0f22;
+        background: var(--gold); padding: 8px 22px; border-radius: 10px; }
+      .chip.v { background: linear-gradient(90deg, var(--violet-2), #b04cff); color: #fff; }
+      .row { display: flex; gap: 20px; align-items: stretch; justify-content: center; width: 100%; }
+      .tile { flex: 1; padding: 22px 14px 24px; border-radius: 26px; background: var(--glass); border: 3px solid rgba(167,123,255,0.75);
+        box-shadow: 0 0 40px rgba(109,61,240,0.45), inset 0 0 0 1px rgba(255,255,255,0.08); }
+      .tile.hot { border-color: var(--gold); box-shadow: 0 0 50px rgba(246,196,83,0.5); }
+      .t-k { font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.12em; color: var(--cyan); }
+      .t-v { font-family: var(--font-display); font-size: 84px; line-height: 1; color: #fff; margin-top: 6px; }
+      .t-v small { font-size: 44px; color: var(--gold); }
+      .t-s { font-family: var(--font-cap); font-weight: 800; font-size: 32px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+      .bar { width: 100%; display: flex; align-items: center; gap: 22px; padding: 20px 28px; border-radius: 24px; background: var(--glass);
+        border: 3px solid rgba(167,123,255,0.75); text-align: left; box-shadow: 0 0 40px rgba(109,61,240,0.4); }
+      .bar.hot { border-color: var(--gold); box-shadow: 0 0 50px rgba(246,196,83,0.45); }
+      .b-n { flex: none; min-width: 84px; height: 84px; padding: 0 14px; border-radius: 18px; background: var(--gold); color: #0b0f22; font-family: var(--font-display);
+        font-size: 46px; display: flex; align-items: center; justify-content: center; }
+      .b-n.v { background: linear-gradient(135deg, var(--violet-2), #b04cff); color: #fff; }
+      .b-t { font-family: var(--font-display); font-size: 50px; line-height: 1.05; color: #fff; }
+      .b-t small { display: block; font-family: var(--font-cap); font-weight: 800; font-size: 30px; color: var(--cyan); margin-top: 4px; letter-spacing: 0.02em; }
+      .pips { display: flex; gap: 26px; justify-content: center; }
+      .pip { width: 110px; height: 110px; border-radius: 50%; border: 8px solid rgba(255,255,255,0.85); background: rgba(10,8,30,0.6); position: relative; }
+      .pip i { position: absolute; inset: 10px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--cyan) 35%, var(--violet-2) 100%);
+        box-shadow: 0 0 40px var(--violet); }
+      .slot { flex: 1; padding: 18px 8px 20px; border-radius: 24px; background: var(--glass); border: 3px solid rgba(167,123,255,0.75); }
+      .slot .s-ic { width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-size: 44px; color: #fff; }
+      .slot .s-n { font-family: var(--font-display); font-size: 36px; color: #fff; }
+      .slot .s-r { font-family: var(--font-cap); font-weight: 800; font-size: 24px; color: var(--cyan); margin-top: 2px; }
+      .el-electro { background: linear-gradient(135deg, #b04cff, #6d3df0); } .el-cryo { background: linear-gradient(135deg, #9fe8ff, #3fa9d8); }
+      .el-anemo { background: linear-gradient(135deg, #8ff0c8, #2fae8a); } .el-flex { background: linear-gradient(135deg, #8a8fa8, #4a4f68); }
+      #follow-btn { display: inline-block; font-family: var(--font-display); font-size: 66px; color: #0b0f22; background: var(--gold);
+        padding: 22px 60px; border-radius: 999px; box-shadow: 0 10px 0 #8a5c00; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920">
+      <div id="facepanel"><div id="facewrap">
+{{FACE}}
+      </div></div>
+      <div id="gamepanel">
+{{SHOTS}}
+      </div>
+      <div id="shade-face"></div>
+      <div id="shade-game"></div>
+      <div id="seam"></div>
+{{DIMS}}
+      <div id="prog"><div id="prog-fill"></div></div>
+{{STANDIN}}
+{{SECTIONS}}
+{{CARDS}}
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+      <div id="flash"></div>
+      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="{{TOTAL}}" data-volume="0.12"
+        data-fade-in="0.2" data-fade-out="1.4" data-track-index="11"></audio>
+{{VO}}
+{{SFX}}
+    </div>
+    <script>
+      const T = {{TIMELINE_JSON}};
+      const tl = gsap.timeline({ paused: true });
+
+      // talking head: jump-cut punch-in every line (alternate wide / tight)
+      let zoom = 1.0;
+      T.lines.forEach((ln, i) => { zoom = i % 2 ? 1.12 : 1.0; tl.set("#facewrap", { scale: zoom }, ln.start); });
+      tl.fromTo("#facewrap", { scale: 1.12 }, { scale: 1.0, duration: 0.4, ease: "power3.out" }, 0);
+      T.punch.forEach((t) => { tl.fromTo("#facewrap", { scale: 1.3 }, { scale: 1.14, duration: 0.3, ease: "power3.out" }, t); });
+
+      // b-roll: push-in per shot, slam + shake on the big hits
+      T.shots.forEach((o) => {
+        const el = "#w-" + o.idx, d = o.end - o.start;
+        if (o.slam) {
+          tl.fromTo(el, { scale: 1.3, x: 0 }, { scale: 1.06, duration: 0.4, ease: "power3.out" }, o.start);
+          [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.04, ease: "none" }, o.start + i * 0.04));
+          tl.to(el, { scale: 1.12, duration: Math.max(0.1, d - 0.4), ease: "none" }, o.start + 0.4);
+        } else {
+          tl.fromTo(el, { scale: 1.02 }, { scale: 1.1, duration: d, ease: "none" }, o.start);
+        }
+      });
+      T.flash.forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.04, ease: "none" }, Math.max(0, t - 0.04));
+        tl.to("#flash", { opacity: 0, duration: 0.28, ease: "power2.out" }, t);
+      });
+      tl.fromTo("#prog-fill", { scaleX: 0 }, { scaleX: 1, duration: T.total, ease: "none" }, 0);
+      tl.fromTo("#seam", { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0);
+
+      document.querySelectorAll(".dim").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.2 }, s);
+        tl.to(el, { opacity: 0, duration: 0.12 }, s + d - 0.13);
+      });
+      document.querySelectorAll(".sec").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".sec-in");
+        tl.fromTo(inner, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, s);
+        tl.to(inner, { opacity: 0, x: -30, duration: 0.15, ease: "power2.in" }, s + d - 0.17);
+      });
+
+      // cards: each [data-at] item pops at its own time; whole card leaves together
+      document.querySelectorAll(".card").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".card-in");
+        el.querySelectorAll("[data-at]").forEach((it, i) => {
+          const at = Math.max(s, parseFloat(it.dataset.at)), fx = it.dataset.fx || "pop";
+          if (at <= 0.001) tl.fromTo(it, { scale: 1.12, opacity: 1 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power3.out" }, 0);
+          else if (fx === "slam") tl.fromTo(it, { scale: 2.4, opacity: 0, rotation: -6 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.2, ease: "back.out(1.8)" }, at);
+          else if (fx === "left") tl.fromTo(it, { x: -160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.24, ease: "back.out(1.6)" }, at);
+          else if (fx === "right") tl.fromTo(it, { x: 160, opacity: 0 }, { x: 0, opacity: 1, duration: 0.24, ease: "back.out(1.6)" }, at);
+          else if (fx === "fill") tl.fromTo(it, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(3)" }, at);
+          else tl.fromTo(it, { scale: 0.5, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.2, ease: "back.out(2.2)" }, at);
+          if (it.dataset.pulse) tl.fromTo(it, { scale: 1 }, { scale: 1.07, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, at + 0.3);
+        });
+        tl.to(inner, { opacity: 0, scale: 1.06, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+      });
+
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Montserrat", fontWeight: 900, maxWidth: 900, baseSize: 100, minSize: 60 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.55, opacity: 0, y: 16 }, { scale: 1, opacity: 1, y: 0, duration: 0.13, ease: "back.out(2.6)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.05, ease: "power2.in" }, s + d - 0.05);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
