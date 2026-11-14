@@ -1,4 +1,17 @@
-# Archon Quest 7.2 — Short (preview draft)
+# Archon Quest 7.2 — Short
+
+**FINAL:** 1080×1920, **60 fps**, **57.6 s**, H.264 CRF 16, 66 MB, −12.5 LUFS
+**Versi final = talking head AbamKamil** (`build/gen2.py` → `index.html`). Jadual di bawah ialah versi TTS awal, simpan sebagai rujukan.
+
+Rebuild versi final:
+```
+python3 build/th_build.py <AbamKamil Gaming Talking Head.mp4> build/th_tx.json   # potong pause/filler, 1.15x, loudness
+python3 build/cut_clips.py <playthrough.mp4> assets/clips                          # B-roll 9:16 @60fps
+python3 build/gen2.py                                                              # jana index.html
+npx hyperframes render -q looks --fps 60 -o out.mp4
+```
+
+---
 
 **Format:** 1080×1920 (9:16), 30 fps, **56.29 s** (bawah 1 minit)
 **Status:** PREVIEW sahaja — belum render.
