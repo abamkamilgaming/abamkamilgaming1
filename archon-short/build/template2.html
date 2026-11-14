@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #05070f;
+        --ink: #ffffff;
+        --gold: #f6c453;
+        --gold-2: #ffe7a3;
+        --violet: #a77bff;
+        --red: #ff4d5e;
+        --navy: rgba(8, 12, 32, 0.78);
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-cap: "Montserrat", sans-serif;
+        --font-label: "Oswald", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      .facewrap { position: absolute; inset: 0; transform-origin: 50% 28%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .shotwrap { position: absolute; inset: 0; transform-origin: 50% 45%; }
+      .shotwrap.split { top: 960px; height: 960px; overflow: hidden; transform-origin: 50% 0%; }
+      .shotwrap.split .shot { height: 960px; border-top: 8px solid var(--gold); box-sizing: border-box; }
+      .shot { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+
+      /* shades: hide the game's burned-in subtitles + give text a bed */
+      #shade-b { position: absolute; left: 0; right: 0; bottom: 0; height: 640px; z-index: 50; pointer-events: none;
+        background: linear-gradient(180deg, rgba(5,7,15,0) 0%, rgba(5,7,15,0.9) 30%, #05070f 52%, #05070f 100%); }
+      #shade-t { position: absolute; left: 0; right: 0; top: 0; height: 420px; z-index: 50; pointer-events: none;
+        background: linear-gradient(0deg, rgba(5,7,15,0) 0%, rgba(5,7,15,0.55) 100%); }
+      #flash { position: absolute; inset: 0; z-index: 90; background: #fff; opacity: 0; pointer-events: none; }
+
+      /* progress bar — retention bait toward the code at the end */
+      #prog { position: absolute; left: 90px; right: 150px; top: 196px; height: 10px; z-index: 70;
+        border-radius: 10px; background: rgba(255,255,255,0.18); }
+      #prog-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 10px;
+        background: linear-gradient(90deg, var(--violet), var(--gold)); transform-origin: 0 50%; }
+      #prog-gift { position: absolute; right: 78px; top: 168px; z-index: 71; width: 62px; height: 62px; }
+
+      /* primogem + exp icons (drawn) */
+      .primo { position: relative; width: 100%; height: 100%; }
+      .primo::before { content: ""; position: absolute; inset: 0;
+        clip-path: polygon(50% 0, 63% 37%, 100% 50%, 63% 63%, 50% 100%, 37% 63%, 0 50%, 37% 37%);
+        background: linear-gradient(135deg, #fff 0%, #bfe9ff 30%, #f6c453 70%, #fff4cc 100%); }
+      .primo::after { content: ""; position: absolute; inset: 34%;
+        clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); background: #7fd3ff; }
+      .book { position: relative; width: 100%; height: 100%; border-radius: 14%;
+        background: linear-gradient(145deg, #c6a2ff, #6a3fd6); box-shadow: inset 0 0 0 5px rgba(255,255,255,0.35); }
+      .book::after { content: ""; position: absolute; left: 24%; right: 24%; top: 30%; height: 12%;
+        background: var(--gold-2); border-radius: 4px; box-shadow: 0 260% 0 0 var(--gold-2); }
+
+      /* section tags */
+      .sec { position: absolute; left: 0; right: 0; top: 240px; height: 90px; z-index: 72; }
+      .sec-in { position: absolute; left: 112px; top: 0; display: flex; align-items: center; gap: 18px;
+        padding: 14px 26px 14px 16px; border-radius: 14px; background: var(--navy);
+        border: 2px solid rgba(246,196,83,0.55); }
+      .sec-num { font-family: var(--font-display); font-size: 40px; color: #0b0f22; background: var(--gold);
+        border-radius: 10px; padding: 2px 14px; }
+      .sec-label { font-family: var(--font-label); font-weight: 700; font-size: 38px; color: #fff; letter-spacing: 0.04em; }
+
+      /* hook */
+      #hook { position: absolute; left: 0; right: 0; top: 330px; height: 760px; z-index: 75; text-align: center; }
+      .h-badge { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.12em;
+        color: #0b0f22; background: var(--gold); padding: 8px 22px; border-radius: 10px; }
+      .h-top { font-family: var(--font-display); font-size: 74px; color: #fff; margin-top: 26px;
+        text-shadow: 0 6px 0 #000, 0 0 30px rgba(0,0,0,0.8); }
+      .h-big { font-family: var(--font-display); font-size: 150px; line-height: 0.95; margin-top: 4px;
+        color: var(--gold); -webkit-text-stroke: 6px #1a0f00; text-shadow: 0 10px 0 #000, 0 0 60px rgba(246,196,83,0.6); }
+      .h-bot { font-family: var(--font-display); font-size: 92px; color: #fff; margin-top: 10px;
+        -webkit-text-stroke: 4px #000; text-shadow: 0 8px 0 #000; }
+      .h-line { display: block; }
+
+      /* gift tease */
+      #gift { position: absolute; left: 0; right: 0; top: 960px; height: 420px; z-index: 75; text-align: center; }
+      .g-top { font-family: var(--font-display); font-size: 80px; line-height: 1; color: #fff;
+        -webkit-text-stroke: 4px #000; text-shadow: 0 8px 0 #000; }
+      .g-chip { display: inline-flex; align-items: center; gap: 22px; margin-top: 22px; padding: 22px 40px;
+        border-radius: 999px; background: linear-gradient(90deg, #6d3df0, #b04cff);
+        border: 4px solid var(--gold-2); box-shadow: 0 0 50px rgba(176,76,255,0.7); }
+      .g-chip .ic { width: 80px; height: 80px; }
+      .g-chip span { font-family: var(--font-display); font-size: 60px; color: #fff; }
+      .g-arrow { font-family: var(--font-display); font-size: 56px; color: var(--gold); margin-top: 16px; -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+
+      /* captions: one group visible at a time, AbamKamil-style big pop words */
+      #captions { position: absolute; left: 0; right: 0; top: 1140px; height: 200px; z-index: 80; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 200px; text-align: center; }
+      .cap-in { position: absolute; left: 112px; right: 112px; top: 30px; text-align: center; transform-origin: 50% 60%; }
+      .w { font-family: var(--font-cap); font-weight: 900; font-size: 104px; line-height: 1.05; color: #fff;
+        -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000, 0 0 24px rgba(0,0,0,0.6); }
+      .w.g { color: var(--gold); }
+      .w + .w { margin-left: 0.28em; }
+
+      /* quotes for game voice lines */
+      .quote { position: absolute; left: 0; right: 0; top: 1110px; height: 260px; z-index: 80; text-align: center; }
+      .q-in { position: absolute; left: 112px; right: 112px; top: 0; padding: 22px 20px 26px; border-radius: 26px; background: rgba(6,8,22,0.62); }
+      .q-who { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 32px; letter-spacing: 0.16em;
+        color: var(--gold); background: rgba(8,12,32,0.85); padding: 6px 18px; border-radius: 8px; }
+      .q-en { font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; font-size: 60px; line-height: 1.12;
+        color: #fff; margin-top: 18px; text-shadow: 0 4px 18px rgba(0,0,0,0.9); }
+      .q-bm { font-family: var(--font-cap); font-weight: 700; font-size: 40px; color: rgba(255,255,255,0.85); margin-top: 14px;
+        text-shadow: 0 3px 10px #000; }
+
+      /* stickers */
+      .stk { position: absolute; left: 0; right: 0; top: 560px; height: 420px; z-index: 78; text-align: center; }
+      .stk.top { top: 430px; }
+      .stk.mid { top: 520px; }
+      .stk.midsub { top: 720px; }
+      .stk-in { position: absolute; left: 40px; right: 40px; top: 0; transform-origin: 50% 50%; }
+      .stk .big { display: block; font-family: var(--font-display); font-size: 190px; line-height: 0.95;
+        -webkit-text-stroke: 6px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; }
+      .stk .sub { display: block; font-family: var(--font-display); font-size: 70px; color: #fff;
+        -webkit-text-stroke: 3px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      .gold { color: var(--gold); }
+      .red { color: var(--red); }
+      .white { color: #fff; }
+      .glow { text-shadow: 0 10px 0 #000, 0 0 50px rgba(167,123,255,0.95), 0 0 110px rgba(167,123,255,0.7) !important; }
+
+      /* end card */
+      #endcard { position: absolute; inset: 0; z-index: 85; }
+      #ec-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(20,14,50,0.82), rgba(5,7,15,0.95)); }
+      #ec-panel { position: absolute; left: 100px; right: 100px; top: 330px; height: 940px; border-radius: 40px;
+        background: linear-gradient(170deg, rgba(36,28,84,0.95), rgba(12,14,36,0.96));
+        border: 4px solid rgba(246,196,83,0.85); box-shadow: 0 0 80px rgba(167,123,255,0.45); text-align: center; }
+      .ec-title { font-family: var(--font-display); font-size: 84px; color: #fff; margin-top: 56px; letter-spacing: 0.02em; }
+      .ec-sub { font-family: var(--font-label); font-weight: 700; font-size: 34px; color: var(--gold-2); letter-spacing: 0.14em; margin-top: 6px; }
+      #ec-code { display: inline-flex; gap: 4px; margin-top: 44px; padding: 26px 30px; border-radius: 22px;
+        background: #f8f1dc; border: 4px dashed #b8892b; }
+      .ch { font-family: "JetBrains Mono", "Space Mono", monospace; font-weight: 700; font-size: 70px; color: #1b1440; width: 50px; display: inline-block; }
+      .ec-row { display: flex; align-items: center; justify-content: center; gap: 26px; margin-top: 40px; }
+      .ec-row .ic { width: 100px; height: 100px; }
+      .ec-row .txt { font-family: var(--font-cap); font-weight: 900; font-size: 56px; color: #fff; text-align: left; }
+      .ec-row .txt b { color: var(--gold); }
+      .ec-hint { font-family: var(--font-cap); font-weight: 700; font-size: 34px; color: rgba(255,255,255,0.75); margin-top: 44px; }
+      #outro { position: absolute; left: 0; right: 0; top: 990px; height: 340px; z-index: 85; text-align: center; }
+      #oc-code { display: inline-flex; align-items: center; gap: 16px; padding: 14px 28px; border-radius: 18px;
+        background: rgba(248,241,220,0.96); border: 4px dashed #b8892b; }
+      #oc-code .ic { width: 54px; height: 54px; }
+      #oc-code span { font-family: "JetBrains Mono", "Space Mono", monospace; font-weight: 700; font-size: 58px; color: #1b1440; letter-spacing: 0.06em; }
+      #ec-follow { margin-top: 30px; text-align: center; }
+      #ec-follow-in { display: inline-block; font-family: var(--font-display); font-size: 64px; color: #0b0f22;
+        background: var(--gold); padding: 22px 56px; border-radius: 999px; box-shadow: 0 10px 0 #8a5c00; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920">
+{{FACES}}
+{{OVERLAYS}}
+      <div id="shade-t"></div>
+      <div id="shade-b"></div>
+
+      <div id="prog"><div id="prog-fill"></div></div>
+      <div id="prog-gift"><div class="primo"></div></div>
+
+      <div id="hook" class="clip" data-start="0" data-duration="{{HOOK_DUR}}" data-track-index="4">
+        <div id="hook-in">
+          <span class="h-badge h-line" id="h-badge">ARCHON QUEST 7.2</span>
+          <div class="h-top h-line" id="h-top">KESEMUA</div>
+          <div class="h-big h-line" id="h-big">7 ARCHON</div>
+          <div class="h-bot h-line" id="h-bot">BERKUMPUL!</div>
+        </div>
+      </div>
+
+      <div id="gift" class="clip" data-start="{{GIFT_START}}" data-duration="{{GIFT_DUR}}" data-track-index="4">
+        <div id="gift-in">
+          <div class="g-top" id="g-top">STAY SAMPAI<br />HABIS!</div>
+          <div class="g-chip" id="g-chip"><div class="ic"><div class="primo"></div></div><span>REDEEM CODE FREE</span></div>
+          <div class="g-arrow" id="g-arrow">KAT HUJUNG VIDEO</div>
+        </div>
+      </div>
+
+{{SECTIONS}}
+{{QUOTES}}
+{{STICKERS}}
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+
+      <div id="endcard" class="clip" data-start="{{END_START}}" data-duration="{{END_DUR}}" data-track-index="8">
+        <div id="ec-dim"></div>
+        <div id="ec-panel">
+          <div class="ec-title" id="ec-title">REDEEM CODE</div>
+          <div class="ec-sub">GENSHIN IMPACT · 7.2</div>
+          <div id="ec-code">{{CODE_SPANS}}</div>
+          <div class="ec-row" id="ec-r1"><div class="ic"><div class="primo"></div></div><div class="txt"><b>×60</b> Primogems</div></div>
+          <div class="ec-row" id="ec-r2"><div class="ic"><div class="book"></div></div><div class="txt"><b>×5</b> Adventurer's<br />Experience</div></div>
+          <div class="ec-hint" id="ec-hint">Claim cepat sebelum expired!</div>
+        </div>
+      </div>
+
+      <div id="outro" class="clip" data-start="{{OUTRO_START}}" data-duration="{{OUTRO_DUR}}" data-track-index="8">
+        <div id="oc-in">
+          <div id="oc-code"><div class="ic"><div class="primo"></div></div><span>{{CODE}}</span></div>
+          <div id="ec-follow"><div id="ec-follow-in">FOLLOW FOR MORE</div></div>
+        </div>
+      </div>
+
+      <div id="flash"></div>
+
+      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="{{TOTAL}}" data-volume="0.14"
+        data-fade-in="0.2" data-fade-out="1.6" data-track-index="11"></audio>
+{{SFX}}
+    </div>
+    <script>
+      const T = {{TIMELINE_JSON}};
+      const tl = gsap.timeline({ paused: true });
+
+      // --- talking head: jump-cut punch-ins (alternate 1.0 / 1.12), reaction punch on "Gila!"
+      T.faces.forEach((fc) => {
+        const el = "#fw-" + fc.id;
+        let zoom = fc.id === "h1" ? 1.0 : 1.06;
+        tl.set(el, { scale: zoom, x: 0 }, fc.start);
+        (T.punch[fc.id] || []).forEach((c) => { zoom = zoom > 1.08 ? 1.0 : 1.14; tl.set(el, { scale: zoom }, fc.start + c); });
+      });
+      tl.fromTo("#fw-r2", { scale: 1.35 }, { scale: 1.12, duration: 0.3, ease: "power3.out" }, T.gila - 0.02);
+      [16, -14, 10, -7, 4, 0].forEach((x, i) => tl.to("#fw-r2", { x: x, duration: 0.035, ease: "none" }, T.gila + i * 0.035));
+      // --- B-roll: slow push-in, slam on the hook and the strike
+      T.overlays.forEach((o) => {
+        const el = "#w-" + o.idx, d = o.end - o.start;
+        if (o.idx === 0) {
+          tl.fromTo(el, { scale: 1.22 }, { scale: 1.06, duration: 0.45, ease: "power3.out" }, 0);
+          tl.to(el, { scale: 1.0, duration: Math.max(0.1, d - 0.45), ease: "none" }, 0.45);
+        } else if (o.sid === "I") {
+          tl.fromTo(el, { scale: 1.18, x: 0 }, { scale: 1.02, duration: 0.45, ease: "power3.out" }, o.start);
+          [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.04, ease: "none" }, o.start + i * 0.04));
+          tl.to(el, { scale: 1.08, duration: Math.max(0.1, d - 0.45), ease: "none" }, o.start + 0.45);
+        } else if (o.mode === "split") {
+          tl.fromTo(el, { yPercent: 100 }, { yPercent: 0, duration: 0.22, ease: "power3.out" }, o.start);
+        } else {
+          tl.fromTo(el, { scale: 1.0 }, { scale: 1.07, duration: d, ease: "none" }, o.start);
+        }
+      });
+
+      // --- white flashes on the big hits
+      [[T.strike, 0.9], [T.end_start, 0.55]].forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.04, ease: "none" }, Math.max(0, t - 0.04));
+        tl.to("#flash", { opacity: 0, duration: 0.28, ease: "power2.out" }, t);
+      });
+
+      // --- progress bar
+      tl.fromTo("#prog-fill", { scaleX: 0 }, { scaleX: 1, duration: T.end_start, ease: "none" }, 0);
+      tl.set("#prog-gift", { scale: 1, rotation: 0 }, 0);
+      [3, 9, 15, 21, 27, 33, 39].forEach((t) => {
+        tl.to("#prog-gift", { scale: 1.25, rotation: 12, duration: 0.15, ease: "power2.out" }, t);
+        tl.to("#prog-gift", { scale: 1, rotation: 0, duration: 0.25, ease: "power2.in" }, t + 0.15);
+      });
+      tl.to(["#prog", "#prog-gift"], { opacity: 0, duration: 0.2 }, T.end_start);
+
+      // --- hook (frame 0 already shows the line — it is the thumbnail)
+      tl.fromTo("#h-big", { scale: 1.25 }, { scale: 1, duration: 0.35, ease: "back.out(2)" }, 0);
+      tl.fromTo("#h-top", { y: -20, opacity: 0.85 }, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#h-bot", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2.5)" }, 0.5);
+      tl.to("#h-big", { scale: 1.06, duration: T.hook_end - 0.6, ease: "none" }, 0.35);
+      tl.to("#hook-in", { opacity: 0, y: -40, duration: 0.15, ease: "power2.in" }, T.hook_end - 0.17);
+
+      // --- gift tease
+      const g0 = T.gift[0], g1 = T.gift[1];
+      tl.fromTo("#g-top", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2)" }, g0);
+      tl.fromTo("#g-chip", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(3)" }, g0 + 0.3);
+      tl.fromTo("#g-chip", { y: 0 }, { y: -14, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 5 }, g0 + 0.6);
+      tl.fromTo("#g-arrow", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2 }, g0 + 0.6);
+      tl.to("#gift-in", { opacity: 0, duration: 0.12 }, g1 - 0.14);
+
+      // --- section tags
+      document.querySelectorAll(".sec").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".sec-in");
+        tl.fromTo(inner, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.28, ease: "power3.out" }, s);
+        tl.to(inner, { opacity: 0, x: -30, duration: 0.15, ease: "power2.in" }, s + d - 0.17);
+      });
+
+      // --- quotes
+      document.querySelectorAll(".quote").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".q-in");
+        tl.fromTo(inner, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "power2.out" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.1 }, s + d - 0.11);
+      });
+
+      // --- stickers
+      document.querySelectorAll(".stk").forEach((el, i) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".stk-in");
+        const r = i % 2 ? 3 : -3;
+        tl.fromTo(inner, { scale: 2.2, opacity: 0, rotation: r * 3 }, { scale: 1, opacity: 1, rotation: r, duration: 0.2, ease: "back.out(1.8)" }, s);
+        tl.to(inner, { scale: 1.06, duration: Math.max(0.1, d - 0.35), ease: "none" }, s + 0.2);
+        tl.to(inner, { opacity: 0, scale: 1.15, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+      });
+
+      // --- captions: pop in, hard kill at end
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Montserrat", fontWeight: 900, maxWidth: 850, baseSize: 104, minSize: 64 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.55, opacity: 0, y: 16 }, { scale: 1, opacity: 1, y: 0, duration: 0.13, ease: "back.out(2.6)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.05, ease: "power2.in" }, s + d - 0.05);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      // --- end card
+      const e0 = T.end_start;
+      tl.fromTo("#ec-dim", { opacity: 0 }, { opacity: 1, duration: 0.3 }, e0);
+      tl.fromTo("#ec-panel", { scale: 0.7, opacity: 0, y: 60 }, { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.7)" }, e0 + 0.05);
+      document.querySelectorAll("#ec-code .ch").forEach((c, i) => {
+        tl.fromTo(c, { y: -40, opacity: 0, scale: 1.6 }, { y: 0, opacity: 1, scale: 1, duration: 0.14, ease: "back.out(3)" }, T.t_code + i * 0.06);
+      });
+      tl.fromTo("#ec-code", { boxShadow: "0 0 0px rgba(246,196,83,0)" }, { boxShadow: "0 0 50px rgba(246,196,83,0.9)", duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.t_code + 0.8);
+      tl.fromTo("#ec-r1", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.t_primo);
+      tl.fromTo("#ec-r2", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.t_exp);
+      tl.fromTo("#ec-hint", { opacity: 0 }, { opacity: 1, duration: 0.3 }, T.t_exp + 0.5);
+      tl.to("#ec-panel", { opacity: 0, scale: 0.92, duration: 0.15, ease: "power2.in" }, T.end_end - 0.16);
+      tl.fromTo("#oc-code", { y: -260, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, T.outro);
+      tl.fromTo("#ec-follow-in", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)" }, T.t_follow);
+      tl.fromTo("#ec-follow-in", { scale: 1 }, { scale: 1.07, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.t_follow + 0.32);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

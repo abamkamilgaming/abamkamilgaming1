@@ -20,7 +20,11 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      .facewrap { position: absolute; inset: 0; transform-origin: 50% 28%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
       .shotwrap { position: absolute; inset: 0; transform-origin: 50% 45%; }
+      .shotwrap.split { top: 960px; height: 960px; overflow: hidden; transform-origin: 50% 0%; }
+      .shotwrap.split .shot { height: 960px; border-top: 8px solid var(--gold); box-sizing: border-box; }
       .shot { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
 
       /* shades: hide the game's burned-in subtitles + give text a bed */
@@ -71,15 +75,15 @@
       .h-line { display: block; }
 
       /* gift tease */
-      #gift { position: absolute; left: 0; right: 0; top: 420px; height: 560px; z-index: 75; text-align: center; }
-      .g-top { font-family: var(--font-display); font-size: 96px; line-height: 1; color: #fff;
+      #gift { position: absolute; left: 0; right: 0; top: 960px; height: 420px; z-index: 75; text-align: center; }
+      .g-top { font-family: var(--font-display); font-size: 80px; line-height: 1; color: #fff;
         -webkit-text-stroke: 4px #000; text-shadow: 0 8px 0 #000; }
-      .g-chip { display: inline-flex; align-items: center; gap: 22px; margin-top: 40px; padding: 22px 40px;
+      .g-chip { display: inline-flex; align-items: center; gap: 22px; margin-top: 22px; padding: 22px 40px;
         border-radius: 999px; background: linear-gradient(90deg, #6d3df0, #b04cff);
         border: 4px solid var(--gold-2); box-shadow: 0 0 50px rgba(176,76,255,0.7); }
       .g-chip .ic { width: 80px; height: 80px; }
       .g-chip span { font-family: var(--font-display); font-size: 60px; color: #fff; }
-      .g-arrow { font-family: var(--font-display); font-size: 70px; color: var(--gold); margin-top: 26px; -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      .g-arrow { font-family: var(--font-display); font-size: 56px; color: var(--gold); margin-top: 16px; -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
 
       /* captions: one group visible at a time, AbamKamil-style big pop words */
       #captions { position: absolute; left: 0; right: 0; top: 1140px; height: 200px; z-index: 80; }
@@ -103,6 +107,8 @@
       /* stickers */
       .stk { position: absolute; left: 0; right: 0; top: 560px; height: 420px; z-index: 78; text-align: center; }
       .stk.top { top: 430px; }
+      .stk.mid { top: 520px; }
+      .stk.midsub { top: 720px; }
       .stk-in { position: absolute; left: 40px; right: 40px; top: 0; transform-origin: 50% 50%; }
       .stk .big { display: block; font-family: var(--font-display); font-size: 190px; line-height: 0.95;
         -webkit-text-stroke: 6px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; }
@@ -115,7 +121,7 @@
 
       /* end card */
       #endcard { position: absolute; inset: 0; z-index: 85; }
-      #ec-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(20,14,50,0.55), rgba(5,7,15,0.9)); }
+      #ec-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(20,14,50,0.82), rgba(5,7,15,0.95)); }
       #ec-panel { position: absolute; left: 100px; right: 100px; top: 330px; height: 940px; border-radius: 40px;
         background: linear-gradient(170deg, rgba(36,28,84,0.95), rgba(12,14,36,0.96));
         border: 4px solid rgba(246,196,83,0.85); box-shadow: 0 0 80px rgba(167,123,255,0.45); text-align: center; }
@@ -129,78 +135,107 @@
       .ec-row .txt { font-family: var(--font-cap); font-weight: 900; font-size: 56px; color: #fff; text-align: left; }
       .ec-row .txt b { color: var(--gold); }
       .ec-hint { font-family: var(--font-cap); font-weight: 700; font-size: 34px; color: rgba(255,255,255,0.75); margin-top: 44px; }
-      #ec-follow { position: absolute; left: 0; right: 0; top: 1310px; text-align: center; }
+      #outro { position: absolute; left: 0; right: 0; top: 990px; height: 340px; z-index: 85; text-align: center; }
+      #oc-code { display: inline-flex; align-items: center; gap: 16px; padding: 14px 28px; border-radius: 18px;
+        background: rgba(248,241,220,0.96); border: 4px dashed #b8892b; }
+      #oc-code .ic { width: 54px; height: 54px; }
+      #oc-code span { font-family: "JetBrains Mono", "Space Mono", monospace; font-weight: 700; font-size: 58px; color: #1b1440; letter-spacing: 0.06em; }
+      #ec-follow { margin-top: 30px; text-align: center; }
       #ec-follow-in { display: inline-block; font-family: var(--font-display); font-size: 64px; color: #0b0f22;
         background: var(--gold); padding: 22px 56px; border-radius: 999px; box-shadow: 0 10px 0 #8a5c00; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="56.29" data-width="1080" data-height="1920">
-      <div class="shotwrap" id="w-A" style="z-index:10">
-        <video id="v-A" class="clip shot" src="assets/clips/A.mp4" data-start="0" data-duration="2.424" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="57.59" data-width="1080" data-height="1920">
+      <div class="facewrap" id="fw-h1" style="z-index:10">
+        <video id="face-h1" class="clip face" src="assets/th/h1.mp4" data-start="0.15" data-duration="5.56" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-B" style="z-index:11">
-        <video id="v-B" class="clip shot" src="assets/clips/B.mp4" data-start="2.424" data-duration="2.328" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.26,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-h2" style="z-index:10">
+        <video id="face-h2" class="clip face" src="assets/th/h2.mp4" data-start="5.71" data-duration="3.343" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-C" style="z-index:12">
-        <video id="v-C" class="clip shot" src="assets/clips/C.mp4" data-start="4.752" data-duration="3.192" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-d1" style="z-index:10">
+        <video id="face-d1" class="clip face" src="assets/th/d1.mp4" data-start="9.053" data-duration="6.743" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-D1" style="z-index:13">
-        <video id="v-D1" class="clip shot" src="assets/clips/D1.mp4" data-start="7.944" data-duration="1.835" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.15,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-s1" style="z-index:10">
+        <video id="face-s1" class="clip face" src="assets/th/s1.mp4" data-start="15.796" data-duration="5.477" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-D2" style="z-index:14">
-        <video id="v-D2" class="clip shot" src="assets/clips/D2.mp4" data-start="9.779" data-duration="2.01" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.22,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-r1" style="z-index:10">
+        <video id="face-r1" class="clip face" src="assets/th/r1.mp4" data-start="21.273" data-duration="5.36" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-E" style="z-index:15">
-        <video id="v-E" class="clip shot" src="assets/clips/E.mp4" data-start="11.789" data-duration="3.6" data-track-index="1" data-has-audio="true" data-volume="1.5" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.28,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-r2" style="z-index:10">
+        <video id="face-r2" class="clip face" src="assets/th/r2.mp4" data-start="26.633" data-duration="2.443" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-F1" style="z-index:16">
-        <video id="v-F1" class="clip shot" src="assets/clips/F1.mp4" data-start="15.389" data-duration="2.282" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.16,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-z1" style="z-index:10">
+        <video id="face-z1" class="clip face" src="assets/th/z1.mp4" data-start="29.076" data-duration="2.243" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-F2" style="z-index:17">
-        <video id="v-F2" class="clip shot" src="assets/clips/F2.mp4" data-start="17.671" data-duration="2.381" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-z2" style="z-index:10">
+        <video id="face-z2" class="clip face" src="assets/th/z2.mp4" data-start="31.319" data-duration="5.143" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-G" style="z-index:18">
-        <video id="v-G" class="clip shot" src="assets/clips/G.mp4" data-start="20.052" data-duration="2.544" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.19,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-c1a" style="z-index:10">
+        <video id="face-c1a" class="clip face" src="assets/th/c1a.mp4" data-start="36.462" data-duration="1.893" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-H" style="z-index:19">
-        <video id="v-H" class="clip shot" src="assets/clips/H.mp4" data-start="22.596" data-duration="1.55" data-track-index="1" data-has-audio="true" data-volume="1.6" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-c1b" style="z-index:10">
+        <video id="face-c1b" class="clip face" src="assets/th/c1b.mp4" data-start="40.565" data-duration="3.027" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-I" style="z-index:20">
-        <video id="v-I" class="clip shot" src="assets/clips/I.mp4" data-start="24.146" data-duration="3.372" data-track-index="1" data-has-audio="true" data-volume="0.7" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.09,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-n1" style="z-index:10">
+        <video id="face-n1" class="clip face" src="assets/th/n1.mp4" data-start="43.592" data-duration="4.643" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-J" style="z-index:21">
-        <video id="v-J" class="clip shot" src="assets/clips/J.mp4" data-start="27.518" data-duration="1.131" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-e1" style="z-index:10">
+        <video id="face-e1" class="clip face" src="assets/th/e1.mp4" data-start="48.235" data-duration="6.727" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-K" style="z-index:22">
-        <video id="v-K" class="clip shot" src="assets/clips/K.mp4" data-start="28.649" data-duration="3.268" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="facewrap" id="fw-e2" style="z-index:10">
+        <video id="face-e2" class="clip face" src="assets/th/e2.mp4" data-start="54.962" data-duration="2.628" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.35,&quot;adjust&quot;:{&quot;exposure&quot;:-0.14,&quot;contrast&quot;:0.2,&quot;highlights&quot;:-0.75,&quot;whites&quot;:-0.35,&quot;shadows&quot;:0.06,&quot;blacks&quot;:-0.08,&quot;temperature&quot;:0.06,&quot;tint&quot;:0.02,&quot;vibrance&quot;:0.14,&quot;saturation&quot;:0.04},&quot;details&quot;:{&quot;vignette&quot;:0.32}}"></video>
       </div>
-      <div class="shotwrap" id="w-L1" style="z-index:23">
-        <video id="v-L1" class="clip shot" src="assets/clips/L1.mp4" data-start="31.917" data-duration="1.45" data-track-index="1" data-has-audio="true" data-volume="1.6" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.09,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-0" style="z-index:20">
+        <video id="v-0-A" class="clip shot" src="assets/clips/A.mp4" data-start="0" data-duration="2.299" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-L2" style="z-index:24">
-        <video id="v-L2" class="clip shot" src="assets/clips/L2.mp4" data-start="33.367" data-duration="1.65" data-track-index="1" data-has-audio="true" data-volume="1.6" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.16,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-1" style="z-index:21">
+        <video id="v-1-B" class="clip shot" src="assets/clips/B.mp4" data-start="2.299" data-duration="2.33" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.26,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-M" style="z-index:25">
-        <video id="v-M" class="clip shot" src="assets/clips/M.mp4" data-start="35.017" data-duration="1.35" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.28,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-2" style="z-index:22">
+        <video id="v-2-D1" class="clip shot" src="assets/clips/D1.mp4" data-start="11.145" data-duration="2.171" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.15,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-N" style="z-index:26">
-        <video id="v-N" class="clip shot" src="assets/clips/N.mp4" data-start="36.367" data-duration="2.25" data-track-index="1" data-has-audio="true" data-volume="1.6" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.32,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-3" style="z-index:23">
+        <video id="v-3-E" class="clip shot" src="assets/clips/E.mp4" data-start="13.316" data-duration="2.48" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.28,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-NY" style="z-index:27">
-        <video id="v-NY" class="clip shot" src="assets/clips/NY.mp4" data-start="38.617" data-duration="2.503" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap split" id="w-4" style="z-index:24">
+        <video id="v-4-F1" class="clip shot" src="assets/clips/F1.mp4" data-start="16.3" data-duration="1.892" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.16,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-NS" style="z-index:28">
-        <video id="v-NS" class="clip shot" src="assets/clips/NS.mp4" data-start="41.12" data-duration="1.5" data-track-index="1" data-has-audio="true" data-volume="1.7" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-5" style="z-index:25">
+        <video id="v-5-F2" class="clip shot" src="assets/clips/F2.mp4" data-start="18.73" data-duration="2.543" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-O" style="z-index:29">
-        <video id="v-O" class="clip shot" src="assets/clips/O.mp4" data-start="42.62" data-duration="2.842" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.14,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-6" style="z-index:26">
+        <video id="v-6-G" class="clip shot" src="assets/clips/G.mp4" data-start="21.273" data-duration="1.444" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.19,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-P" style="z-index:30">
-        <video id="v-P" class="clip shot" src="assets/clips/P.mp4" data-start="45.462" data-duration="1.6" data-track-index="1" data-has-audio="true" data-volume="1.5" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-7" style="z-index:27">
+        <video id="v-7-H" class="clip shot" src="assets/clips/H.mp4" data-start="24.213" data-duration="2.42" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
-      <div class="shotwrap" id="w-Q" style="z-index:31">
-        <video id="v-Q" class="clip shot" src="assets/clips/Q.mp4" data-start="47.062" data-duration="9.228" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.14,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      <div class="shotwrap full" id="w-8" style="z-index:28">
+        <video id="v-8-I" class="clip shot" src="assets/clips/I.mp4" data-start="26.633" data-duration="1.56" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.09,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap split" id="w-9" style="z-index:29">
+        <video id="v-9-J" class="clip shot" src="assets/clips/J.mp4" data-start="29.806" data-duration="1.513" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.09,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-10" style="z-index:30">
+        <video id="v-10-K" class="clip shot" src="assets/clips/K.mp4" data-start="31.319" data-duration="3.453" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.12,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-11" style="z-index:31">
+        <video id="v-11-L2" class="clip shot" src="assets/clips/L2.mp4" data-start="35.311" data-duration="1.151" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.16,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-12" style="z-index:32">
+        <video id="v-12-M" class="clip shot" src="assets/clips/M.mp4" data-start="36.462" data-duration="1.893" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.28,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-13" style="z-index:33">
+        <video id="v-13-N" class="clip shot" src="assets/clips/N.mp4" data-start="38.355" data-duration="2.21" data-track-index="2" data-has-audio="true" data-volume="1.6" playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.32,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-14" style="z-index:34">
+        <video id="v-14-NY" class="clip shot" src="assets/clips/NY.mp4" data-start="40.565" data-duration="3.027" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.04,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-15" style="z-index:35">
+        <video id="v-15-O" class="clip shot" src="assets/clips/O.mp4" data-start="44.783" data-duration="1.479" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:0.14,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.16,&quot;shadows&quot;:0.22000000000000003,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
+      </div>
+      <div class="shotwrap full" id="w-16" style="z-index:36">
+        <video id="v-16-C" class="clip shot" src="assets/clips/C.mp4" data-start="46.262" data-duration="1.973" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.55,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.14,&quot;vibrance&quot;:0.22,&quot;temperature&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0.24},&quot;effects&quot;:{&quot;bloom&quot;:0.22}}"></video>
       </div>
       <div id="shade-t"></div>
       <div id="shade-b"></div>
@@ -208,7 +243,7 @@
       <div id="prog"><div id="prog-fill"></div></div>
       <div id="prog-gift"><div class="primo"></div></div>
 
-      <div id="hook" class="clip" data-start="0" data-duration="4.732" data-track-index="4">
+      <div id="hook" class="clip" data-start="0" data-duration="4.609" data-track-index="4">
         <div id="hook-in">
           <span class="h-badge h-line" id="h-badge">ARCHON QUEST 7.2</span>
           <div class="h-top h-line" id="h-top">KESEMUA</div>
@@ -217,7 +252,7 @@
         </div>
       </div>
 
-      <div id="gift" class="clip" data-start="4.752" data-duration="3.172" data-track-index="4">
+      <div id="gift" class="clip" data-start="5.71" data-duration="3.323" data-track-index="4">
         <div id="gift-in">
           <div class="g-top" id="g-top">STAY SAMPAI<br />HABIS!</div>
           <div class="g-chip" id="g-chip"><div class="ic"><div class="primo"></div></div><span>REDEEM CODE FREE</span></div>
@@ -225,157 +260,159 @@
         </div>
       </div>
 
-      <div id="sec-01" class="clip sec" data-start="7.894" data-duration="7.445" data-track-index="5"><div class="sec-in"><span class="sec-num">#01</span><span class="sec-label">BAHAYA KEWUJUDAN TEYVAT</span></div></div>
-      <div id="sec-02" class="clip sec" data-start="15.339" data-duration="4.663" data-track-index="5"><div class="sec-in"><span class="sec-num">#02</span><span class="sec-label">7 ARCHON BERKUMPUL</span></div></div>
-      <div id="sec-03" class="clip sec" data-start="20.002" data-duration="7.466" data-track-index="5"><div class="sec-in"><span class="sec-num">#03</span><span class="sec-label">RAIDEN EI × CELESTIAL NAIL</span></div></div>
-      <div id="sec-04" class="clip sec" data-start="27.468" data-duration="7.499" data-track-index="5"><div class="sec-in"><span class="sec-num">#04</span><span class="sec-label">KONTRAK TERAKHIR ZHONGLI</span></div></div>
-      <div id="sec-05" class="clip sec" data-start="34.967" data-duration="7.603" data-track-index="5"><div class="sec-in"><span class="sec-num">#05</span><span class="sec-label">CELESTIA & NOY</span></div></div>
-      <div id="sec-06" class="clip sec" data-start="42.57" data-duration="4.442" data-track-index="5"><div class="sec-in"><span class="sec-num">#06</span><span class="sec-label">SEMUA BERGABUNG TENAGA</span></div></div>
-      <div id="q-E" class="clip quote" data-start="11.789" data-duration="3.5" data-track-index="6"><div class="q-in"><div class="q-who">THE EVER-SPEAKING ONE</div><div class="q-en">“True annihilation shall descend.”</div><div class="q-bm">Kemusnahan total akan tiba.</div></div></div>
-      <div id="q-H" class="clip quote" data-start="22.596" data-duration="1.45" data-track-index="6"><div class="q-in"><div class="q-who">RAIDEN EI</div><div class="q-en">“…to answer for eternity.”</div><div class="q-bm">Demi keabadian.</div></div></div>
-      <div id="q-L1" class="clip quote" data-start="31.917" data-duration="1.35" data-track-index="6"><div class="q-in"><div class="q-who">ZHONGLI</div><div class="q-en">“Betray it…”</div><div class="q-bm">Khianatinya…</div></div></div>
-      <div id="q-L2" class="clip quote" data-start="33.367" data-duration="1.55" data-track-index="6"><div class="q-in"><div class="q-who">ZHONGLI</div><div class="q-en">“…and you taint my blood.”</div><div class="q-bm">…dan kau cemari darahku.</div></div></div>
-      <div id="q-N" class="clip quote" data-start="36.367" data-duration="2.15" data-track-index="6"><div class="q-in"><div class="q-who">CELESTIA</div><div class="q-en">“Celestia welcomes you.”</div><div class="q-bm">Celestia mengalu-alukan kedatangan kau.</div></div></div>
-      <div id="q-NS" class="clip quote" data-start="41.12" data-duration="1.4" data-track-index="6"><div class="q-in"><div class="q-who">NOY</div><div class="q-en">“Tysyatsky Noy.”</div><div class="q-bm">Noy, fae lord dari Snezhnaya.</div></div></div>
-      <div id="q-P" class="clip quote" data-start="45.462" data-duration="1.5" data-track-index="6"><div class="q-in"><div class="q-who">MAVUIKA</div><div class="q-en">“We have to face it… together.”</div><div class="q-bm">Kita hadap… sama-sama.</div></div></div>
-      <div id="st-500" class="clip stk" data-start="18.839" data-duration="1.163" data-track-index="7"><div class="stk-in"><span class="big gold" style="font-size:190px">500</span><span class="sub">TAHUN LEPAS</span></div></div>
-      <div id="st-42" class="clip stk top" data-start="11.889" data-duration="3.35" data-track-index="7"><div class="stk-in"><span class="sub">TINGGAL</span><span class="big red" style="font-size:161px">42 HARI</span></div></div>
-      <div id="st-gila" class="clip stk" data-start="27.036" data-duration="0.9" data-track-index="7"><div class="stk-in"><span class="big white glow" style="font-size:190px">GILA!</span></div></div>
-      <div id="st-kontrak" class="clip stk top" data-start="30.919" data-duration="0.998" data-track-index="7"><div class="stk-in"><span class="sub">KONTRAK</span><span class="big gold" style="font-size:141px">TERAKHIR</span></div></div>
-      <div id="st-noy" class="clip stk top" data-start="40.727" data-duration="1.693" data-track-index="7"><div class="stk-in"><span class="big gold" style="font-size:190px">NOY</span><span class="sub">WATAK BARU!</span></div></div>
-      <div id="st-reunion" class="clip stk top" data-start="44.37" data-duration="1.042" data-track-index="7"><div class="stk-in"><span class="sub">SEMUA</span><span class="big gold" style="font-size:113px">BERGABUNG!</span></div></div>
+      <div id="sec-01" class="clip sec" data-start="9.023" data-duration="6.743" data-track-index="5"><div class="sec-in"><span class="sec-num">#01</span><span class="sec-label">BAHAYA KEWUJUDAN TEYVAT</span></div></div>
+      <div id="sec-02" class="clip sec" data-start="15.766" data-duration="5.477" data-track-index="5"><div class="sec-in"><span class="sec-num">#02</span><span class="sec-label">7 ARCHON BERKUMPUL</span></div></div>
+      <div id="sec-03" class="clip sec" data-start="21.243" data-duration="7.803" data-track-index="5"><div class="sec-in"><span class="sec-num">#03</span><span class="sec-label">RAIDEN EI × CELESTIAL NAIL</span></div></div>
+      <div id="sec-04" class="clip sec" data-start="29.046" data-duration="7.386" data-track-index="5"><div class="sec-in"><span class="sec-num">#04</span><span class="sec-label">KONTRAK TERAKHIR ZHONGLI</span></div></div>
+      <div id="sec-05" class="clip sec" data-start="36.432" data-duration="7.13" data-track-index="5"><div class="sec-in"><span class="sec-num">#05</span><span class="sec-label">CELESTIA & NOY</span></div></div>
+      <div id="sec-06" class="clip sec" data-start="43.562" data-duration="6.975" data-track-index="5"><div class="sec-in"><span class="sec-num">#06</span><span class="sec-label">SEMUA BERGABUNG TENAGA</span></div></div>
+      <div id="q-N" class="clip quote" data-start="38.355" data-duration="2.15" data-track-index="6"><div class="q-in"><div class="q-who">CELESTIA</div><div class="q-en">“Celestia welcomes you.”</div><div class="q-bm">Celestia mengalu-alukan kedatangan kau.</div></div></div>
+      <div id="st-42" class="clip stk top" data-start="13.366" data-duration="2.43" data-track-index="7"><div class="stk-in"><span class="sub">TINGGAL</span><span class="big red" style="font-size:161px">42 HARI</span></div></div>
+      <div id="st-500" class="clip stk mid" data-start="20.077" data-duration="1.196" data-track-index="7"><div class="stk-in"><span class="big gold" style="font-size:190px">500</span></div></div>
+      <div id="st-500b" class="clip stk midsub" data-start="20.077" data-duration="1.196" data-track-index="7"><div class="stk-in"><span class="sub">TAHUN LEPAS</span></div></div>
+      <div id="st-kontrak" class="clip stk top" data-start="35.261" data-duration="1.201" data-track-index="7"><div class="stk-in"><span class="sub">KONTRAK</span><span class="big gold" style="font-size:141px">TERAKHIR</span></div></div>
+      <div id="st-noy" class="clip stk top" data-start="42.557" data-duration="1.035" data-track-index="7"><div class="stk-in"><span class="big gold" style="font-size:190px">NOY</span><span class="sub">WATAK BARU!</span></div></div>
+      <div id="st-gabung" class="clip stk top" data-start="46.212" data-duration="2.023" data-track-index="7"><div class="stk-in"><span class="sub">SEMUA</span><span class="big gold" style="font-size:113px">BERGABUNG!</span></div></div>
       <div id="captions" data-track-kind="captions">
-        <div id="cap-0" class="clip cap" data-start="0.15" data-duration="1.1"><div class="cap-in"><span class="w">WEH!</span></div></div>
-        <div id="cap-1" class="clip cap" data-start="1.47" data-duration="0.38"><div class="cap-in"><span class="w g">FIRST</span> <span class="w">KALI</span></div></div>
-        <div id="cap-2" class="clip cap" data-start="1.85" data-duration="0.6"><div class="cap-in"><span class="w">DALAM</span> <span class="w g">SEJARAH</span></div></div>
-        <div id="cap-3" class="clip cap" data-start="2.45" data-duration="0.52"><div class="cap-in"><span class="w">GENSHIN</span></div></div>
-        <div id="cap-4" class="clip cap" data-start="3.21" data-duration="0.6"><div class="cap-in"><span class="w">KESEMUA</span> <span class="w g">TUJUH</span></div></div>
-        <div id="cap-5" class="clip cap" data-start="3.81" data-duration="0.82"><div class="cap-in"><span class="w g">ARCHON</span> <span class="w">BERKUMPUL!</span></div></div>
-        <div id="cap-6" class="clip cap" data-start="4.752" data-duration="0.64"><div class="cap-in"><span class="w">STAY</span> <span class="w">SAMPAI</span></div></div>
-        <div id="cap-7" class="clip cap" data-start="5.392" data-duration="0.5"><div class="cap-in"><span class="w g">HABIS</span></div></div>
-        <div id="cap-8" class="clip cap" data-start="6.132" data-duration="0.34"><div class="cap-in"><span class="w">AKU</span> <span class="w">ADA</span></div></div>
-        <div id="cap-9" class="clip cap" data-start="6.472" data-duration="0.48"><div class="cap-in"><span class="w g">REDEEM</span> <span class="w g">CODE</span></div></div>
-        <div id="cap-10" class="clip cap" data-start="6.952" data-duration="0.54"><div class="cap-in"><span class="w g">FREE</span> <span class="w">UNTUK</span></div></div>
-        <div id="cap-11" class="clip cap" data-start="7.492" data-duration="0.32"><div class="cap-in"><span class="w">KORANG!</span></div></div>
-        <div id="cap-12" class="clip cap" data-start="7.944" data-duration="0.64"><div class="cap-in"><span class="w g">TEYVAT</span> <span class="w">SEKARANG</span></div></div>
-        <div id="cap-13" class="clip cap" data-start="8.584" data-duration="0.5"><div class="cap-in"><span class="w">DALAM</span> <span class="w g">BAHAYA</span></div></div>
-        <div id="cap-14" class="clip cap" data-start="9.084" data-duration="0.54"><div class="cap-in"><span class="w g">BESAR</span></div></div>
-        <div id="cap-15" class="clip cap" data-start="9.824" data-duration="0.44"><div class="cap-in"><span class="w g">CELESTIA</span> <span class="w">NAK</span></div></div>
-        <div id="cap-16" class="clip cap" data-start="10.264" data-duration="0.66"><div class="cap-in"><span class="w g">HAPUSKAN</span> <span class="w g">TEYVAT</span></div></div>
-        <div id="cap-17" class="clip cap" data-start="10.924" data-duration="0.74"><div class="cap-in"><span class="w">DARI</span> <span class="w g">KEWUJUDAN!</span></div></div>
-        <div id="cap-18" class="clip cap" data-start="15.389" data-duration="0.66"><div class="cap-in"><span class="w">KALI</span> <span class="w g">TERAKHIR</span></div></div>
-        <div id="cap-19" class="clip cap" data-start="16.049" data-duration="1.5"><div class="cap-in"><span class="w g">SEVEN</span> <span class="w">BERKUMPUL?</span></div></div>
-        <div id="cap-20" class="clip cap" data-start="17.749" data-duration="0.86"><div class="cap-in"><span class="w">MASA</span> <span class="w g">CATACLYSM</span></div></div>
-        <div id="cap-21" class="clip cap" data-start="18.889" data-duration="0.48"><div class="cap-in"><span class="w">LIMA</span> <span class="w">RATUS</span></div></div>
-        <div id="cap-22" class="clip cap" data-start="19.369" data-duration="0.48"><div class="cap-in"><span class="w">TAHUN</span> <span class="w">LEPAS!</span></div></div>
-        <div id="cap-23" class="clip cap" data-start="20.052" data-duration="0.7"><div class="cap-in"><span class="w g">RAIDEN</span> <span class="w g">EI</span></div></div>
-        <div id="cap-24" class="clip cap" data-start="20.752" data-duration="0.54"><div class="cap-in"><span class="w">PULA</span></div></div>
-        <div id="cap-25" class="clip cap" data-start="21.452" data-duration="0.48"><div class="cap-in"><span class="w">DATANG</span> <span class="w">DEMI</span></div></div>
-        <div id="cap-26" class="clip cap" data-start="21.932" data-duration="0.42"><div class="cap-in"><span class="w g">ETERNITY</span></div></div>
-        <div id="cap-27" class="clip cap" data-start="24.146" data-duration="0.78"><div class="cap-in"><span class="w">DAN</span> <span class="w">HANCURKAN</span></div></div>
-        <div id="cap-28" class="clip cap" data-start="24.926" data-duration="0.84"><div class="cap-in"><span class="w g">CELESTIAL</span> <span class="w g">NAIL</span></div></div>
-        <div id="cap-29" class="clip cap" data-start="26.066" data-duration="0.6"><div class="cap-in"><span class="w">SATU</span> <span class="w">TEBASAN</span></div></div>
-        <div id="cap-30" class="clip cap" data-start="26.666" data-duration="0.25"><div class="cap-in"><span class="w">JE</span></div></div>
-        <div id="cap-31" class="clip cap" data-start="27.086" data-duration="0.25"><div class="cap-in"><span class="w g">GILA!</span></div></div>
-        <div id="cap-32" class="clip cap" data-start="27.518" data-duration="0.64"><div class="cap-in"><span class="w">TAPI</span> <span class="w g">ZHONGLI</span></div></div>
-        <div id="cap-33" class="clip cap" data-start="28.158" data-duration="0.32"><div class="cap-in"><span class="w">TAK</span> <span class="w">ADA</span></div></div>
-        <div id="cap-34" class="clip cap" data-start="28.649" data-duration="0.5"><div class="cap-in"><span class="w">DIA</span> <span class="w">MASUK</span></div></div>
-        <div id="cap-35" class="clip cap" data-start="29.149" data-duration="0.52"><div class="cap-in"><span class="w">DALAM</span> <span class="w g">NAIL</span></div></div>
-        <div id="cap-36" class="clip cap" data-start="29.669" data-duration="1.1"><div class="cap-in"><span class="w">GUNA</span> <span class="w g">MORA</span></div></div>
-        <div id="cap-37" class="clip cap" data-start="30.969" data-duration="0.58"><div class="cap-in"><span class="w g">KONTRAK</span> <span class="w g">TERAKHIR</span></div></div>
-        <div id="cap-38" class="clip cap" data-start="31.549" data-duration="0.25"><div class="cap-in"><span class="w">DIA</span></div></div>
-        <div id="cap-39" class="clip cap" data-start="35.017" data-duration="0.44"><div class="cap-in"><span class="w">DAN</span> <span class="w">BILA</span></div></div>
-        <div id="cap-40" class="clip cap" data-start="35.457" data-duration="0.78"><div class="cap-in"><span class="w">SAMPAI</span> <span class="w g">CELESTIA</span></div></div>
-        <div id="cap-41" class="clip cap" data-start="38.617" data-duration="0.72"><div class="cap-in"><span class="w">LEPAS</span> <span class="w">TU</span></div></div>
-        <div id="cap-42" class="clip cap" data-start="39.517" data-duration="0.5"><div class="cap-in"><span class="w">MUNCUL</span> <span class="w">PULA</span></div></div>
-        <div id="cap-43" class="clip cap" data-start="40.017" data-duration="0.56"><div class="cap-in"><span class="w">WATAK</span> <span class="w">BARU</span></div></div>
-        <div id="cap-44" class="clip cap" data-start="40.777" data-duration="0.25"><div class="cap-in"><span class="w g">NOY!</span></div></div>
-        <div id="cap-45" class="clip cap" data-start="42.62" data-duration="0.38"><div class="cap-in"><span class="w">PART</span> <span class="w">PALING</span></div></div>
-        <div id="cap-46" class="clip cap" data-start="43" data-duration="0.68"><div class="cap-in"><span class="w g">MEREMANG</span> <span class="w">UNTUK</span></div></div>
-        <div id="cap-47" class="clip cap" data-start="43.68" data-duration="0.54"><div class="cap-in"><span class="w">PLAYER</span> <span class="w">LAMA</span></div></div>
-        <div id="cap-48" class="clip cap" data-start="44.42" data-duration="0.56"><div class="cap-in"><span class="w">SEMUA</span> <span class="w g">BERGABUNG</span></div></div>
-        <div id="cap-49" class="clip cap" data-start="44.98" data-duration="0.66"><div class="cap-in"><span class="w g">TENAGA!</span></div></div>
+        <div id="cap-0" class="clip cap" data-start="4.629" data-duration="0.974"><div class="cap-in"><span class="w">BERKUMPUL</span><span class="w">BABE!</span></div></div>
+        <div id="cap-1" class="clip cap" data-start="9.392" data-duration="0.557"><div class="cap-in"><span class="w g">TEYVAT</span><span class="w">SEKARANG</span></div></div>
+        <div id="cap-2" class="clip cap" data-start="9.949" data-duration="0.626"><div class="cap-in"><span class="w">DALAM</span><span class="w g">BAHAYA</span></div></div>
+        <div id="cap-3" class="clip cap" data-start="10.575" data-duration="0.413"><div class="cap-in"><span class="w">GUYS</span></div></div>
+        <div id="cap-4" class="clip cap" data-start="11.145" data-duration="0.574"><div class="cap-in"><span class="w g">CELESTIA</span></div></div>
+        <div id="cap-5" class="clip cap" data-start="11.806" data-duration="0.4"><div class="cap-in"><span class="w">DIA</span><span class="w">NAK</span></div></div>
+        <div id="cap-6" class="clip cap" data-start="12.206" data-duration="1.035"><div class="cap-in"><span class="w g">HANCURKAN</span></div></div>
+        <div id="cap-7" class="clip cap" data-start="13.316" data-duration="0.68"><div class="cap-in"><span class="w g">TEYVAT</span><span class="w">NI</span></div></div>
+        <div id="cap-8" class="clip cap" data-start="14.03" data-duration="1.148"><div class="cap-in"><span class="w">DARIPADA</span><span class="w">TAK</span></div></div>
+        <div id="cap-9" class="clip cap" data-start="15.178" data-duration="0.522"><div class="cap-in"><span class="w g">WUJUD</span><span class="w g">LANGSUNG</span></div></div>
+        <div id="cap-10" class="clip cap" data-start="15.935" data-duration="0.365"><div class="cap-in"><span class="w">KALI</span><span class="w g">TERAKHIR</span></div></div>
+        <div id="cap-11" class="clip cap" data-start="16.3" data-duration="0.331"><div class="cap-in"><span class="w">BILA</span><span class="w">KAU</span></div></div>
+        <div id="cap-12" class="clip cap" data-start="16.631" data-duration="0.713"><div class="cap-in"><span class="w">INGAT</span><span class="w g">7</span></div></div>
+        <div id="cap-13" class="clip cap" data-start="17.344" data-duration="0.848"><div class="cap-in"><span class="w g">ARCHON</span><span class="w">BERKUMPUL?</span></div></div>
+        <div id="cap-14" class="clip cap" data-start="18.192" data-duration="0.451"><div class="cap-in"><span class="w">HAA</span></div></div>
+        <div id="cap-15" class="clip cap" data-start="18.73" data-duration="0.73"><div class="cap-in"><span class="w">MASA</span><span class="w g">CATACLYSM</span></div></div>
+        <div id="cap-16" class="clip cap" data-start="19.46" data-duration="0.441"><div class="cap-in"><span class="w">LAH</span></div></div>
+        <div id="cap-17" class="clip cap" data-start="20.127" data-duration="0.661"><div class="cap-in"><span class="w g">500</span><span class="w">TAHUN</span></div></div>
+        <div id="cap-18" class="clip cap" data-start="20.823" data-duration="0.33"><div class="cap-in"><span class="w">LEPAS</span></div></div>
+        <div id="cap-19" class="clip cap" data-start="21.569" data-duration="0.33"><div class="cap-in"><span class="w g">RAIDEN</span><span class="w g">EI</span></div></div>
+        <div id="cap-20" class="clip cap" data-start="21.899" data-duration="0.487"><div class="cap-in"><span class="w">PULA</span></div></div>
+        <div id="cap-21" class="clip cap" data-start="22.717" data-duration="1.496"><div class="cap-in"><span class="w">DIA</span><span class="w g">HANCURKAN</span></div></div>
+        <div id="cap-22" class="clip cap" data-start="24.213" data-duration="0.957"><div class="cap-in"><span class="w g">CELESTIAL</span><span class="w g">NAIL</span></div></div>
+        <div id="cap-23" class="clip cap" data-start="25.17" data-duration="1.373"><div class="cap-in"><span class="w">DEMI</span><span class="w g">ETERNITY</span></div></div>
+        <div id="cap-24" class="clip cap" data-start="26.763" data-duration="0.261"><div class="cap-in"><span class="w">WEH</span></div></div>
+        <div id="cap-25" class="clip cap" data-start="27.024" data-duration="0.487"><div class="cap-in"><span class="w">SATU</span><span class="w g">LIBAS</span></div></div>
+        <div id="cap-26" class="clip cap" data-start="27.511" data-duration="0.308"><div class="cap-in"><span class="w">JE</span><span class="w">BABE!</span></div></div>
+        <div id="cap-27" class="clip cap" data-start="28.193" data-duration="0.696"><div class="cap-in"><span class="w g">GILA!</span></div></div>
+        <div id="cap-28" class="clip cap" data-start="29.215" data-duration="1.468"><div class="cap-in"><span class="w">TAPI</span><span class="w g">ZHONGLI</span></div></div>
+        <div id="cap-29" class="clip cap" data-start="30.683" data-duration="0.503"><div class="cap-in"><span class="w g">TAKDE</span></div></div>
+        <div id="cap-30" class="clip cap" data-start="31.389" data-duration="0.469"><div class="cap-in"><span class="w">DIA</span><span class="w">MASUK</span></div></div>
+        <div id="cap-31" class="clip cap" data-start="31.858" data-duration="1.165"><div class="cap-in"><span class="w">DALAM</span><span class="w g">CELESTIAL</span></div></div>
+        <div id="cap-32" class="clip cap" data-start="33.023" data-duration="1.161"><div class="cap-in"><span class="w g">NAIL</span><span class="w">GUNA</span></div></div>
+        <div id="cap-33" class="clip cap" data-start="34.184" data-duration="0.4"><div class="cap-in"><span class="w">APA?</span></div></div>
+        <div id="cap-34" class="clip cap" data-start="34.772" data-duration="0.313"><div class="cap-in"><span class="w">HAA</span></div></div>
+        <div id="cap-35" class="clip cap" data-start="35.172" data-duration="0.504"><div class="cap-in"><span class="w">ITU</span><span class="w g">KONTRAK</span></div></div>
+        <div id="cap-36" class="clip cap" data-start="35.676" data-duration="0.696"><div class="cap-in"><span class="w g">TERAKHIR</span><span class="w">DIA</span></div></div>
+        <div id="cap-37" class="clip cap" data-start="36.584" data-duration="0.608"><div class="cap-in"><span class="w">LEPAS</span><span class="w">TU</span></div></div>
+        <div id="cap-38" class="clip cap" data-start="37.245" data-duration="0.452"><div class="cap-in"><span class="w">BILA</span><span class="w">SAMPAI</span></div></div>
+        <div id="cap-39" class="clip cap" data-start="37.697" data-duration="0.435"><div class="cap-in"><span class="w g">CELESTIA</span></div></div>
+        <div id="cap-40" class="clip cap" data-start="40.617" data-duration="0.713"><div class="cap-in"><span class="w">MUNCUL</span><span class="w">PULA</span></div></div>
+        <div id="cap-41" class="clip cap" data-start="41.33" data-duration="0.922"><div class="cap-in"><span class="w g">WATAK</span><span class="w g">BARU</span></div></div>
+        <div id="cap-42" class="clip cap" data-start="42.252" data-duration="0.355"><div class="cap-in"><span class="w">WEY</span></div></div>
+        <div id="cap-43" class="clip cap" data-start="42.607" data-duration="0.817"><div class="cap-in"><span class="w g">NOY!</span></div></div>
+        <div id="cap-44" class="clip cap" data-start="43.914" data-duration="0.661"><div class="cap-in"><span class="w">WEY</span></div></div>
+        <div id="cap-45" class="clip cap" data-start="44.783" data-duration="0.731"><div class="cap-in"><span class="w">PALING</span><span class="w g">MEREMANG</span></div></div>
+        <div id="cap-46" class="clip cap" data-start="45.514" data-duration="0.469"><div class="cap-in"><span class="w">UNTUK</span><span class="w">PLAYER</span></div></div>
+        <div id="cap-47" class="clip cap" data-start="45.983" data-duration="0.539"><div class="cap-in"><span class="w">LAMA</span><span class="w">SEMUA</span></div></div>
+        <div id="cap-48" class="clip cap" data-start="46.522" data-duration="0.905"><div class="cap-in"><span class="w g">BERGABUNG</span><span class="w g">TENAGA</span></div></div>
+        <div id="cap-49" class="clip cap" data-start="48.235" data-duration="1.087"><div class="cap-in"><span class="w">JANJI</span><span class="w">AKU</span></div></div>
+        <div id="cap-50" class="clip cap" data-start="49.722" data-duration="0.609"><div class="cap-in"><span class="w">INI</span><span class="w g">REDEEM</span></div></div>
+        <div id="cap-51" class="clip cap" data-start="50.331" data-duration="0.206"><div class="cap-in"><span class="w g">CODE</span><span class="w">DIA</span></div></div>
       </div>
 
-      <div id="endcard" class="clip" data-start="47.012" data-duration="9.278" data-track-index="8">
+      <div id="endcard" class="clip" data-start="50.537" data-duration="4.425" data-track-index="8">
         <div id="ec-dim"></div>
         <div id="ec-panel">
           <div class="ec-title" id="ec-title">REDEEM CODE</div>
           <div class="ec-sub">GENSHIN IMPACT · 7.2</div>
-          <div id="ec-code"><span class="ch" id="ch-0">Q</span><span class="ch" id="ch-1">Y</span><span class="ch" id="ch-2">J</span><span class="ch" id="ch-3">W</span><span class="ch" id="ch-4">5</span><span class="ch" id="ch-5">0</span><span class="ch" id="ch-6">3</span><span class="ch" id="ch-7">6</span><span class="ch" id="ch-8">8</span><span class="ch" id="ch-9">S</span><span class="ch" id="ch-10">U</span><span class="ch" id="ch-11">7</span></div>
+          <div id="ec-code"><span class="ch">Q</span><span class="ch">Y</span><span class="ch">J</span><span class="ch">W</span><span class="ch">5</span><span class="ch">0</span><span class="ch">3</span><span class="ch">6</span><span class="ch">8</span><span class="ch">S</span><span class="ch">U</span><span class="ch">7</span></div>
           <div class="ec-row" id="ec-r1"><div class="ic"><div class="primo"></div></div><div class="txt"><b>×60</b> Primogems</div></div>
           <div class="ec-row" id="ec-r2"><div class="ic"><div class="book"></div></div><div class="txt"><b>×5</b> Adventurer's<br />Experience</div></div>
           <div class="ec-hint" id="ec-hint">Claim cepat sebelum expired!</div>
         </div>
-        <div id="ec-follow"><div id="ec-follow-in">FOLLOW FOR MORE</div></div>
+      </div>
+
+      <div id="outro" class="clip" data-start="54.962" data-duration="2.628" data-track-index="8">
+        <div id="oc-in">
+          <div id="oc-code"><div class="ic"><div class="primo"></div></div><span>QYJW50368SU7</span></div>
+          <div id="ec-follow"><div id="ec-follow-in">FOLLOW FOR MORE</div></div>
+        </div>
       </div>
 
       <div id="flash"></div>
 
-      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="56.29" data-volume="0.2"
+      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="57.59" data-volume="0.14"
         data-fade-in="0.2" data-fade-out="1.6" data-track-index="11"></audio>
-      <audio id="vo-h1" class="clip" src="assets/voice/h1.wav" data-start="0.15" data-duration="4.502" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-h2" class="clip" src="assets/voice/h2.wav" data-start="4.752" data-duration="3.092" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-d1" class="clip" src="assets/voice/d1.wav" data-start="7.944" data-duration="3.745" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-s1" class="clip" src="assets/voice/s1.wav" data-start="15.389" data-duration="4.563" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-r1" class="clip" src="assets/voice/r1.wav" data-start="20.052" data-duration="2.444" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-r2" class="clip" src="assets/voice/r2.wav" data-start="24.146" data-duration="3.272" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-z1" class="clip" src="assets/voice/z1.wav" data-start="27.518" data-duration="1.031" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-z2" class="clip" src="assets/voice/z2.wav" data-start="28.649" data-duration="3.168" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-c1a" class="clip" src="assets/voice/c1a.wav" data-start="35.017" data-duration="1.25" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-c1b" class="clip" src="assets/voice/c1b.wav" data-start="38.617" data-duration="2.403" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-n1" class="clip" src="assets/voice/n1.wav" data-start="42.62" data-duration="2.742" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-e1" class="clip" src="assets/voice/e1.wav" data-start="47.062" data-duration="5.363" data-volume="1" data-track-index="10"></audio>
-      <audio id="vo-e2" class="clip" src="assets/voice/e2.wav" data-start="52.525" data-duration="1.863" data-volume="1" data-track-index="10"></audio>
-      <audio id="sfx-0" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="0" data-duration="2.12" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-1" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="2.324" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-2" class="clip" src="assets/sfx/whoosh.mp3" data-start="4.632" data-duration="0.57" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-3" class="clip" src="assets/sfx/pop.mp3" data-start="5.002" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-4" class="clip" src="assets/sfx/pop.mp3" data-start="6.422" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-5" class="clip" src="assets/sfx/glitch-1.mp3" data-start="7.894" data-duration="2.64" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-6" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="11.439" data-duration="2.59" data-volume="0.6" data-track-index="12"></audio>
-      <audio id="sfx-7" class="clip" src="assets/sfx/whoosh.mp3" data-start="15.269" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-8" class="clip" src="assets/sfx/ping.mp3" data-start="18.839" data-duration="1.32" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-9" class="clip" src="assets/sfx/riser.mp3" data-start="14.116" data-duration="10.03" data-volume="0.32" data-track-index="12"></audio>
-      <audio id="sfx-10" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="24.146" data-duration="2.12" data-volume="0.6" data-track-index="12"></audio>
-      <audio id="sfx-11" class="clip" src="assets/sfx/pop.mp3" data-start="27.036" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-12" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="27.418" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-13" class="clip" src="assets/sfx/sparkle.mp3" data-start="29.829" data-duration="1.8" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-14" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="30.569" data-duration="2.59" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-15" class="clip" src="assets/sfx/whoosh.mp3" data-start="34.897" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-16" class="clip" src="assets/sfx/chime.mp3" data-start="36.367" data-duration="2.5" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-17" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="38.517" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-18" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="40.427" data-duration="2.59" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-19" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="42.52" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-20" class="clip" src="assets/sfx/sparkle.mp3" data-start="44.37" data-duration="1.8" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-21" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="47.012" data-duration="2.12" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-22" class="clip" src="assets/sfx/ping.mp3" data-start="48.092" data-duration="1.32" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-23" class="clip" src="assets/sfx/pop.mp3" data-start="49.292" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-24" class="clip" src="assets/sfx/pop.mp3" data-start="50.652" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-25" class="clip" src="assets/sfx/notification.mp3" data-start="53.425" data-duration="2.46" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-0" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="0" data-duration="2.12" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-1" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="2.199" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-2" class="clip" src="assets/sfx/whoosh.mp3" data-start="4.509" data-duration="0.57" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-3" class="clip" src="assets/sfx/whoosh.mp3" data-start="5.61" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-4" class="clip" src="assets/sfx/pop.mp3" data-start="6.01" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-5" class="clip" src="assets/sfx/pop.mp3" data-start="7.188" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-6" class="clip" src="assets/sfx/glitch-1.mp3" data-start="11.095" data-duration="2.64" data-volume="0.32" data-track-index="12"></audio>
+      <audio id="sfx-7" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="13.016" data-duration="2.59" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-8" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="16.2" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-9" class="clip" src="assets/sfx/whoosh.mp3" data-start="18.63" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-10" class="clip" src="assets/sfx/ping.mp3" data-start="20.077" data-duration="1.32" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-11" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="21.473" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-12" class="clip" src="assets/sfx/riser.mp3" data-start="16.603" data-duration="10.03" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-13" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="26.633" data-duration="2.12" data-volume="0.6" data-track-index="12"></audio>
+      <audio id="sfx-14" class="clip" src="assets/sfx/pop.mp3" data-start="28.153" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-15" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="29.706" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-16" class="clip" src="assets/sfx/sparkle.mp3" data-start="31.519" data-duration="1.8" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-17" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="34.961" data-duration="2.59" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-18" class="clip" src="assets/sfx/whoosh.mp3" data-start="36.362" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-19" class="clip" src="assets/sfx/chime.mp3" data-start="38.355" data-duration="2.5" data-volume="0.3" data-track-index="12"></audio>
+      <audio id="sfx-20" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="40.485" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-21" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="42.257" data-duration="2.59" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-22" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="44.683" data-duration="0.57" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-23" class="clip" src="assets/sfx/sparkle.mp3" data-start="46.212" data-duration="1.8" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-24" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="50.507" data-duration="2.12" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-25" class="clip" src="assets/sfx/ping.mp3" data-start="50.787" data-duration="1.32" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-26" class="clip" src="assets/sfx/pop.mp3" data-start="51.437" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-27" class="clip" src="assets/sfx/pop.mp3" data-start="52.971" data-duration="0.72" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-28" class="clip" src="assets/sfx/notification.mp3" data-start="55.707" data-duration="1.883" data-volume="0.35" data-track-index="12"></audio>
     </div>
     <script>
-      const T = {"total": 56.29, "placed": [{"id": "A", "start": 0.0, "end": 2.424}, {"id": "B", "start": 2.424, "end": 4.752}, {"id": "C", "start": 4.752, "end": 7.944}, {"id": "D1", "start": 7.944, "end": 9.779}, {"id": "D2", "start": 9.779, "end": 11.789}, {"id": "E", "start": 11.789, "end": 15.389}, {"id": "F1", "start": 15.389, "end": 17.671}, {"id": "F2", "start": 17.671, "end": 20.052}, {"id": "G", "start": 20.052, "end": 22.596}, {"id": "H", "start": 22.596, "end": 24.146}, {"id": "I", "start": 24.146, "end": 27.518}, {"id": "J", "start": 27.518, "end": 28.649}, {"id": "K", "start": 28.649, "end": 31.917}, {"id": "L1", "start": 31.917, "end": 33.367}, {"id": "L2", "start": 33.367, "end": 35.017}, {"id": "M", "start": 35.017, "end": 36.367}, {"id": "N", "start": 36.367, "end": 38.617}, {"id": "NY", "start": 38.617, "end": 41.12}, {"id": "NS", "start": 41.12, "end": 42.62}, {"id": "O", "start": 42.62, "end": 45.462}, {"id": "P", "start": 45.462, "end": 47.062}, {"id": "Q", "start": 47.062, "end": 56.29}], "events": [{"kind": "vo", "id": "h1", "shots": ["A", "B"], "start": 0.15, "dur": 4.502}, {"kind": "vo", "id": "h2", "shots": ["C"], "start": 4.752, "dur": 3.092}, {"kind": "vo", "id": "d1", "shots": ["D1", "D2"], "start": 7.944, "dur": 3.745}, {"kind": "sync", "id": "E", "shots": ["E"], "start": 11.789, "dur": 3.5}, {"kind": "vo", "id": "s1", "shots": ["F1", "F2"], "start": 15.389, "dur": 4.563}, {"kind": "vo", "id": "r1", "shots": ["G"], "start": 20.052, "dur": 2.444}, {"kind": "sync", "id": "H", "shots": ["H"], "start": 22.596, "dur": 1.45}, {"kind": "vo", "id": "r2", "shots": ["I"], "start": 24.146, "dur": 3.272}, {"kind": "vo", "id": "z1", "shots": ["J"], "start": 27.518, "dur": 1.031}, {"kind": "vo", "id": "z2", "shots": ["K"], "start": 28.649, "dur": 3.168}, {"kind": "sync", "id": "L1", "shots": ["L1"], "start": 31.917, "dur": 1.35}, {"kind": "sync", "id": "L2", "shots": ["L2"], "start": 33.367000000000004, "dur": 1.55}, {"kind": "vo", "id": "c1a", "shots": ["M"], "start": 35.017, "dur": 1.25}, {"kind": "sync", "id": "N", "shots": ["N"], "start": 36.367000000000004, "dur": 2.15}, {"kind": "vo", "id": "c1b", "shots": ["NY"], "start": 38.617000000000004, "dur": 2.403}, {"kind": "sync", "id": "NS", "shots": ["NS"], "start": 41.120000000000005, "dur": 1.4}, {"kind": "vo", "id": "n1", "shots": ["O"], "start": 42.620000000000005, "dur": 2.742}, {"kind": "sync", "id": "P", "shots": ["P"], "start": 45.462, "dur": 1.5}, {"kind": "vo", "id": "e1", "shots": ["Q"], "start": 47.062000000000005, "dur": 5.363}, {"kind": "vo", "id": "e2", "shots": [], "start": 52.525000000000006, "dur": 1.863}], "caps": [{"words": ["Weh!"], "start": 0.15, "end": 1.25}, {"words": ["First", "kali"], "start": 1.47, "end": 1.8499999999999999}, {"words": ["dalam", "sejarah"], "start": 1.8499999999999999, "end": 2.4499999999999997}, {"words": ["Genshin,"], "start": 2.4499999999999997, "end": 2.9699999999999998}, {"words": ["kesemua", "tujuh"], "start": 3.21, "end": 3.81}, {"words": ["Archon", "berkumpul!"], "start": 3.81, "end": 4.630000000000001}, {"words": ["Stay", "sampai"], "start": 4.752, "end": 5.3919999999999995}, {"words": ["habis,"], "start": 5.3919999999999995, "end": 5.8919999999999995}, {"words": ["aku", "ada"], "start": 6.132, "end": 6.4719999999999995}, {"words": ["redeem", "code"], "start": 6.4719999999999995, "end": 6.952}, {"words": ["free", "untuk"], "start": 6.952, "end": 7.492}, {"words": ["korang!"], "start": 7.492, "end": 7.811999999999999}, {"words": ["Teyvat", "sekarang"], "start": 7.944, "end": 8.584}, {"words": ["dalam", "bahaya"], "start": 8.584, "end": 9.084}, {"words": ["besar."], "start": 9.084, "end": 9.624}, {"words": ["Celestia", "nak"], "start": 9.824, "end": 10.264}, {"words": ["hapuskan", "Teyvat"], "start": 10.264, "end": 10.924}, {"words": ["dari", "kewujudan!"], "start": 10.924, "end": 11.664}, {"words": ["Kali", "terakhir"], "start": 15.389, "end": 16.049}, {"words": ["Seven", "berkumpul?"], "start": 16.049, "end": 17.549}, {"words": ["Masa", "Cataclysm,"], "start": 17.749, "end": 18.608999999999998}, {"words": ["lima", "ratus"], "start": 18.889, "end": 19.369}, {"words": ["tahun", "lepas!"], "start": 19.369, "end": 19.849}, {"words": ["Raiden", "Ei"], "start": 20.052, "end": 20.752}, {"words": ["pula,"], "start": 20.752, "end": 21.291999999999998}, {"words": ["datang", "demi"], "start": 21.451999999999998, "end": 21.932}, {"words": ["eternity,"], "start": 21.932, "end": 22.352}, {"words": ["dan", "hancurkan"], "start": 24.146, "end": 24.926000000000002}, {"words": ["Celestial", "Nail,"], "start": 24.926000000000002, "end": 25.766000000000002}, {"words": ["satu", "tebasan"], "start": 26.066000000000003, "end": 26.666}, {"words": ["je."], "start": 26.666, "end": 26.916}, {"words": ["Gila!"], "start": 27.086000000000002, "end": 27.336000000000002}, {"words": ["Tapi", "Zhongli"], "start": 27.518, "end": 28.158}, {"words": ["tak", "ada."], "start": 28.158, "end": 28.478}, {"words": ["Dia", "masuk"], "start": 28.649, "end": 29.149}, {"words": ["dalam", "Nail"], "start": 29.149, "end": 29.669}, {"words": ["guna", "Mora."], "start": 29.669, "end": 30.769000000000002}, {"words": ["Kontrak", "terakhir"], "start": 30.969, "end": 31.549}, {"words": ["dia."], "start": 31.549, "end": 31.799}, {"words": ["Dan", "bila"], "start": 35.017, "end": 35.457}, {"words": ["sampai", "Celestia,"], "start": 35.457, "end": 36.237}, {"words": ["Lepas", "tu,"], "start": 38.617000000000004, "end": 39.337}, {"words": ["muncul", "pula"], "start": 39.517, "end": 40.017}, {"words": ["watak", "baru."], "start": 40.017, "end": 40.577000000000005}, {"words": ["Noy!"], "start": 40.777, "end": 41.027}, {"words": ["Part", "paling"], "start": 42.620000000000005, "end": 43.00000000000001}, {"words": ["meremang", "untuk"], "start": 43.00000000000001, "end": 43.68000000000001}, {"words": ["player", "lama,"], "start": 43.68000000000001, "end": 44.220000000000006}, {"words": ["semua", "bergabung"], "start": 44.42, "end": 44.980000000000004}, {"words": ["tenaga!"], "start": 44.980000000000004, "end": 45.64}], "end_start": 47.012, "t_code": 48.092000000000006, "t_primo": 49.292, "t_exp": 50.652, "t_follow": 53.275000000000006, "strike": 24.146, "hook_end": 4.752, "gift": [4.752, 7.944]};
+      const T = {"total": 57.59, "faces": [{"id": "h1", "start": 0.15, "end": 5.71, "dur": 5.5}, {"id": "h2", "start": 5.71, "end": 9.053, "dur": 3.283}, {"id": "d1", "start": 9.053, "end": 15.796, "dur": 6.683}, {"id": "s1", "start": 15.796, "end": 21.273, "dur": 5.417}, {"id": "r1", "start": 21.273, "end": 26.633, "dur": 5.3}, {"id": "r2", "start": 26.633, "end": 29.076, "dur": 2.383}, {"id": "z1", "start": 29.076, "end": 31.319, "dur": 2.183}, {"id": "z2", "start": 31.319, "end": 36.462, "dur": 5.083}, {"id": "c1a", "start": 36.462, "end": 38.355, "dur": 1.833}, {"id": "c1b", "start": 40.565, "end": 43.592, "dur": 2.967}, {"id": "n1", "start": 43.592, "end": 48.235, "dur": 4.583}, {"id": "e1", "start": 48.235, "end": 54.962, "dur": 6.667}, {"id": "e2", "start": 54.962, "end": 57.59, "dur": 1.433}], "overlays": [{"sid": "A", "start": 0.0, "end": 2.299, "mode": "full", "idx": 0}, {"sid": "B", "start": 2.299, "end": 4.629, "mode": "full", "idx": 1}, {"sid": "D1", "start": 11.145, "end": 13.316, "mode": "full", "idx": 2}, {"sid": "E", "start": 13.316, "end": 15.796, "mode": "full", "idx": 3}, {"sid": "F1", "start": 16.3, "end": 18.192, "mode": "split", "idx": 4}, {"sid": "F2", "start": 18.73, "end": 21.273, "mode": "full", "idx": 5}, {"sid": "G", "start": 21.273, "end": 22.717, "mode": "full", "idx": 6}, {"sid": "H", "start": 24.213, "end": 26.633, "mode": "full", "idx": 7}, {"sid": "I", "start": 26.633, "end": 28.193, "mode": "full", "idx": 8}, {"sid": "J", "start": 29.806, "end": 31.319, "mode": "split", "idx": 9}, {"sid": "K", "start": 31.319, "end": 34.772, "mode": "full", "idx": 10}, {"sid": "L2", "start": 35.311, "end": 36.462, "mode": "full", "idx": 11}, {"sid": "M", "start": 36.462, "end": 38.355, "mode": "full", "idx": 12}, {"sid": "N", "start": 38.355, "end": 40.565, "mode": "full", "sync": true, "idx": 13}, {"sid": "NY", "start": 40.565, "end": 43.592, "mode": "full", "idx": 14}, {"sid": "O", "start": 44.783, "end": 46.262, "mode": "full", "idx": 15}, {"sid": "C", "start": 46.262, "end": 48.235, "mode": "full", "idx": 16}], "punch": {"h1": [0.659], "h2": [], "d1": [1.935, 4.188, 4.89], "s1": [2.396, 4.031, 4.992], "r1": [1.294], "r2": [1.186], "z1": [0.73, 1.607], "z2": [2.185, 3.384], "c1a": [], "c1b": [0.017, 2.034], "n1": [2.635], "e1": [3.217, 4.535], "e2": [0.667]}, "end_start": 50.537, "end_end": 54.962, "t_code": 50.787, "t_primo": 51.437000000000005, "t_exp": 52.971000000000004, "t_follow": 55.707, "strike": 26.633, "gila": 28.193, "hook_end": 4.629, "gift": [5.71, 9.053], "outro": 54.962};
       const tl = gsap.timeline({ paused: true });
 
-      // --- shots: slow push-in on every cut, punch on the hook and the strike
-      T.placed.forEach((p) => {
-        const d = p.end - p.start;
-        const el = "#w-" + p.id;
-        if (p.id === "A") {
+      // --- talking head: jump-cut punch-ins (alternate 1.0 / 1.12), reaction punch on "Gila!"
+      T.faces.forEach((fc) => {
+        const el = "#fw-" + fc.id;
+        let zoom = fc.id === "h1" ? 1.0 : 1.06;
+        tl.set(el, { scale: zoom, x: 0 }, fc.start);
+        (T.punch[fc.id] || []).forEach((c) => { zoom = zoom > 1.08 ? 1.0 : 1.14; tl.set(el, { scale: zoom }, fc.start + c); });
+      });
+      tl.fromTo("#fw-r2", { scale: 1.35 }, { scale: 1.12, duration: 0.3, ease: "power3.out" }, T.gila - 0.02);
+      [16, -14, 10, -7, 4, 0].forEach((x, i) => tl.to("#fw-r2", { x: x, duration: 0.035, ease: "none" }, T.gila + i * 0.035));
+      // --- B-roll: slow push-in, slam on the hook and the strike
+      T.overlays.forEach((o) => {
+        const el = "#w-" + o.idx, d = o.end - o.start;
+        if (o.idx === 0) {
           tl.fromTo(el, { scale: 1.22 }, { scale: 1.06, duration: 0.45, ease: "power3.out" }, 0);
-          tl.to(el, { scale: 1.0, duration: d - 0.45, ease: "none" }, 0.45);
-        } else if (p.id === "I") {
-          tl.fromTo(el, { scale: 1.18, x: 0 }, { scale: 1.02, duration: 0.5, ease: "power3.out" }, p.start);
-          [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.04, ease: "none" }, p.start + i * 0.04));
-          tl.to(el, { scale: 1.08, duration: d - 0.5, ease: "none" }, p.start + 0.5);
+          tl.to(el, { scale: 1.0, duration: Math.max(0.1, d - 0.45), ease: "none" }, 0.45);
+        } else if (o.sid === "I") {
+          tl.fromTo(el, { scale: 1.18, x: 0 }, { scale: 1.02, duration: 0.45, ease: "power3.out" }, o.start);
+          [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.04, ease: "none" }, o.start + i * 0.04));
+          tl.to(el, { scale: 1.08, duration: Math.max(0.1, d - 0.45), ease: "none" }, o.start + 0.45);
+        } else if (o.mode === "split") {
+          tl.fromTo(el, { yPercent: 100 }, { yPercent: 0, duration: 0.22, ease: "power3.out" }, o.start);
         } else {
-          tl.fromTo(el, { scale: 1.0 }, { scale: 1.07, duration: d, ease: "none" }, p.start);
+          tl.fromTo(el, { scale: 1.0 }, { scale: 1.07, duration: d, ease: "none" }, o.start);
         }
       });
 
       // --- white flashes on the big hits
-      [[T.strike, 0.9], [T.events.find((e) => e.id === "E").start, 0.5], [T.end_start, 0.6]].forEach(([t, a]) => {
+      [[T.strike, 0.9], [T.end_start, 0.55]].forEach(([t, a]) => {
         tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.04, ease: "none" }, Math.max(0, t - 0.04));
         tl.to("#flash", { opacity: 0, duration: 0.28, ease: "power2.out" }, t);
       });
@@ -450,12 +487,14 @@
       document.querySelectorAll("#ec-code .ch").forEach((c, i) => {
         tl.fromTo(c, { y: -40, opacity: 0, scale: 1.6 }, { y: 0, opacity: 1, scale: 1, duration: 0.14, ease: "back.out(3)" }, T.t_code + i * 0.06);
       });
-      tl.fromTo("#ec-code", { boxShadow: "0 0 0px rgba(246,196,83,0)" }, { boxShadow: "0 0 50px rgba(246,196,83,0.9)", duration: 0.5, yoyo: true, repeat: 7, ease: "sine.inOut" }, T.t_code + 0.8);
+      tl.fromTo("#ec-code", { boxShadow: "0 0 0px rgba(246,196,83,0)" }, { boxShadow: "0 0 50px rgba(246,196,83,0.9)", duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.t_code + 0.8);
       tl.fromTo("#ec-r1", { x: -120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.t_primo);
       tl.fromTo("#ec-r2", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.t_exp);
       tl.fromTo("#ec-hint", { opacity: 0 }, { opacity: 1, duration: 0.3 }, T.t_exp + 0.5);
+      tl.to("#ec-panel", { opacity: 0, scale: 0.92, duration: 0.15, ease: "power2.in" }, T.end_end - 0.16);
+      tl.fromTo("#oc-code", { y: -260, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, T.outro);
       tl.fromTo("#ec-follow-in", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)" }, T.t_follow);
-      tl.fromTo("#ec-follow-in", { scale: 1 }, { scale: 1.07, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.t_follow + 0.35);
+      tl.fromTo("#ec-follow-in", { scale: 1 }, { scale: 1.07, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.t_follow + 0.32);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
