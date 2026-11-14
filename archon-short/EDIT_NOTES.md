@@ -1,6 +1,6 @@
 # Archon Quest 7.2 — Short (preview draft)
 
-**Format:** 1080×1920 (9:16), 30 fps, **53.85 s** (bawah 1 minit)
+**Format:** 1080×1920 (9:16), 30 fps, **56.29 s** (bawah 1 minit)
 **Status:** PREVIEW sahaja — belum render.
 
 ## Skrip VO (BM santai) + timeline
@@ -18,12 +18,14 @@
 | 27.52 | #04 Zhongli | "Tapi Zhongli tak ada." | 5:09:20 (Ningguang: "If Rex Lapis were still with us") |
 | 28.65 | #04 | "Dia masuk dalam Nail guna Mora. Kontrak terakhir dia." | 1:31:48 (Zhongli dalam Nail) |
 | 31.92 | #04 (game VO) | *Zhongli: "Betray it… and you taint my blood."* (pause dibuang) | 1:31:33 |
-| 35.02 | #05 Celestia & Noy | "Dan bila sampai Celestia, Noy mula masuk dalam cerita." | 5:11:30 (Divine Throne) |
-| 37.93 | #05 (game VO) | *"Celestia welcomes you."* | 5:18:58 |
-| 40.18 | #06 Nostalgia | "Part paling meremang untuk player lama, semua bergabung tenaga!" | 0:49:44 (montaj) |
-| 43.02 | #06 (game VO) | *Mavuika: "We have to face it… together."* | 5:22:51 |
-| 44.62 | END | "Janji aku, ni redeem code dia! Enam puluh Primogems, lima Adventurer's Experience." | Kad code **QYJW50368SU7** |
-| 50.08 | END | "Cepat claim! Follow for more." | Butang FOLLOW |
+| 35.02 | #05 Celestia & Noy | "Dan bila sampai Celestia," | 5:11:30 (Divine Throne) |
+| 36.37 | #05 (game VO) | *"Celestia welcomes you."* | 5:18:58 |
+| 38.62 | #05 | "Lepas tu, muncul pula watak baru. Noy!" | 4:53:17 (Noy close-up) |
+| 41.12 | #05 (game VO) | *Noy: "Tysyatsky Noy."* | suara 4:51:56, visual 4:52:23 |
+| 42.62 | #06 Nostalgia | "Part paling meremang untuk player lama, semua bergabung tenaga!" | 0:49:44 (montaj) |
+| 45.46 | #06 (game VO) | *Mavuika: "We have to face it… together."* | 5:22:51 |
+| 47.06 | END | "Janji aku, ni redeem code dia! Enam puluh Primogems, lima Adventurer's Experience." | Kad code **QYJW50368SU7** |
+| 52.53 | END | "Cepat claim! Follow for more." | Butang FOLLOW |
 
 ## Apa yang dah dibuat
 - Transcribe penuh video 5j24m (Whisper) → cari timestamp setiap keypoint Hoyoverse.
@@ -34,8 +36,8 @@
 - Colour grade (HyperFrames media-treatment): deep-contrast + vibrance + bloom + vignette; lighting per shot (shot gelap dinaikkan, shot throne yang terlalu terang diturunkan).
 
 ## Perlu tindakan kau
-1. **VO sekarang suara TTS sementara** (ms-MY Osman) — untuk timing je. Rakam suara kau ikut skrip atas, letak fail dalam `assets/voice/<id>.wav` (h1, h2, d1, s1, r1, r2, z1, z2, c1, n1, e1, e2), lepas tu run `python3 build/tighten_vo.py` dan `python3 build/gen.py` (perlu re-align word timing — aku boleh buat).
-2. **Sahkan "Noy"**: dalam playthrough, entiti di Celestia ialah *Nuvyah, The Ever-Speaking One*. Aku anggap ini "Noy" dalam brief. Ada juga "Mr. Noi" (Fatui, 3:25:36). Bagitau kalau Noy yang dimaksudkan lain.
+1. **VO sekarang suara TTS sementara** (ms-MY Osman) — untuk timing je. Rakam suara kau ikut skrip atas, letak fail dalam `assets/voice/<id>.wav` (h1, h2, d1, s1, r1, r2, z1, z2, c1a, c1b, n1, e1, e2), lepas tu run `python3 build/tighten_vo.py` dan `python3 build/gen.py` (perlu re-align word timing — aku boleh buat).
+2. ~~Sahkan "Noy"~~ — dah betulkan: Noy = Tysyatsky Noy (fae lord Snezhnaya, rambut merah, armour perak). Diperkenalkan 3:25:36, masuk istana Tsaritsa 4:51:47.
 3. Approve preview → baru render.
 
 ## Rebuild

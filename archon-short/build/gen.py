@@ -6,6 +6,8 @@ import json, os, html
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VO = json.load(open(os.path.join(ROOT, "build", "vo_words_tight.json")))
 SHOTS = {s[0]: s for s in json.load(open(os.path.join(ROOT, "assets", "clips", "shots.json")))}
+# NS is cut by hand (Noy's voice from 17516.2 s laid over his close-up from 17543.3 s)
+SHOTS.setdefault("NS", ["NS", 17516.2, 1.4, 1.0, 875, "full", 1])
 CODE = "QYJW50368SU7"
 GAP = 0.10
 
@@ -18,7 +20,7 @@ SEQ = [
     ("vo", "s1", ["F1", "F2"]),
     ("vo", "r1", ["G"]), ("sync", "H"), ("vo", "r2", ["I"]),
     ("vo", "z1", ["J"]), ("vo", "z2", ["K"]), ("sync", "L1"), ("sync", "L2"),
-    ("vo", "c1", ["M"]), ("sync", "N"),
+    ("vo", "c1a", ["M"]), ("sync", "N"), ("vo", "c1b", ["NY"]), ("sync", "NS"),
     ("vo", "n1", ["O"]), ("sync", "P"),
     ("vo", "e1", ["Q"]), ("vo", "e2", []),
 ]
@@ -103,11 +105,12 @@ QUOTES = {
     "L1": ("“Betray it…”", "Khianatinya…"),
     "L2": ("“…and you taint my blood.”", "…dan kau cemari darahku."),
     "N": ("“Celestia welcomes you.”", "Celestia mengalu-alukan kedatangan kau."),
+    "NS": ("“Tysyatsky Noy.”", "Noy, fae lord dari Snezhnaya."),
     "P": ("“We have to face it… together.”", "Kita hadap… sama-sama."),
 }
 SPEAKER = {"E": "THE EVER-SPEAKING ONE", "H": "RAIDEN EI", "L1": "ZHONGLI", "L2": "ZHONGLI",
-           "N": "CELESTIA", "P": "MAVUIKA"}
-SYNC_VOL = {"E": 1.5, "H": 1.6, "L1": 1.6, "L2": 1.6, "N": 1.6, "P": 1.5}
+           "N": "CELESTIA", "P": "MAVUIKA", "NS": "NOY"}
+SYNC_VOL = {"E": 1.5, "H": 1.6, "L1": 1.6, "L2": 1.6, "N": 1.6, "P": 1.5, "NS": 1.7}
 
 # --- sections (keypoint chapter tags) -----------------------------------------
 SECTIONS = [
@@ -115,7 +118,7 @@ SECTIONS = [
     ("s1", "z", "02", "7 ARCHON BERKUMPUL"),
     ("r1", "z", "03", "RAIDEN EI × CELESTIAL NAIL"),
     ("z1", "z", "04", "KONTRAK TERAKHIR ZHONGLI"),
-    ("c1", "z", "05", "CELESTIA & NOY"),
+    ("c1a", "z", "05", "CELESTIA & NOY"),
     ("n1", "z", "06", "SEMUA BERGABUNG TENAGA"),
 ]
 sec_list = []
@@ -134,8 +137,8 @@ STICKERS = [
     ("st-gila", word_t("r2", 7) - 0.05, 0.9, '<span class="big white glow">GILA!</span>', "stk"),
     ("st-kontrak", word_t("z2", 6) - 0.05, ev("z2")["start"] + VO["z2"]["dur"] - word_t("z2", 6) + 0.15,
      '<span class="sub">KONTRAK</span><span class="big gold">TERAKHIR</span>', "stk top"),
-    ("st-noy", word_t("c1", 4) - 0.05, ev("c1")["start"] + VO["c1"]["dur"] - word_t("c1", 4) + 0.1,
-     '<span class="big gold">NOY</span><span class="sub">MASUK CERITA</span>', "stk top"),
+    ("st-noy", word_t("c1b", 6) - 0.05, ev("NS")["start"] + ev("NS")["dur"] - word_t("c1b", 6) - 0.05,
+     '<span class="big gold">NOY</span><span class="sub">WATAK BARU!</span>', "stk top"),
     ("st-reunion", word_t("n1", 6) - 0.05, ev("n1")["start"] + VO["n1"]["dur"] - word_t("n1", 6) + 0.1,
      '<span class="sub">SEMUA</span><span class="big gold">BERGABUNG!</span>', "stk top"),
 ]
@@ -152,7 +155,8 @@ SFX = [
     ("pop", word_t("r2", 7) - 0.05, 0.5),
     ("whoosh-short", ev("z1")["start"] - 0.1, 0.4), ("sparkle", word_t("z2", 5) - 0.1, 0.4),
     ("impact-bass-2", word_t("z2", 6) - 0.4, 0.45),
-    ("whoosh", ev("c1")["start"] - 0.12, 0.4), ("chime", ev("N")["start"], 0.35),
+    ("whoosh", ev("c1a")["start"] - 0.12, 0.4), ("chime", ev("N")["start"], 0.35),
+    ("whoosh-short", ev("c1b")["start"] - 0.1, 0.4), ("impact-bass-2", word_t("c1b", 6) - 0.35, 0.5),
     ("whoosh-short", ev("n1")["start"] - 0.1, 0.4), ("sparkle", word_t("n1", 6) - 0.05, 0.4),
     ("impact-bass-1", ev("e1")["start"] - 0.05, 0.55), ("ping", word_t("e1", 3) - 0.05, 0.4),
     ("pop", word_t("e1", 6) - 0.05, 0.45), ("pop", word_t("e1", 9) - 0.05, 0.45),
