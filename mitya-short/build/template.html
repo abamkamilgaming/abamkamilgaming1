@@ -19,7 +19,7 @@
 
       /* top: talking head · bottom: gameplay */
       #facepanel { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; z-index: 10; }
-      #facewrap { position: absolute; inset: 0; transform-origin: 55% 45%; }
+      #facewrap { position: absolute; inset: 0; transform-origin: 50% 62%; }
       .face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
       #gamepanel { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; z-index: 12; background: #0b0a1e; }
       .shotwrap { position: absolute; inset: 0; transform-origin: 50% 60%; }
@@ -117,8 +117,8 @@
 {{CAPTIONS}}
       </div>
       <div id="flash"></div>
-      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="{{TOTAL}}" data-volume="0.12"
-        data-fade-in="0.2" data-fade-out="1.4" data-track-index="11"></audio>
+      <audio id="bgm" class="clip" src="assets/audio/bed.wav" data-start="0" data-duration="{{TOTAL}}" data-volume="0.16"
+        data-fade-in="0.3" data-fade-out="1.6" data-track-index="11"></audio>
 {{VO}}
 {{SFX}}
     </div>
@@ -127,10 +127,13 @@
       const tl = gsap.timeline({ paused: true });
 
       // talking head: jump-cut punch-in every line (alternate wide / tight)
+      // jump-cut punch-in: selang-seli wide / tight setiap ayat DAN setiap pause yang dipotong
       let zoom = 1.0;
-      T.lines.forEach((ln, i) => { zoom = i % 2 ? 1.12 : 1.0; tl.set("#facewrap", { scale: zoom }, ln.start); });
-      tl.fromTo("#facewrap", { scale: 1.12 }, { scale: 1.0, duration: 0.4, ease: "power3.out" }, 0);
-      T.punch.forEach((t) => { tl.fromTo("#facewrap", { scale: 1.3 }, { scale: 1.14, duration: 0.3, ease: "power3.out" }, t); });
+      T.lines.forEach((ln) => {
+        zoom = zoom > 1.04 ? 1.0 : 1.09; tl.set("#facewrap", { scale: zoom }, ln.start);
+        (ln.cuts || []).forEach((c) => { zoom = zoom > 1.04 ? 1.0 : 1.09; tl.set("#facewrap", { scale: zoom }, ln.start + c); });
+      });
+      T.punch.forEach((t) => { tl.fromTo("#facewrap", { scale: 1.24 }, { scale: 1.12, duration: 0.3, ease: "power3.out" }, t); });
 
       // b-roll: push-in per shot, slam + shake on the big hits
       T.shots.forEach((o) => {
