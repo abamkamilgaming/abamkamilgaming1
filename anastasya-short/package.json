@@ -1,0 +1,11 @@
+{
+  "name": "anastasya-short",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.9.46 preview",
+    "check": "npx --yes hyperframes@0.9.46 check",
+    "render": "npx --yes hyperframes@0.9.46 render --fps 60 --video-bitrate 11M --resolution portrait",
+    "publish": "npx --yes hyperframes@0.9.46 publish"
+  }
+}
