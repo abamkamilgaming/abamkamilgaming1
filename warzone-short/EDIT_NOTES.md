@@ -1,6 +1,6 @@
 # Warzone Short — gaya Doro44
 
-**Format:** 1080×1920, 30 fps, **33.9 s** (bawah 1 minit) · **Status:** PREVIEW je, belum render.
+**Format:** 1080×1920, 30 fps, **33.9 s** (bawah 1 minit) · **Status:** FINAL dah render: `renders/Warzone-Short-1080p60-11Mbps.mp4` (1080×1920, 60 fps, 11 Mbps, −14.6 LUFS, 47 MB; tak di-commit, boleh jana semula).
 
 ## Struktur (face cam atas 0–900px, gameplay bawah 900–1920px, caption besar kat tengah)
 | Masa | Segmen | Line (BM santai) | Motion / SFX |
@@ -38,5 +38,9 @@
 python3 build/cut.py "<Warzone 1.mp4>" "<Warzone 2.mp4>"   # potong, crop, buang pause → assets/seg
 python3 build/gen.py                                       # jana index.html
 npx hyperframes preview --background                       # preview
-npx hyperframes render -o out.mp4                          # (lepas approve)
+npx hyperframes render -q delivery --fps 60 --resolution portrait -o renders/master-60fps.mp4
+# encode 11 Mbps (two-pass):
+ffmpeg -i renders/master-60fps.mp4 -c:v libx264 -preset slow -b:v 11M -maxrate 11M -bufsize 22M -g 120 -pass 1 -an -f null /dev/null
+ffmpeg -i renders/master-60fps.mp4 -c:v libx264 -preset slow -b:v 11M -maxrate 11M -bufsize 22M -g 120 -pass 2 \
+  -c:a aac -b:a 320k -movflags +faststart renders/Warzone-Short-1080p60-11Mbps.mp4
 ```
