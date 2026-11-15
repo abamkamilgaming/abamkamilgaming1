@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/Anton-Regular.ttf") format("truetype"); font-weight: 400; font-display: block; }
+      @font-face { font-family: "Noto Color Emoji"; src: url("assets/fonts/emoji-subset.ttf") format("truetype"); font-display: block; }
+      :root {
+        --ground: #070814;
+        --ice: #8fe3ff;
+        --yellow: #ffe14d;
+        --red: #ff3b4f;
+        --green: #3dff8a;
+        --violet: #9b6bff;
+        --font-cap: "Anton", "Archivo Black", "Montserrat", sans-serif;
+        --font-ui: "Montserrat", sans-serif;
+        --font-emoji: "Noto Color Emoji", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* --- layout: webcam on top, gameplay below (Doro / Jon split) --- */
+      #camzone { position: absolute; left: 0; top: 0; width: 1080px; height: 620px; overflow: hidden; z-index: 10; }
+      #gamezone { position: absolute; left: 0; top: 620px; width: 1080px; height: 1300px; overflow: hidden; z-index: 5; }
+      .cw { position: absolute; inset: 0; transform-origin: 50% 42%; }
+      .gw { position: absolute; inset: 0; transform-origin: 50% 50%; }
+      .cam { position: absolute; left: 0; top: 0; width: 1080px; height: 620px; object-fit: cover; }
+      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 1300px; object-fit: cover; }
+      .still { position: absolute; left: 0; top: 0; width: 1080px; object-fit: cover; }
+      #seam { position: absolute; left: 0; right: 0; top: 614px; height: 12px; z-index: 30;
+        background: linear-gradient(90deg, var(--violet), var(--ice) 50%, var(--violet)); box-shadow: 0 0 26px rgba(143,227,255,0.65); }
+      #shade-g { position: absolute; left: 0; right: 0; top: 620px; height: 260px; z-index: 29; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,8,20,0.55), rgba(7,8,20,0)); }
+      #shade-c { position: absolute; left: 0; right: 0; top: 420px; height: 200px; z-index: 29; pointer-events: none;
+        background: linear-gradient(0deg, rgba(7,8,20,0.5), rgba(7,8,20,0)); }
+      #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+
+      /* --- captions: 1-3 words, sitting on the seam --- */
+      #captions { position: absolute; left: 0; right: 0; top: 540px; height: 170px; z-index: 80; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 170px; }
+      .cap-in { position: absolute; left: 50px; right: 50px; top: 10px; text-align: center; transform-origin: 50% 60%; white-space: nowrap; }
+      .w { font-family: var(--font-cap); font-size: 112px; line-height: 1.1; color: #fff; letter-spacing: 0.01em;
+        -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 9px 0 #000; }
+      .w.k { color: var(--yellow); }
+      .w + .w { margin-left: 0.22em; }
+
+      /* --- hook --- */
+      #hook { position: absolute; left: 0; right: 0; top: 700px; height: 700px; z-index: 75; text-align: center; }
+      .hk-chip { display: inline-flex; align-items: center; gap: 16px; padding: 14px 30px; border-radius: 18px;
+        background: rgba(20,10,14,0.88); border: 4px solid var(--red); box-shadow: 0 0 40px rgba(255,59,79,0.55); }
+      .hk-chip .ico { font-family: var(--font-emoji); font-size: 52px; }
+      .hk-chip .t1 { font-family: var(--font-ui); font-weight: 900; font-size: 34px; color: var(--red); letter-spacing: 0.08em; text-align: left; line-height: 1.05; }
+      .hk-chip .t2 { display: block; font-family: var(--font-ui); font-weight: 700; font-size: 30px; color: #fff; letter-spacing: 0; }
+      .hk-big { font-family: var(--font-cap); font-size: 150px; line-height: 0.95; margin-top: 30px; color: #fff;
+        -webkit-text-stroke: 16px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000; }
+      .hk-big .vs { color: var(--yellow); font-size: 110px; }
+      .hk-big .tt { color: var(--ice); }
+      .hk-sub { display: inline-block; margin-top: 26px; font-family: var(--font-cap); font-size: 74px; color: #fff;
+        -webkit-text-stroke: 10px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
+      .hk-sub .em { font-family: var(--font-emoji); -webkit-text-stroke: 0; }
+
+      /* --- live-chat popups (real messages from the stream chat) --- */
+      .chat { position: absolute; left: 0; right: 0; top: 760px; height: 300px; z-index: 78; }
+      .chat-in { position: absolute; left: 60px; right: 60px; top: 0; display: flex; gap: 22px; align-items: flex-start;
+        padding: 24px 30px 26px 24px; border-radius: 30px; background: rgba(255,255,255,0.97);
+        box-shadow: 0 16px 0 rgba(0,0,0,0.35), 0 0 0 5px rgba(0,0,0,0.85); transform-origin: 12% 50%; }
+      .chat .av { flex: 0 0 auto; width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-ui); font-weight: 900; font-size: 46px; color: #fff; }
+      .chat .who { font-family: var(--font-ui); font-weight: 900; font-size: 34px; letter-spacing: 0.01em; }
+      .chat .who small { font-weight: 700; font-size: 28px; color: #6d7286; margin-left: 10px; }
+      .chat .msg { font-family: var(--font-ui); font-weight: 800; font-size: 50px; line-height: 1.15; color: #111; margin-top: 4px; }
+      .chat .msg .em { font-family: var(--font-emoji); }
+      .chat.lower { top: 1130px; }
+
+      /* --- stickers (emoji + punch text) --- */
+      .stk { position: absolute; left: 0; right: 0; height: 420px; z-index: 77; text-align: center; }
+      .stk-in { position: absolute; left: 40px; right: 40px; top: 0; transform-origin: 50% 50%; }
+      .stk .emo { display: block; font-family: var(--font-emoji); font-size: 190px; line-height: 1.05; }
+      .stk .txt { display: inline-block; font-family: var(--font-cap); font-size: 96px; line-height: 1; color: #fff; padding: 10px 30px 14px;
+        -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; }
+      .stk .txt.box { -webkit-text-stroke: 0; text-shadow: none; color: #0b0b12; background: var(--yellow); border-radius: 16px;
+        border: 6px solid #000; box-shadow: 0 10px 0 #000; font-size: 78px; }
+      .stk .txt.red { color: var(--red); }
+      .stk .txt.ice { color: var(--ice); }
+      .stk .txt.green { color: var(--green); }
+
+      /* --- brain-juice meter --- */
+      #meter { position: absolute; left: 0; right: 0; top: 1500px; height: 220px; z-index: 77; text-align: center; }
+      #meter-in { position: absolute; left: 140px; right: 140px; top: 0; padding: 22px 30px; border-radius: 26px;
+        background: rgba(8,10,24,0.86); border: 5px solid #000; box-shadow: 0 10px 0 #000; }
+      #meter .lbl { font-family: var(--font-cap); font-size: 60px; color: #fff; letter-spacing: 0.02em; }
+      #meter .lbl .em { font-family: var(--font-emoji); }
+      #meter .bar { position: relative; height: 44px; margin-top: 14px; border-radius: 22px; background: rgba(255,255,255,0.14); border: 4px solid #fff; overflow: hidden; }
+      #meter-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transform-origin: 0 50%;
+        background: linear-gradient(90deg, var(--red), var(--yellow), var(--green)); }
+      #meter-pct { font-family: var(--font-cap); font-size: 54px; color: var(--red); margin-top: 6px; -webkit-text-stroke: 6px #000; paint-order: stroke fill; }
+
+      /* --- WASTED freeze --- */
+      #wasted { position: absolute; left: 0; right: 0; top: 1070px; height: 300px; z-index: 79; text-align: center; }
+      #wasted-in { position: absolute; left: 0; right: 0; top: 0; }
+      #wasted .wt { font-family: var(--font-cap); font-size: 210px; letter-spacing: 0.06em; color: var(--red);
+        -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000; }
+      #wasted .band { position: absolute; left: 0; right: 0; top: 40px; height: 190px; background: rgba(0,0,0,0.55); }
+
+      /* --- end card --- */
+      #endcard { position: absolute; inset: 0; z-index: 90; }
+      #ec-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(30,20,70,0.78), rgba(7,8,20,0.96)); }
+      #ec-in { position: absolute; left: 0; right: 0; top: 440px; text-align: center; }
+      #ec-av { display: block; margin: 0 auto 30px; width: 300px; height: 300px; border-radius: 50%; object-fit: cover;
+        border: 10px solid var(--yellow); box-shadow: 0 0 0 8px #000, 0 0 60px rgba(255,225,77,0.55); }
+      .ec-top { font-family: var(--font-cap); font-size: 92px; color: #fff; -webkit-text-stroke: 12px #000; paint-order: stroke fill; text-shadow: 0 9px 0 #000; }
+      .ec-name { font-family: var(--font-cap); font-size: 132px; color: var(--yellow); margin-top: 6px; -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 11px 0 #000; }
+      #ec-btn { display: inline-block; margin-top: 46px; font-family: var(--font-ui); font-weight: 900; font-size: 60px; color: #fff;
+        background: #fe2c55; padding: 24px 70px; border-radius: 999px; box-shadow: 0 10px 0 #9c0f2b; }
+      .ec-sub { font-family: var(--font-ui); font-weight: 800; font-size: 40px; color: rgba(255,255,255,0.86); margin-top: 40px; }
+      .ec-sub .em { font-family: var(--font-emoji); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920">
+      <div id="camzone">
+{{CAMS}}
+      </div>
+      <div id="gamezone">
+{{GAMES}}
+      </div>
+      <div id="shade-c"></div>
+      <div id="shade-g"></div>
+      <div id="seam"></div>
+
+      <div id="hook" class="clip" data-start="0" data-duration="{{HOOK_DUR}}" data-track-index="4">
+        <div id="hook-in">
+          <div class="hk-chip" id="hk-chip"><span class="ico">⚠️</span><span class="t1">AMARAN TIKTOK<span class="t2">“Unoriginal content”</span></span></div>
+          <div class="hk-big" id="hk-big">STREAMER<br /><span class="vs">VS</span> <span class="tt">TIKTOK</span></div>
+          <div class="hk-sub" id="hk-sub">KENA WARNING 2 KALI <span class="em">💀</span></div>
+        </div>
+      </div>
+
+{{CHATS}}
+{{STICKERS}}
+      <div id="meter" class="clip" data-start="{{METER_START}}" data-duration="{{METER_DUR}}" data-track-index="6">
+        <div id="meter-in">
+          <div class="lbl"><span class="em">🧠</span> BRAIN JUICE</div>
+          <div class="bar"><div id="meter-fill"></div></div>
+          <div id="meter-pct">0%</div>
+        </div>
+      </div>
+
+      <div id="wasted" class="clip" data-start="{{WASTED_START}}" data-duration="{{WASTED_DUR}}" data-track-index="6">
+        <div id="wasted-in"><div class="band"></div><div class="wt">WASTED</div></div>
+      </div>
+
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+
+      <div id="endcard" class="clip" data-start="{{END_START}}" data-duration="{{END_DUR}}" data-track-index="8">
+        <div id="ec-dim"></div>
+        <div id="ec-in">
+          <img id="ec-av" src="assets/img/avatar.jpg" alt="AbamKamil" />
+          <div class="ec-top" id="ec-top">FOLLOW</div>
+          <div class="ec-name" id="ec-name">ABAMKAMIL</div>
+          <div id="ec-btn">+ Follow</div>
+          <div class="ec-sub" id="ec-sub">Live Genshin tiap malam <span class="em">❄️</span></div>
+        </div>
+      </div>
+      <div id="flash"></div>
+
+{{AUDIO}}
+    </div>
+    <script>
+      const T = {{TIMELINE_JSON}};
+      const tl = gsap.timeline({ paused: true });
+
+      // --- jump-cut punch-ins on the webcam (alternate framing every line + every inner cut)
+      T.lines.forEach((ln, i) => {
+        const cw = "#cw-" + ln.id, gw = "#gw-" + ln.id;
+        let z = i % 2 ? 1.12 : 1.0;
+        tl.set(cw, { scale: z, x: 0, y: 0 }, ln.start);
+        ln.cuts.forEach((c) => { z = z > 1.06 ? 1.0 : 1.12; tl.set(cw, { scale: z }, ln.start + c); });
+        tl.fromTo(gw, { scale: 1.0 }, { scale: 1.06, duration: ln.dur, ease: "none" }, ln.start);
+      });
+      // --- punch zooms + shakes on the punchlines
+      T.punches.forEach((p) => {
+        const el = "#cw-" + p.id;
+        tl.fromTo(el, { scale: p.z + 0.18 }, { scale: p.z, duration: 0.28, ease: "power3.out" }, p.t);
+        if (p.shake) [18, -16, 12, -9, 6, -3, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.035, ease: "none" }, p.t + i * 0.035));
+      });
+      // game-zone shake on rage moments
+      T.gshakes.forEach((g) => {
+        [22, -18, 14, -10, 6, 0].forEach((x, i) => tl.to("#gw-" + g.id, { x: x, duration: 0.04, ease: "none" }, g.t + i * 0.04));
+      });
+      // --- flashes on section changes
+      T.flashes.forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.03, ease: "none" }, Math.max(0, t - 0.03));
+        tl.to("#flash", { opacity: 0, duration: 0.22, ease: "power2.out" }, t);
+      });
+
+      // --- hook
+      tl.fromTo("#hk-big", { scale: 1.35 }, { scale: 1, duration: 0.32, ease: "back.out(2.2)" }, 0);
+      tl.fromTo("#hk-chip", { y: -30, rotation: -4 }, { y: 0, rotation: -2, duration: 0.3, ease: "back.out(3)" }, 0);
+      tl.fromTo("#hk-sub", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.5)" }, 0.45);
+      tl.to("#hk-big", { scale: 1.05, duration: T.hook_end - 0.5, ease: "none" }, 0.32);
+      tl.to("#hook-in", { opacity: 0, scale: 0.9, duration: 0.14, ease: "power2.in" }, T.hook_end - 0.15);
+
+      // --- chats: slide + pop, wiggle, out
+      document.querySelectorAll(".chat").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".chat-in");
+        tl.fromTo(inner, { x: -140, scale: 0.6, opacity: 0, rotation: -6 }, { x: 0, scale: 1, opacity: 1, rotation: -1.5, duration: 0.24, ease: "back.out(2)" }, s);
+        tl.to(inner, { scale: 1.03, duration: Math.max(0.1, d - 0.4), ease: "none" }, s + 0.24);
+        tl.to(inner, { opacity: 0, x: 60, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+      });
+
+      // --- stickers
+      document.querySelectorAll(".stk").forEach((el, i) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".stk-in");
+        const r = i % 2 ? 5 : -5;
+        tl.fromTo(inner, { scale: 2.4, opacity: 0, rotation: r * 3 }, { scale: 1, opacity: 1, rotation: r, duration: 0.2, ease: "back.out(1.8)" }, s);
+        tl.to(inner, { scale: 1.07, duration: Math.max(0.1, d - 0.33), ease: "none" }, s + 0.2);
+        tl.to(inner, { opacity: 0, scale: 1.2, duration: 0.11, ease: "power2.in" }, s + d - 0.12);
+      });
+
+      // --- brain juice meter drains to 0
+      tl.fromTo("#meter-in", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.meter[0]);
+      tl.fromTo("#meter-fill", { scaleX: 1 }, { scaleX: 0.0, duration: 1.4, ease: "power2.in" }, T.meter[0] + 0.3);
+      tl.fromTo("#meter-pct", { scale: 1 }, { scale: 1.3, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.meter[0] + 1.7);
+      tl.to("#meter-in", { opacity: 0, duration: 0.12 }, T.meter[1] - 0.13);
+
+      // --- WASTED
+      tl.fromTo("#wasted .wt", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.out" }, T.wasted[0]);
+      tl.fromTo("#wasted .band", { scaleY: 0 }, { scaleY: 1, duration: 0.16, ease: "power3.out" }, T.wasted[0]);
+      tl.to("#wasted-in", { opacity: 0, duration: 0.1 }, T.wasted[1] - 0.11);
+
+      // --- captions: hard pop in, hard cut out
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Anton", fontWeight: 400, maxWidth: 960, baseSize: 112, minSize: 70 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.5, opacity: 0, y: 14 }, { scale: 1, opacity: 1, y: 0, duration: 0.12, ease: "back.out(2.8)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.04, ease: "none" }, s + d - 0.04);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      // --- end card
+      tl.fromTo("#ec-dim", { opacity: 0 }, { opacity: 1, duration: 0.25 }, T.end_start);
+      tl.to(["#seam", "#shade-c", "#shade-g"], { opacity: 0, duration: 0.2 }, T.end_start);
+      tl.fromTo("#ec-av", { scale: 0, rotation: -20 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2)" }, T.end_start + 0.02);
+      tl.fromTo("#ec-top", { y: -60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.22, ease: "back.out(2)" }, T.end_start + 0.05);
+      tl.fromTo("#ec-name", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.end_start + 0.15);
+      tl.fromTo("#ec-btn", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2.5)" }, T.end_start + 0.35);
+      tl.to("#ec-btn", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.end_start + 0.62);
+      tl.fromTo("#ec-sub", { opacity: 0 }, { opacity: 1, duration: 0.25 }, T.end_start + 0.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

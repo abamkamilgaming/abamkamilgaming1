@@ -1,0 +1,242 @@
+{
+ "_doc": "Lines in edit order. pieces = [start,end] in source seconds (padded loosely; trimmed by vocal energy). focus = game crop x-centre 0..1",
+ "lines": [
+  {
+   "id": "h1",
+   "sec": "hook",
+   "pieces": [
+    [
+     376.35,
+     378.7
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "h2",
+   "sec": "hook",
+   "pieces": [
+    [
+     383.1,
+     385.6
+    ]
+   ],
+   "focus": 0.5,
+   "hold": 0.3
+  },
+  {
+   "id": "h3",
+   "sec": "hook",
+   "pieces": [
+    [
+     406.3,
+     410.9
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "s1",
+   "sec": "setup",
+   "pieces": [
+    [
+     91.2,
+     94.3
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "s2",
+   "sec": "setup",
+   "pieces": [
+    [
+     165.0,
+     167.1
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "e1",
+   "sec": "event",
+   "pieces": [
+    [
+     181.5,
+     183.2
+    ]
+   ],
+   "focus": 0.5,
+   "hold": 0.6
+  },
+  {
+   "id": "e3",
+   "sec": "event",
+   "pieces": [
+    [
+     221.4,
+     227.3
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "e4",
+   "sec": "event",
+   "pieces": [
+    [
+     546.6,
+     548.1
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "e5",
+   "sec": "event",
+   "pieces": [
+    [
+     571.6,
+     573.5
+    ],
+    [
+     576.15,
+     577.3
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "e6",
+   "sec": "event",
+   "pieces": [
+    [
+     594.9,
+     601.3
+    ]
+   ],
+   "focus": 0.5,
+   "hold": 0.45
+  },
+  {
+   "id": "f1",
+   "sec": "food",
+   "pieces": [
+    [
+     1671.2,
+     1674.0
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "f2",
+   "sec": "food",
+   "pieces": [
+    [
+     1694.3,
+     1696.0
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "f3",
+   "sec": "food",
+   "pieces": [
+    [
+     1705.6,
+     1706.6
+    ],
+    [
+     1707.1,
+     1708.8
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "f4",
+   "sec": "food",
+   "pieces": [
+    [
+     1716.8,
+     1719.2
+    ]
+   ],
+   "focus": 0.5,
+   "hold": 0.55
+  },
+  {
+   "id": "f5",
+   "sec": "food",
+   "pieces": [
+    [
+     1732.9,
+     1734.8
+    ],
+    [
+     1739.1,
+     1742.2
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "r1",
+   "sec": "review",
+   "pieces": [
+    [
+     1091.5,
+     1094.5
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "r2",
+   "sec": "review",
+   "pieces": [
+    [
+     1119.2,
+     1127.4
+    ]
+   ],
+   "focus": 0.5,
+   "hold": 0.5
+  },
+  {
+   "id": "o1",
+   "sec": "outro",
+   "pieces": [
+    [
+     4038.9,
+     4043.6
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "o2",
+   "sec": "outro",
+   "pieces": [
+    [
+     4047.7,
+     4050.3
+    ]
+   ],
+   "focus": 0.5
+  },
+  {
+   "id": "o3",
+   "sec": "outro",
+   "pieces": [
+    [
+     4054.3,
+     4055.4
+    ]
+   ],
+   "focus": 0.5
+  }
+ ]
+}
