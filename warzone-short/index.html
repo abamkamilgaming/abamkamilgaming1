@@ -28,17 +28,17 @@
       #flash { position: absolute; inset: 0; z-index: 90; background: #fff; opacity: 0; pointer-events: none; }
 
       /* hook — frame 0 is the thumbnail */
-      #hook { position: absolute; left: 0; right: 0; top: 960px; height: 560px; z-index: 75; text-align: center; }
-      .h-top { font-family: var(--font-display); font-size: 82px; color: #fff; line-height: 1;
+      #hook { position: absolute; left: 64px; right: 140px; top: 960px; height: 540px; z-index: 75; text-align: center; }
+      .h-top { font-family: var(--font-display); font-size: 66px; color: #fff; line-height: 1;
         -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
-      .h-big { font-family: var(--font-display); font-size: 150px; line-height: 0.95; margin-top: 12px; color: var(--yellow);
+      .h-big { font-family: var(--font-display); font-size: 132px; line-height: 0.95; margin-top: 12px; color: var(--yellow);
         -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000; }
-      .h-emo { font-family: var(--font-emoji); font-size: 150px; line-height: 1; margin-top: 10px; display: inline-block; }
+      .h-emo { font-family: var(--font-emoji); font-size: 130px; line-height: 1; margin-top: 10px; display: inline-block; }
 
       /* captions on the seam */
       #captions { position: absolute; left: 0; right: 0; top: 820px; height: 170px; z-index: 80; }
       .cap { position: absolute; left: 0; right: 0; top: 0; height: 170px; }
-      .cap-in { position: absolute; left: 30px; right: 30px; top: 6px; white-space: nowrap; text-align: center; transform-origin: 50% 60%; }
+      .cap-in { position: absolute; left: 64px; right: 140px; top: 6px; white-space: nowrap; text-align: center; transform-origin: 50% 60%; }
       .w { font-family: var(--font-display); font-size: 1em; line-height: 1.05; color: #fff;
         -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
       .w.y { color: var(--yellow); }
@@ -46,11 +46,11 @@
 
       /* meme stickers on the gameplay panel */
       .stk { position: absolute; left: 0; right: 0; height: 420px; z-index: 78; text-align: center; }
-      .stk.g-top { top: 1010px; }
-      .stk.g-mid { top: 1230px; }
-      .stk.g-low { top: 1380px; }
-      .stk-in { position: absolute; left: 30px; right: 30px; top: 0; transform-origin: 50% 50%; }
-      .stk .emo { display: block; font-family: var(--font-emoji); font-size: 150px; line-height: 1.1; }
+      .stk.g-top { top: 1000px; }
+      .stk.g-mid { top: 1110px; }
+      .stk.g-low { top: 1250px; }
+      .stk-in { position: absolute; left: 64px; right: 140px; top: 0; transform-origin: 50% 50%; }
+      .stk .emo { display: block; font-family: var(--font-emoji); font-size: 130px; line-height: 1.1; }
       .stk .big { display: block; font-family: var(--font-display); line-height: 0.98;
         -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; }
       .stk .sub { display: block; font-family: var(--font-display); font-size: 54px; color: #fff;
@@ -58,8 +58,8 @@
       .yellow { color: var(--yellow); } .red { color: var(--red); } .white { color: #fff; }
 
       /* live-chat bubble */
-      #chat { position: absolute; left: 0; right: 0; top: 1060px; height: 300px; z-index: 78; }
-      #chat-in { position: absolute; left: 70px; right: 70px; top: 0; display: flex; gap: 26px; align-items: flex-start;
+      #chat { position: absolute; left: 0; right: 0; top: 1005px; height: 300px; z-index: 78; }
+      #chat-in { position: absolute; left: 64px; right: 140px; top: 0; display: flex; gap: 26px; align-items: flex-start;
         padding: 30px 34px; border-radius: 34px; background: rgba(14,16,24,0.88); border: 3px solid rgba(255,214,10,0.8);
         box-shadow: 0 18px 50px rgba(0,0,0,0.6); }
       #chat-av { flex: 0 0 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #ff7eb3, #b26bff);
@@ -68,8 +68,8 @@
       #chat-msg { font-family: var(--font-cap); font-weight: 800; font-size: 54px; line-height: 1.12; color: #fff; margin-top: 6px; }
 
       /* end */
-      #endc { position: absolute; left: 0; right: 0; top: 1240px; height: 400px; z-index: 85; text-align: center; }
-      #end-q { font-family: var(--font-display); font-size: 74px; color: #fff; line-height: 1.05;
+      #endc { position: absolute; left: 64px; right: 140px; top: 1060px; height: 400px; z-index: 85; text-align: center; }
+      #end-q { font-family: var(--font-display); font-size: 66px; color: #fff; line-height: 1.05;
         -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
       #end-q b { color: var(--yellow); font-weight: inherit; }
       #follow { display: inline-block; margin-top: 40px; font-family: var(--font-display); font-size: 66px; color: #111;
@@ -121,9 +121,9 @@
 
       <div id="s-alone" class="clip stk g-top" data-start="10.225" data-duration="0.609" data-track-index="4"><div class="stk-in"><span class="emo">🦗</span><span class="big white" style="font-size:85px">FOREVER ALONE</span></div></div>
       <div id="s-baz" class="clip stk g-mid" data-start="12.713" data-duration="0.987" data-track-index="4"><div class="stk-in"><span class="emo">🚀</span><span class="big yellow" style="font-size:123px">BAZOOKA?!</span></div></div>
-      <div id="s-uzi" class="clip stk g-mid" data-start="14.526" data-duration="0.787" data-track-index="4"><div class="stk-in"><span class="emo">🤨</span><span class="big yellow" style="font-size:170px">UZI??</span></div></div>
-      <div id="s-best" class="clip stk g-mid" data-start="15.395" data-duration="1.464" data-track-index="4"><div class="stk-in"><span class=sub>TAK BEST</span><span class="emo">👎</span><span class="big red" style="font-size:170px">0/10</span></div></div>
-      <div id="s-mrk" class="clip stk g-low" data-start="20.059" data-duration="2.015" data-track-index="4"><div class="stk-in"><span class=sub>ABAM KAMIL SEBAGAI</span><span class="emo">🕴️</span><span class="big yellow" style="font-size:170px">MR.K</span></div></div>
+      <div id="s-uzi" class="clip stk g-mid" data-start="14.526" data-duration="0.787" data-track-index="4"><div class="stk-in"><span class="emo">🤨</span><span class="big yellow" style="font-size:150px">UZI??</span></div></div>
+      <div id="s-best" class="clip stk g-mid" data-start="15.395" data-duration="1.464" data-track-index="4"><div class="stk-in"><span class=sub>TAK BEST</span><span class="emo">👎</span><span class="big red" style="font-size:150px">0/10</span></div></div>
+      <div id="s-mrk" class="clip stk g-mid" data-start="20.059" data-duration="2.015" data-track-index="4"><div class="stk-in"><span class=sub>ABAM KAMIL SEBAGAI</span><span class="emo">🕴️</span><span class="big yellow" style="font-size:150px">MR.K</span></div></div>
       <div id="s-tank" class="clip stk g-mid" data-start="24.52" data-duration="3.109" data-track-index="4"><div class="stk-in"><span class="emo">⛽</span><span class="big yellow" style="font-size:123px">FULL TANK</span></div></div>
       <div id="s-dmg" class="clip stk g-low" data-start="29.751" data-duration="0.612" data-track-index="4"><div class="stk-in"><span class="emo">💀</span><span class="big red" style="font-size:69px">EMOTIONAL DAMAGE</span></div></div>
 
@@ -135,32 +135,32 @@
       </div>
 
       <div id="captions" data-track-kind="captions">
-        <div id="cap-0" class="clip cap" data-start="1.596" data-duration="0.809" data-track-index="3"><div class="cap-in" style="font-size:111px"><span class="w">BUKAN</span><span class="w y">GI</span><span class="w">NI!</span></div></div>
-        <div id="cap-1" class="clip cap" data-start="2.437" data-duration="1.516" data-track-index="3"><div class="cap-in" style="font-size:95px"><span class="w">HELO,</span><span class="w y">FARAHIN!</span></div></div>
-        <div id="cap-2" class="clip cap" data-start="3.967" data-duration="1.018" data-track-index="3"><div class="cap-in" style="font-size:78px"><span class="w">EH,</span><span class="w">BUKAN</span><span class="w y">GENSHIN!</span></div></div>
-        <div id="cap-3" class="clip cap" data-start="4.985" data-duration="0.618" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">JAP,</span></div></div>
-        <div id="cap-4" class="clip cap" data-start="5.603" data-duration="0.817" data-track-index="3"><div class="cap-in" style="font-size:95px"><span class="w">AKU</span><span class="w y">GENSHIN...</span></div></div>
-        <div id="cap-5" class="clip cap" data-start="9.17" data-duration="0.451" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">AKU</span><span class="w">RASA</span></div></div>
-        <div id="cap-6" class="clip cap" data-start="9.621" data-duration="0.654" data-track-index="3"><div class="cap-in" style="font-size:102px"><span class="w">AKU</span><span class="w y">SORANG</span><span class="w">JE</span></div></div>
-        <div id="cap-7" class="clip cap" data-start="10.275" data-duration="0.609" data-track-index="3"><div class="cap-in" style="font-size:95px"><span class="w">KAT</span><span class="w">SINI</span><span class="w">NI...</span></div></div>
-        <div id="cap-8" class="clip cap" data-start="10.925" data-duration="0.764" data-track-index="3"><div class="cap-in" style="font-size:102px"><span class="w">AKU</span><span class="w">NAK</span><span class="w">AMBIL</span></div></div>
-        <div id="cap-9" class="clip cap" data-start="11.689" data-duration="0.747" data-track-index="3"><div class="cap-in" style="font-size:95px"><span class="w y">RESOURCES,</span><span class="w">EH.</span></div></div>
-        <div id="cap-10" class="clip cap" data-start="12.431" data-duration="0.322" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">UISH,</span></div></div>
-        <div id="cap-11" class="clip cap" data-start="12.753" data-duration="0.997" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w y">BAZOOKA!</span></div></div>
-        <div id="cap-12" class="clip cap" data-start="13.764" data-duration="0.802" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">KE</span><span class="w">APA</span><span class="w">NI?</span></div></div>
-        <div id="cap-13" class="clip cap" data-start="14.566" data-duration="0.797" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w y">UZI,</span><span class="w y">UZI.</span></div></div>
-        <div id="cap-14" class="clip cap" data-start="15.395" data-duration="0.904" data-track-index="3"><div class="cap-in" style="font-size:111px"><span class="w">TAK</span><span class="w y">BEST</span><span class="w">EH,</span></div></div>
-        <div id="cap-15" class="clip cap" data-start="16.299" data-duration="0.61" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">WEAPON</span><span class="w">NI.</span></div></div>
-        <div id="cap-16" class="clip cap" data-start="20.032" data-duration="1.347" data-track-index="3"><div class="cap-in" style="font-size:102px"><span class="w">TERIMA</span><span class="w">KASIH!</span></div></div>
-        <div id="cap-17" class="clip cap" data-start="21.384" data-duration="0.69" data-track-index="3"><div class="cap-in" style="font-size:78px"><span class="w">TERIMA</span><span class="w">KASIH</span><span class="w y">FARAHIN!</span></div></div>
-        <div id="cap-18" class="clip cap" data-start="22.074" data-duration="1.255" data-track-index="3"><div class="cap-in" style="font-size:78px"><span class="w">SEMOGA</span><span class="w y">LAMPU</span><span class="w y">HIJAU</span></div></div>
-        <div id="cap-19" class="clip cap" data-start="23.329" data-duration="0.85" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">SENTIASA!</span></div></div>
-        <div id="cap-20" class="clip cap" data-start="24.22" data-duration="1.982" data-track-index="3"><div class="cap-in" style="font-size:78px"><span class="w">MINYAK</span><span class="w y">FULL</span><span class="w y">TANK!</span></div></div>
-        <div id="cap-21" class="clip cap" data-start="26.202" data-duration="1.477" data-track-index="3"><div class="cap-in" style="font-size:121px"><span class="w y">INSYAALLAH.</span></div></div>
-        <div id="cap-22" class="clip cap" data-start="29.601" data-duration="0.812" data-track-index="3"><div class="cap-in" style="font-size:121px"><span class="w y">BELUM</span><span class="w">LAGI.</span></div></div>
-        <div id="cap-23" class="clip cap" data-start="30.399" data-duration="0.328" data-track-index="3"><div class="cap-in" style="font-size:124px"><span class="w">NI,</span></div></div>
-        <div id="cap-24" class="clip cap" data-start="30.727" data-duration="0.654" data-track-index="3"><div class="cap-in" style="font-size:111px"><span class="w">LEPAS</span><span class="w">NI</span><span class="w">AKU</span></div></div>
-        <div id="cap-25" class="clip cap" data-start="31.381" data-duration="0.98" data-track-index="3"><div class="cap-in" style="font-size:102px"><span class="w">MAIN</span><span class="w y">GENSHIN!</span></div></div>
+        <div id="cap-0" class="clip cap" data-start="1.596" data-duration="0.809" data-track-index="3"><div class="cap-in" style="font-size:97px"><span class="w">BUKAN</span><span class="w y">GI</span><span class="w">NI!</span></div></div>
+        <div id="cap-1" class="clip cap" data-start="2.437" data-duration="1.516" data-track-index="3"><div class="cap-in" style="font-size:83px"><span class="w">HELO,</span><span class="w y">FARAHIN!</span></div></div>
+        <div id="cap-2" class="clip cap" data-start="3.967" data-duration="1.018" data-track-index="3"><div class="cap-in" style="font-size:66px"><span class="w">EH,</span><span class="w">BUKAN</span><span class="w y">GENSHIN!</span></div></div>
+        <div id="cap-3" class="clip cap" data-start="4.985" data-duration="0.618" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">JAP,</span></div></div>
+        <div id="cap-4" class="clip cap" data-start="5.603" data-duration="0.817" data-track-index="3"><div class="cap-in" style="font-size:83px"><span class="w">AKU</span><span class="w y">GENSHIN...</span></div></div>
+        <div id="cap-5" class="clip cap" data-start="9.17" data-duration="0.451" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">AKU</span><span class="w">RASA</span></div></div>
+        <div id="cap-6" class="clip cap" data-start="9.621" data-duration="0.654" data-track-index="3"><div class="cap-in" style="font-size:89px"><span class="w">AKU</span><span class="w y">SORANG</span><span class="w">JE</span></div></div>
+        <div id="cap-7" class="clip cap" data-start="10.275" data-duration="0.609" data-track-index="3"><div class="cap-in" style="font-size:83px"><span class="w">KAT</span><span class="w">SINI</span><span class="w">NI...</span></div></div>
+        <div id="cap-8" class="clip cap" data-start="10.925" data-duration="0.764" data-track-index="3"><div class="cap-in" style="font-size:89px"><span class="w">AKU</span><span class="w">NAK</span><span class="w">AMBIL</span></div></div>
+        <div id="cap-9" class="clip cap" data-start="11.689" data-duration="0.747" data-track-index="3"><div class="cap-in" style="font-size:83px"><span class="w y">RESOURCES,</span><span class="w">EH.</span></div></div>
+        <div id="cap-10" class="clip cap" data-start="12.431" data-duration="0.322" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">UISH,</span></div></div>
+        <div id="cap-11" class="clip cap" data-start="12.753" data-duration="0.997" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w y">BAZOOKA!</span></div></div>
+        <div id="cap-12" class="clip cap" data-start="13.764" data-duration="0.802" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">KE</span><span class="w">APA</span><span class="w">NI?</span></div></div>
+        <div id="cap-13" class="clip cap" data-start="14.566" data-duration="0.797" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w y">UZI,</span><span class="w y">UZI.</span></div></div>
+        <div id="cap-14" class="clip cap" data-start="15.395" data-duration="0.904" data-track-index="3"><div class="cap-in" style="font-size:97px"><span class="w">TAK</span><span class="w y">BEST</span><span class="w">EH,</span></div></div>
+        <div id="cap-15" class="clip cap" data-start="16.299" data-duration="0.61" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">WEAPON</span><span class="w">NI.</span></div></div>
+        <div id="cap-16" class="clip cap" data-start="20.032" data-duration="1.347" data-track-index="3"><div class="cap-in" style="font-size:89px"><span class="w">TERIMA</span><span class="w">KASIH!</span></div></div>
+        <div id="cap-17" class="clip cap" data-start="21.384" data-duration="0.69" data-track-index="3"><div class="cap-in" style="font-size:66px"><span class="w">TERIMA</span><span class="w">KASIH</span><span class="w y">FARAHIN!</span></div></div>
+        <div id="cap-18" class="clip cap" data-start="22.074" data-duration="1.255" data-track-index="3"><div class="cap-in" style="font-size:66px"><span class="w">SEMOGA</span><span class="w y">LAMPU</span><span class="w y">HIJAU</span></div></div>
+        <div id="cap-19" class="clip cap" data-start="23.329" data-duration="0.85" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">SENTIASA!</span></div></div>
+        <div id="cap-20" class="clip cap" data-start="24.22" data-duration="1.982" data-track-index="3"><div class="cap-in" style="font-size:68px"><span class="w">MINYAK</span><span class="w y">FULL</span><span class="w y">TANK!</span></div></div>
+        <div id="cap-21" class="clip cap" data-start="26.202" data-duration="1.477" data-track-index="3"><div class="cap-in" style="font-size:106px"><span class="w y">INSYAALLAH.</span></div></div>
+        <div id="cap-22" class="clip cap" data-start="29.601" data-duration="0.812" data-track-index="3"><div class="cap-in" style="font-size:106px"><span class="w y">BELUM</span><span class="w">LAGI.</span></div></div>
+        <div id="cap-23" class="clip cap" data-start="30.399" data-duration="0.328" data-track-index="3"><div class="cap-in" style="font-size:116px"><span class="w">NI,</span></div></div>
+        <div id="cap-24" class="clip cap" data-start="30.727" data-duration="0.654" data-track-index="3"><div class="cap-in" style="font-size:97px"><span class="w">LEPAS</span><span class="w">NI</span><span class="w">AKU</span></div></div>
+        <div id="cap-25" class="clip cap" data-start="31.381" data-duration="0.98" data-track-index="3"><div class="cap-in" style="font-size:89px"><span class="w">MAIN</span><span class="w y">GENSHIN!</span></div></div>
       </div>
 
       <div id="endc" class="clip" data-start="30.863" data-duration="3.047" data-track-index="7">

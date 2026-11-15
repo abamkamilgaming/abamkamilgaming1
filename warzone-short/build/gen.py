@@ -73,7 +73,7 @@ C = []
 for i, (txt, s, e) in enumerate(caps):
     words = "".join(f'<span class="w{" y" if w.strip(",.!?").lower() in HOT else ""}">'
                     f'{html.escape(w.upper())}</span>' for w in txt.split())
-    fs = max(78, min(124, int(960 / (len(txt) * 0.72))))      # Archivo Black caps ~0.72em per glyph
+    fs = max(66, min(116, int(840 / (len(txt) * 0.72))))      # 876px TikTok-safe column      # Archivo Black caps ~0.72em per glyph
     C.append(f'        <div id="cap-{i}" class="clip cap" data-start="{f(s)}" data-duration="{f(e - s)}" '
              f'data-track-index="3"><div class="cap-in" style="font-size:{fs}px">{words}</div></div>')
 cap_html = "\n".join(C)
@@ -84,13 +84,13 @@ STK = [
     ("s-baz", at("baz", 1) - 0.04, at("baz", "end"), "🚀", "BAZOOKA?!", "", "yellow", "g-mid"),
     ("s-uzi", at("uzi", 1) - 0.04, at("uzi", "end"), "🤨", "UZI??", "", "yellow", "g-mid"),
     ("s-best", at("best", 0), at("best", "end"), "👎", "0/10", "TAK BEST", "red", "g-mid"),
-    ("s-mrk", start["gift"] + 0.1, at("gift2", 1), "🕴️", "MR.K", "ABAM KAMIL SEBAGAI", "yellow", "g-low"),
+    ("s-mrk", start["gift"] + 0.1, at("gift2", 1), "🕴️", "MR.K", "ABAM KAMIL SEBAGAI", "yellow", "g-mid"),
     ("s-tank", at("minyak", 0) + 0.3, at("minyak", "end"), "⛽", "FULL TANK", "", "yellow", "g-mid"),
     ("s-dmg", at("chat", 0) + 0.15, at("chat", "end"), "💀", "EMOTIONAL DAMAGE", "", "red", "g-low"),
 ]
 S = []
 for sid, s, e, emo, txt, sub, cls, pos in STK:
-    size = min(170, int(820 / (len(txt) * 0.74)))
+    size = min(150, int(820 / (len(txt) * 0.74)))      # fits the 876px TikTok-safe column
     S.append(f'      <div id="{sid}" class="clip stk {pos}" data-start="{f(s)}" data-duration="{f(e - s)}" data-track-index="4">'
              f'<div class="stk-in">{f"<span class=sub>{sub}</span>" if sub else ""}<span class="emo">{emo}</span>'
              f'<span class="big {cls}" style="font-size:{size}px">{txt}</span></div></div>')

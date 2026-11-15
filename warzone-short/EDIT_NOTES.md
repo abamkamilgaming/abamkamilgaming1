@@ -20,6 +20,12 @@
 | 27.63 | chat | (chat: "Abam dah buat Archon Quest ke belum?") "Belum lagi." | bubble chat, 💀 EMOTIONAL DAMAGE |
 | 30.36 | end | "Ni, lepas ni aku main Genshin!" | "TEAM GENSHIN ATAU TEAM WARZONE?" + FOLLOW 🔔, outro song |
 
+## TikTok-ready (portrait)
+- 1080×1920 (9:16), 30 fps, H.264 + AAC — format upload TikTok.
+- Semua teks, sticker, chat bubble dan butang FOLLOW duduk dalam **safe zone TikTok**: kiri 64px, kanan 140px
+  (rail like/comment/share), atas 150px (tab Following/For You), bawah 420px (username, caption, music).
+- Semakan: `preview-frames/tiktok-safezone.jpg` (merah = kawasan yang UI TikTok tutup).
+
 ## Apa yang dibuat
 - Transcribe kedua-dua video (Whisper large-v3, semak semula setiap segmen lepas potong).
 - Buang awkward pause (jeda > 0.16 s dipotong ke 0.07 s) + line berulang ("Helo, helo", "Bukan Genshin" ×3, "Terima kasih, sudah punch card" ×2, "saja try je ni" ×2). Line yang bisik/tak jelas ("Weapon apa sia?") dibuang. Talking dipercepat 1.1×.
