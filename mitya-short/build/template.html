@@ -74,14 +74,25 @@
       .t-v { font-family: var(--font-display); font-size: 84px; line-height: 1; color: #fff; margin-top: 6px; }
       .t-v small { font-size: 44px; color: var(--gold); }
       .t-s { font-family: var(--font-cap); font-weight: 800; font-size: 32px; color: rgba(255,255,255,0.85); margin-top: 6px; }
-      .bar { width: 100%; display: flex; align-items: center; gap: 22px; padding: 20px 28px; border-radius: 24px; background: var(--glass);
+      .bar { width: 100%; display: flex; align-items: center; gap: 22px; padding: 14px 24px; border-radius: 24px; background: var(--glass);
         border: 3px solid rgba(167,123,255,0.75); text-align: left; box-shadow: 0 0 40px rgba(109,61,240,0.4); }
       .bar.hot { border-color: var(--gold); box-shadow: 0 0 50px rgba(246,196,83,0.45); }
       .b-n { flex: none; min-width: 84px; height: 84px; padding: 0 14px; border-radius: 18px; background: var(--gold); color: #0b0f22; font-family: var(--font-display);
         font-size: 46px; display: flex; align-items: center; justify-content: center; }
       .b-n.v { background: linear-gradient(135deg, var(--violet-2), #b04cff); color: #fff; }
       .b-t { font-family: var(--font-display); font-size: 50px; line-height: 1.05; color: #fff; }
-      .b-t small { display: block; font-family: var(--font-cap); font-weight: 800; font-size: 30px; color: var(--cyan); margin-top: 4px; letter-spacing: 0.02em; }
+      .b-t small { display: block; font-family: var(--font-cap); font-weight: 800; font-size: 30px; text-transform: none; color: var(--cyan); margin-top: 4px; letter-spacing: 0.02em; }
+      .b-ic { flex: none; width: 144px; height: 144px; border-radius: 22px; background: radial-gradient(circle at 50% 40%, #4a3aa0, #1a1440);
+        border: 3px solid rgba(255,231,163,0.75); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+      .b-ic img { width: 134px; height: 134px; object-fit: contain; }
+      .row.team { align-items: stretch; gap: 16px; }
+      .slot.two { flex: 1.9; }
+      .s-av { width: 190px; height: 190px; border-radius: 50%; object-fit: cover; background: radial-gradient(circle at 50% 35%, #5a48b8, #1a1440);
+        border: 4px solid var(--gold-2); display: block; margin: 0 auto 10px; }
+      .duo { display: flex; align-items: center; justify-content: center; gap: 6px; }
+      .duo .s-av { margin: 0 0 10px; }
+      .duo .or { font-family: var(--font-display); font-size: 54px; color: var(--gold); }
+      .slot .s-n small { font-family: var(--font-cap); font-weight: 800; font-size: 24px; color: var(--gold-2); }
       .pips { display: flex; gap: 26px; justify-content: center; }
       .pip { width: 110px; height: 110px; border-radius: 50%; border: 8px solid rgba(255,255,255,0.85); background: rgba(10,8,30,0.6); position: relative; }
       .pip i { position: absolute; inset: 10px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, var(--cyan) 35%, var(--violet-2) 100%);
@@ -89,8 +100,8 @@
       .slot { flex: 1; padding: 18px 8px 20px; border-radius: 24px; background: var(--glass); border: 3px solid rgba(167,123,255,0.75); }
       .slot .s-ic { width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
         font-family: var(--font-display); font-size: 44px; color: #fff; }
-      .slot .s-n { font-family: var(--font-display); font-size: 36px; color: #fff; }
-      .slot .s-r { font-family: var(--font-cap); font-weight: 800; font-size: 24px; color: var(--cyan); margin-top: 2px; }
+      .slot .s-n { font-family: var(--font-display); font-size: 38px; color: #fff; }
+      .slot .s-r { font-family: var(--font-cap); font-weight: 800; font-size: 28px; color: var(--cyan); margin-top: 2px; }
       .el-electro { background: linear-gradient(135deg, #b04cff, #6d3df0); } .el-cryo { background: linear-gradient(135deg, #9fe8ff, #3fa9d8); }
       .el-anemo { background: linear-gradient(135deg, #8ff0c8, #2fae8a); } .el-flex { background: linear-gradient(135deg, #8a8fa8, #4a4f68); }
       #follow-btn { display: inline-block; font-family: var(--font-display); font-size: 66px; color: #0b0f22; background: var(--gold);

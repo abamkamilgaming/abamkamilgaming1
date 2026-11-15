@@ -137,20 +137,21 @@ card("stats", L("b1"), nxt("b1"),
      f'<div class="tile" data-at="{at("b1", "er")}"><div class="t-k">ER</div><div class="t-v">140<small>%</small></div><div class="t-s">Energy Recharge</div></div></div>')
 card("arti", L("b2"), nxt("b2"),
      f'<span class="chip" data-at="{at("b2", 0)}">ARTIFACT</span>'
-     f'<div class="bar hot" data-at="{at("b2", "deep")}" data-fx="left"><div class="b-n">4PC</div><div class="b-t">DISENCHANTMENT IN DEEP SHADOW<small>pilihan utama</small></div></div>'
-     f'<div class="bar" data-at="{at("b2", "ataupun")}" data-fx="right"><div class="b-n v">ATAU</div><div class="b-t">GILDED DREAMS<small>fokus EM</small></div></div>'
+     f'<div class="bar hot" data-at="{at("b2", "deep")}" data-fx="left"><div class="b-ic"><img src="assets/img/deep-shadow.png" alt=""/></div><div class="b-t">DISENCHANTMENT IN DEEP SHADOW<small>4 PIECE · pilihan utama</small></div></div>'
+     f'<div class="bar" data-at="{at("b2", "ataupun")}" data-fx="right"><div class="b-ic"><img src="assets/img/gilded-dreams.png" alt=""/></div><div class="b-t">GILDED DREAMS<small>ATAU · fokus EM</small></div></div>'
      f'<div class="sub" style="font-size:40px" data-at="{at("b2", "ataupun", 0, 0.25)}">SANDS EM · GOBLET EM · CIRCLET CRIT</div>')
 card("weapon", L("b3"), nxt("b3"),
      f'<span class="chip" data-at="{at("b3", 0)}">WEAPON</span>'
-     f'<div class="bar hot" data-at="{at("b3", "signature")}" data-fx="left"><div class="b-n">BiS</div><div class="b-t">SIGNATURE MITYA<small>paling padu</small></div></div>'
-     f'<div class="bar" data-at="{at("b3", "kagura")}" data-fx="right"><div class="b-n v">5★</div><div class="b-t">KAGURA\'S VERITY</div></div>'
-     f'<div class="bar" data-at="{at("b3", "widsith")}" data-fx="right"><div class="b-n v">F2P</div><div class="b-t">THE WIDSITH</div></div>')
-def slot(cls, ic, n, r, a): return (f'<div class="slot" data-at="{a}"><div class="s-ic {cls}">{ic}</div><div class="s-n">{n}</div>'
-                                    f'<div class="s-r">{r}</div></div>')
+     f'<div class="bar hot" data-at="{at("b3", "signature")}" data-fx="left"><div class="b-ic"><img src="assets/img/starsealed.png" alt=""/></div><div class="b-t">STARSEALED EDICT<small>SIGNATURE · paling padu</small></div></div>'
+     f'<div class="bar" data-at="{at("b3", "kagura")}" data-fx="right"><div class="b-ic"><img src="assets/img/kagura.png" alt=""/></div><div class="b-t">KAGURA\'S VERITY<small>5★ alternatif</small></div></div>'
+     f'<div class="bar" data-at="{at("b3", "widsith")}" data-fx="right"><div class="b-ic"><img src="assets/img/widsith.png" alt=""/></div><div class="b-t">THE WIDSITH<small>F2P · 4★</small></div></div>')
+def av(n): return f'<img class="s-av" src="assets/img/{n}.png" alt=""/>'
 card("team", L("t1"), nxt("t1"),
-     f'<span class="chip" data-at="{at("t1", 0)}">TEAM STELLAR-CONDUCT</span><div class="row">'
-     + slot("el-electro", "⚡", "MITYA", "DPS", at("t1", 0)) + slot("el-cryo", "❄", "CRYO", "trigger", at("t1", "unit"))
-     + slot("el-anemo", "🜁", "SUCROSE", "EM buff", at("t1", "sucrose")) + slot("el-flex", "+", "FLEX", "Cryo / healer", at("t1", "sucrose", 0, 0.2)) + '</div>'
+     f'<span class="chip" data-at="{at("t1", 0)}">TEAM STELLAR-CONDUCT</span><div class="row team">'
+     f'<div class="slot" data-at="{at("t1", 0)}">{av("mitya")}<div class="s-n">MITYA</div><div class="s-r">Electro · DPS</div></div>'
+     f'<div class="slot two" data-at="{at("t1", "unit")}"><div class="duo">{av("odette")}<span class="or">/</span>{av("qiqi")}</div>'
+     f'<div class="s-n">ODETTE <small>atau</small> QIQI</div><div class="s-r">Cryo · Qiqi = F2P</div></div>'
+     f'<div class="slot" data-at="{at("t1", "sucrose")}">{av("sucrose")}<div class="s-n">SUCROSE</div><div class="s-r">Anemo · EM buff</div></div></div>'
      f'<div class="sub" style="font-size:42px" data-at="{at("t1", "cryo")}">ELECTRO + CRYO = STELLAR-CONDUCT</div>')
 card("tsar", L("z1"), nxt("z1"),
      f'<span class="chip v" data-at="{at("z1", 0)}">TEKAAN AKU · VERSION AKAN DATANG</span><div style="height:150px"></div>'
