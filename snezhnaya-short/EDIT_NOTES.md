@@ -1,7 +1,10 @@
 # SNEZHNAYA — Funny Moments Short
 
-**Format:** 1080×1920 (9:16 TikTok), **64.85 s** (62.65 s ucapan + 2.2 s end card)
-**Status:** PREVIEW sahaja — belum render.
+**FINAL:** 1080×1920, **60 fps**, **64.8 s**, HEVC (H.265) 2-pass 11 Mbps, AAC 256k, −15.9 LUFS
+Fail: `out/snezhnaya_final_1080p60_hevc.mp4` (tak di-commit — 90 MB)
+
+Perubahan selepas draf: "bodoh" dibeep (caption B*D*H); part kerusi jadi ragebait (grade merah, riser, zoom ke
+kerusi + "SIAPA LETAK NI?!", gegaran, flash, suara bass-boost, 💢 TERSANGKUT!!); end card "ABAMKAMIL GAMING".
 **Gaya:** Doro44 / Thejonathon — webcam atas, gameplay bawah, caption besar 1–3 perkataan di garis tengah, popup live chat, sticker emoji, freeze B&W, SFX meme.
 
 ## Timeline
@@ -47,5 +50,6 @@ python3 build/stems.py "<SNEZHNAYA!.mp4>"   # extract + asingkan suara (demucs)
 python3 build/cut.py "<SNEZHNAYA!.mp4>"     # potong jeda, crop cam + gameplay, 60fps
 python3 build/gen.py                        # jana index.html
 npx hyperframes preview                     # preview
-npx hyperframes render --fps 60 -o out.mp4  # render (lepas approve)
+npx hyperframes render -f 60 -q delivery -o master60.mp4
+/home/user/scripts/final_hevc.sh            # atau: ffmpeg libx265 -b:v 11M 2-pass, -tag:v hvc1
 ```
