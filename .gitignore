@@ -3,3 +3,4 @@ node_modules/
 *.log
 .*.hf-transaction-*/
 work-*/
+snezhnaya-short/out/

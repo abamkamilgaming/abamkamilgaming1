@@ -33,6 +33,16 @@ def speech(v, sr):
         else: out.append(r)
     return [r for r in out if r[1] - r[0] >= 0.06]
 
+def post(ln):
+    """Per-line audio extras in output-clip time: 'rage' = bass-boosted, hotter voice from t;
+    'censor' = mute spans (a beep is mixed in by gen.py as its own audio clip)."""
+    x = ""
+    if "rage" in ln:
+        t = ln["rage"]; x += f",bass=g=9:f=110:enable='gte(t,{t})',volume=2.5dB:enable='gte(t,{t})'"
+    for a, b in ln.get("censor", []):
+        x += f",volume=0:enable='between(t,{a},{b})'"
+    return x
+
 lines = []
 for ln in S:
     keep = []  # source-time intervals
@@ -74,7 +84,7 @@ for ln in S:
     fc += "".join(f"[c{i}][g{i}][a{i}]" for i in range(n)) + f"concat=n={n}:v=2:a=1[cv][gv][aa];"
     fc += (f"[cv]setpts=PTS/{SPEED},{CAM}[cam];"
            f"[gv]setpts=PTS/{SPEED},crop=418:503:{fx:.0f}:415,scale=1080:1300:flags=lanczos,unsharp=5:5:0.5[game];"
-           f"[aa]atempo={SPEED},volume={float(np.mean(gains)):.2f}dB,alimiter=limit=0.89:level=false[aud]")
+           f"[aa]atempo={SPEED},volume={float(np.mean(gains)):.2f}dB{post(ln)},alimiter=limit=0.89:level=false[aud]")
     enc = ["-c:v", "libx264", "-preset", "fast", "-crf", "17", "-pix_fmt", "yuv420p", "-r", "60"]
     subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", *ins, "-filter_complex", fc,
                     "-map", "[cam]", *enc, "-an", f"{OUT}/{ln['id']}_cam.mp4",

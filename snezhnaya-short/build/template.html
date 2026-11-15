@@ -105,6 +105,25 @@
         -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000; }
       #wasted .band { position: absolute; left: 0; right: 0; top: 40px; height: 190px; background: rgba(0,0,0,0.55); }
 
+      /* --- rage edit (chair) --- */
+      #rage-vig { position: absolute; inset: 0; z-index: 70; pointer-events: none; opacity: 0;
+        background: radial-gradient(ellipse at 50% 48%, rgba(255,0,30,0) 38%, rgba(255,0,30,0.55) 78%, rgba(140,0,10,0.9) 100%); }
+      #rage-ring { position: absolute; left: 0; right: 0; top: 600px; height: 520px; z-index: 76; }
+      #ring { position: absolute; left: 330px; top: 70px; width: 560px; height: 300px; border-radius: 50%;
+        border: 14px solid var(--red); box-shadow: 0 0 0 6px #000, 0 0 40px rgba(255,59,79,0.9), inset 0 0 0 6px #000; }
+      #ring-lbl { position: absolute; left: 0; right: 0; top: 390px; text-align: center; }
+      #ring-lbl span { display: inline-block; font-family: var(--font-cap); font-size: 92px; color: #fff; background: var(--red);
+        padding: 6px 34px 12px; border-radius: 18px; border: 7px solid #000; box-shadow: 0 10px 0 #000; }
+      #ring-lbl .em { font-family: var(--font-emoji); background: none; border: 0; box-shadow: none; padding: 0; }
+      #ring-arrow { position: absolute; left: 530px; top: 330px; width: 0; height: 0;
+        border-left: 34px solid transparent; border-right: 34px solid transparent; border-bottom: 56px solid var(--red); }
+      #rage-hit { position: absolute; left: 0; right: 0; top: 1060px; height: 520px; z-index: 77; text-align: center; }
+      #rage-hit .emo { font-family: var(--font-emoji); font-size: 170px; line-height: 1; }
+      #rage-hit .txt { display: block; margin-top: 8px; font-family: var(--font-cap); font-size: 150px; line-height: 1; color: var(--red);
+        -webkit-text-stroke: 16px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000, 0 0 50px rgba(255,59,79,0.8); }
+      .cap.rage .w { color: var(--red); text-shadow: 0 9px 0 #000, 0 0 36px rgba(255,59,79,0.9); }
+      .cap.rage .w.k { color: #fff; }
+
       /* --- end card --- */
       #endcard { position: absolute; inset: 0; z-index: 90; }
       #ec-dim { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(30,20,70,0.78), rgba(7,8,20,0.96)); }
@@ -153,6 +172,15 @@
         <div id="wasted-in"><div class="band"></div><div class="wt">WASTED</div></div>
       </div>
 
+      <div id="rage-vig" class="clip" data-start="{{RAGE_S}}" data-duration="{{RAGE_D}}" data-track-index="6"></div>
+      <div id="rage-ring" class="clip" data-start="{{RAGE_Q}}" data-duration="{{RAGE_QD}}" data-track-index="6">
+        <div id="ring"></div><div id="ring-arrow"></div>
+        <div id="ring-lbl"><span>SIAPA LETAK NI?! <span class="em">😡</span></span></div>
+      </div>
+      <div id="rage-hit" class="clip" data-start="{{RAGE_HIT}}" data-duration="{{RAGE_HD}}" data-track-index="6">
+        <div id="rage-hit-in"><span class="emo">💢😡💢</span><span class="txt">TERSANGKUT!!</span></div>
+      </div>
+
       <div id="captions" data-track-kind="captions">
 {{CAPTIONS}}
       </div>
@@ -181,7 +209,7 @@
         let z = i % 2 ? 1.12 : 1.0;
         tl.set(cw, { scale: z, x: 0, y: 0 }, ln.start);
         ln.cuts.forEach((c) => { z = z > 1.06 ? 1.0 : 1.12; tl.set(cw, { scale: z }, ln.start + c); });
-        tl.fromTo(gw, { scale: 1.0 }, { scale: 1.06, duration: ln.dur, ease: "none" }, ln.start);
+        if (ln.id !== "e5") tl.fromTo(gw, { scale: 1.0 }, { scale: 1.06, duration: ln.dur, ease: "none" }, ln.start);
       });
       // --- punch zooms + shakes on the punchlines
       T.punches.forEach((p) => {
@@ -198,6 +226,44 @@
         tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.03, ease: "none" }, Math.max(0, t - 0.03));
         tl.to("#flash", { opacity: 0, duration: 0.22, ease: "power2.out" }, t);
       });
+
+      // --- RAGE: chair line. build-up tremble -> slam zoom on the chair -> earthquake on "tersangkut"
+      const RG = T.rage;
+      tl.set("#gw-e5", { transformOrigin: "610px 230px", scale: 1.0, x: 0, y: 0 }, RG.s);
+      tl.to("#gw-e5", { scale: 1.08, duration: RG.q - RG.s, ease: "power1.in" }, RG.s);
+      tl.fromTo("#rage-vig", { opacity: 0 }, { opacity: 0.35, duration: RG.q - RG.s, ease: "power1.in" }, RG.s);
+      for (let k = 0, t0 = RG.s; t0 < RG.q - 0.02; k++, t0 += 0.05) {
+        const a = 2 + (6 * (t0 - RG.s)) / (RG.q - RG.s);
+        tl.to("#cw-e5", { x: k % 2 ? -a : a, y: k % 2 ? a * 0.5 : -a * 0.5, duration: 0.05, ease: "none" }, t0);
+      }
+      tl.fromTo("#gw-e5", { scale: 1.08 }, { scale: 1.55, duration: 0.22, ease: "power4.out" }, RG.q);
+      tl.to("#gw-e5", { scale: 1.65, duration: RG.hit - RG.q - 0.22, ease: "none" }, RG.q + 0.22);
+      tl.fromTo("#cw-e5", { scale: 1.25 }, { scale: 1.12, duration: 0.25, ease: "power3.out" }, RG.q);
+      tl.fromTo("#ring", { scale: 2.2, opacity: 0, rotation: -12 }, { scale: 1, opacity: 1, rotation: -4, duration: 0.2, ease: "back.out(2)" }, RG.q + 0.05);
+      tl.to(["#ring", "#ring-arrow"], { opacity: 0, duration: 0.1 }, RG.q + 0.5);
+      tl.fromTo("#ring-lbl", { y: 60, scale: 0.6, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2.5)" }, RG.q + 0.15);
+      tl.fromTo("#ring-arrow", { y: 30 }, { y: 0, duration: 0.14, yoyo: true, repeat: 5, ease: "sine.inOut" }, RG.q + 0.15);
+      tl.to("#rage-vig", { opacity: 0.55, duration: 0.1, yoyo: true, repeat: 3, ease: "sine.inOut" }, RG.q);
+      // the hit
+      tl.set("#gw-e5", { scale: 1.18, transformOrigin: "50% 50%" }, RG.hit);
+      tl.set("#cw-e5", { scale: 1.42, x: 0, y: 0 }, RG.hit);
+      tl.to("#cw-e5", { scale: 1.3, duration: RG.e - RG.hit, ease: "power2.out" }, RG.hit + 0.02);
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.85, duration: 0.03, ease: "none" }, RG.hit - 0.03);
+      tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, RG.hit);
+      tl.set("#rage-vig", { opacity: 0.9 }, RG.hit);
+      tl.to("#rage-vig", { opacity: 0.45, duration: 0.12, yoyo: true, repeat: 7, ease: "sine.inOut" }, RG.hit + 0.1);
+      for (let k = 0, t0 = RG.hit; t0 < RG.e - 0.04; k++, t0 += 0.04) {
+        const a = Math.max(4, 34 * (1 - (t0 - RG.hit) / (RG.e - RG.hit)));
+        const sx = k % 2 ? -a : a, sy = (k % 3) - 1;
+        tl.to("#gw-e5", { x: sx, y: sy * a * 0.6, duration: 0.04, ease: "none" }, t0);
+        tl.to("#cw-e5", { x: -sx * 0.7, y: sy * a * 0.4, rotation: (k % 2 ? -1 : 1) * a * 0.04, duration: 0.04, ease: "none" }, t0);
+        tl.to("#captions", { x: sx * 0.35, duration: 0.04, ease: "none" }, t0);
+      }
+      tl.set("#captions", { x: 0 }, RG.e);
+      tl.fromTo("#rage-hit-in", { scale: 3, opacity: 0, rotation: 8 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.16, ease: "back.out(1.6)" }, RG.hit);
+      tl.to("#rage-hit-in", { scale: 1.12, duration: 0.09, yoyo: true, repeat: 5, ease: "sine.inOut" }, RG.hit + 0.18);
+      tl.to("#rage-hit-in", { opacity: 0, duration: 0.08 }, RG.e - 0.09);
+      tl.to("#rage-vig", { opacity: 0, duration: 0.08 }, RG.e - 0.08);
 
       // --- hook
       tl.fromTo("#hk-big", { scale: 1.35 }, { scale: 1, duration: 0.32, ease: "back.out(2.2)" }, 0);

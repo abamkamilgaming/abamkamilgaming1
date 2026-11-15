@@ -4,7 +4,7 @@ import html, json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LINES = json.load(open(os.path.join(ROOT, "build", "lines.json")))
-END_DUR = 2.2
+END_DUR = 2.0
 
 # --- timeline: lines back to back ------------------------------------------------------
 t = 0.0
@@ -21,13 +21,13 @@ def end(lid): return round(L[lid]["start"] + L[lid]["dur"], 3)
 CAPS = {
     "h1": [(0.0, "EH"), (0.36, "*JADAH* APA"), (1.12, "KAU NI *TIKTOK?*")],
     "h2": [(0.0, "*REPRODUCE*"), (0.66, "KOTAK KEPALA"), (1.62, "ACIK *ENGKAU!*")],
-    "h3": [(0.0, "*BODOH* LAH"), (0.94, "TIKTOK NI"), (1.74, "SORRY LAH TIKTOK"), (2.52, "AKU KENA *MAKI*"), (3.40, "KAU MEMANG *BONGOK*")],
+    "h3": [(0.0, "*B§D§H* LAH"), (0.94, "TIKTOK NI"), (1.74, "SORRY LAH TIKTOK"), (2.52, "AKU KENA *MAKI*"), (3.40, "KAU MEMANG *BONGOK*")],
     "s1": [(0.0, "AKU *MENGANTUK*"), (1.10, "TAPI AKU *PAKSA*"), (2.14, "JUGA *LIVE* MALAM NI")],
     "s2": [(0.0, "SEMALAM TIDUR"), (1.24, "*2 JAM* JE")],
     "e1": [(0.0, "*SUSAH* GILA"), (0.82, "NAK AIM")],
     "e3": [(0.0, "KENAPA KENA"), (0.88, "ISI PELURU *MANUAL?*"), (2.16, "PATUTNYA DIA BUAT"), (3.40, "*AUTO RELOAD* LAH")],
     "e4": [(0.0, "PAKAI *PHONE*"), (0.74, "*SENANG* JE")],
-    "e5": [(0.0, "SIAPA LETAK"), (1.00, "*KERUSI* SINI?"), (1.90, "AKU *TERSANGKUT*")],
+    "e5": [(0.0, "SIAPA LETAK"), (1.00, "*KERUSI* SINI?!"), (1.88, "!AKU *TERSANGKUT!*")],
     "e6": [(0.0, "SEBAB DIA *BANGANG*"), (1.22, "ITU JE"), (1.62, "THE ONLY"), (2.38, "*EXPLAINABLE*"), (3.46, "*REASON*")],
     "f1": [(0.0, "YO *SAKITNYA!*"), (1.84, "*NOOOO!*")],
     "f2": [(0.0, "HABIS LAH"), (0.76, "*MAKANAN* AKU")],
@@ -42,7 +42,7 @@ CAPS = {
     "o3": [(0.0, "*BYE BYE!*")],
 }
 # hold tails (no speech) must not keep a caption on screen
-HOLD = {"h2": 0.3, "e1": 0.6, "e6": 0.45, "f4": 0.55, "r2": 0.5}
+HOLD = {"e5": 0.45, "e1": 0.6, "e6": 0.45, "f4": 0.55, "r2": 0.5}
 caps = []
 for lid, chunks in CAPS.items():
     for i, (rel, txt) in enumerate(chunks):
@@ -66,7 +66,6 @@ STICKERS = [
     ("st-2jam", at("s2", 1.2), 0.85, 1120, "💤", "2 JAM", "ice"),
     ("st-sng", end("e1") - 0.6, 0.62, 1170, "💀", "SENANG??", "red"),
     ("st-reload", at("e3", 3.38), 1.95, 1150, "🔫", "AUTO RELOAD PLS", "box"),
-    ("st-kerusi", at("e5", 1.9), 1.27, 1100, "🪑", "TERSANGKUT", "red"),
     ("st-iq", at("e6", 3.44), 0.86, 1080, "🧠", "100 IQ", "box"),
     ("st-sakit", at("f1", 1.8), 1.05, 1120, "😭", "", ""),
     ("st-makan", at("f2", 0.74), 0.93, 1120, "🍗", "HABIS!", "red"),
@@ -81,20 +80,20 @@ WASTED = (at("f4", 0.84), round(end("f4") - at("f4", 0.84), 3))
 
 # --- punch zooms (webcam) & shakes ---------------------------------------------------------------
 PUNCH = [("h1", 0.36, 1.0, True), ("h2", 1.62, 1.12, True), ("h3", 3.40, 1.0, True), ("e1", 1.42, 1.12, False),
-         ("e5", 1.90, 1.0, True), ("e6", 3.46, 1.0, True), ("f1", 1.84, 1.0, True), ("f4", 0.0, 1.0, False),
+         ("e6", 3.46, 1.0, True), ("f1", 1.84, 1.0, True), ("f4", 0.0, 1.0, False),
          ("r2", 5.40, 1.12, True), ("o3", 0.0, 1.12, False)]
-GSHAKE = [("e1", 0.0), ("e5", 1.90), ("f1", 0.40), ("f1", 1.84)]
+GSHAKE = [("e1", 0.0), ("f1", 0.40), ("f1", 1.84)]
 FLASH = [(at("s1"), 0.5), (at("e1"), 0.45), (at("f1"), 0.55), (at("r1"), 0.45), (at("o1"), 0.4), (END_START, 0.5)]
 
 # --- sound: SFX from the user's folder + a few utility hits -------------------------------------
 SFXDUR = {"vine-boom": 1.306, "emotional-damage": 3.37, "faaah": 1.959, "awkward": 1.489, "violin-screech": 3.997,
-          "get-out": 1.032, "laughing-dog": 9.874, "yay": 8.176, "ack": 5.042, "movie": 0.864, "run-vine": 8.28,
+          "get-out": 1.032, "beep": 0.52, "laughing-dog": 9.874, "yay": 8.176, "ack": 5.042, "movie": 0.864, "run-vine": 8.28,
           "whoosh": 0.575, "whoosh-short": 0.575, "pop": 0.72, "impact-bass-1": 2.116, "ping": 1.32,
           "notification": 2.456, "glitch-1": 2.638, "riser": 10.03}
 SFX = [  # name, time, volume, max duration
     ("impact-bass-1", 0.0, 0.35, 1.2), ("glitch-1", 0.02, 0.22, 0.6),
     ("vine-boom", at("h2", 1.62), 0.5, None),
-    ("pop", at("h3", 0.15), 0.6, None),
+    ("pop", at("h3", 0.15), 0.6, None), ("beep", at("h3", 0.16), 1.0, 0.52),
     ("faaah", at("h3", 3.38), 0.42, None),
     ("whoosh", at("s1") - 0.1, 0.45, None), ("pop", at("s1", 0.1), 0.5, None),
     ("ping", at("s2", 1.22), 0.8, None),
@@ -102,7 +101,10 @@ SFX = [  # name, time, volume, max duration
     ("pop", end("e1") - 0.62, 0.6, None), ("awkward", end("e1") - 0.55, 1.3, None),
     ("pop", at("e3", 3.38), 0.5, None),
     ("pop", at("e4"), 0.6, None),
-    ("violin-screech", at("e5", 1.88), 0.32, 1.3),
+    ("riser", at("e5", 0.0), 0.18, 1.0, 2.2), ("glitch-1", at("e5", 1.0), 0.22, 0.5, 0.0),
+    ("impact-bass-1", at("e5", 1.0), 0.22, 0.9, 0.0),
+    ("impact-bass-1", at("e5", 1.86), 0.45, 1.6, 0.0), ("violin-screech", at("e5", 1.86), 0.34, 1.6, 0.0),
+    ("glitch-1", at("e5", 1.86), 0.25, 0.7, 0.0),
     ("vine-boom", at("e6", 3.44), 0.55, None),
     ("whoosh", at("f1") - 0.1, 0.45, None), ("ack", at("f1", 1.8), 0.4, 1.0),
     ("pop", at("f2", 0.74), 0.5, None),
@@ -133,15 +135,21 @@ G_GAME = {"preset": "deep-contrast", "intensity": 0.5,
           "adjust": {"exposure": 0.05, "contrast": 0.1, "highlights": -0.18, "shadows": 0.16, "vibrance": 0.24,
                      "temperature": 0.02},
           "details": {"vignette": 0.22}, "effects": {"bloom": 0.2}}
+G_RAGE = {"preset": "deep-contrast", "intensity": 0.85,
+          "adjust": {"exposure": 0.02, "contrast": 0.28, "highlights": -0.2, "shadows": 0.05, "saturation": 0.18,
+                     "vibrance": 0.2, "temperature": 0.3, "tint": 0.08},
+          "details": {"vignette": 0.5}, "effects": {"bloom": 0.25}}
+G_RAGE_CAM = dict(G_CAM, adjust=dict(G_CAM["adjust"], temperature=0.22, contrast=0.26, tint=0.06), details={"vignette": 0.45})
 G_MONO = {"preset": "mono-clean", "intensity": 1.0, "adjust": {"contrast": 0.25}, "details": {"vignette": 0.35}}
 def attr(g): return html.escape(json.dumps(g, separators=(",", ":")), quote=True)
 def f(x): return f"{x:.3f}".rstrip("0").rstrip(".")
 
 def caption_html(txt):
     out = []
+    txt = txt.lstrip("!")
     for w in txt.split(" "):
         k = w.startswith("*") or w.endswith("*") or w.endswith("*?") or w.endswith("*!")
-        out.append(f'<span class="w{" k" if k else ""}">{html.escape(w.replace("*", ""))}</span>')
+        out.append(f'<span class="w{" k" if k else ""}">{html.escape(w.replace("*", "").replace("§", "*"))}</span>')
     return "".join(out)
 
 # --- HTML pieces ---------------------------------------------------------------------------------
@@ -150,11 +158,11 @@ for i, ln in enumerate(LINES):
     s, d, lid = ln["start"], ln["dur"], ln["id"]
     cams.append(f'        <div class="cw" id="cw-{lid}" style="z-index:{10 + i}">'
                 f'<video id="cam-{lid}" class="clip cam" src="assets/clips/{lid}_cam.mp4" data-start="{f(s)}" '
-                f'data-duration="{f(d)}" data-track-index="1" muted playsinline data-color-grading="{attr(G_CAM)}"></video></div>')
+                f'data-duration="{f(d)}" data-track-index="1" muted playsinline data-color-grading="{attr(G_RAGE_CAM if lid == "e5" else G_CAM)}"></video></div>')
     games.append(f'        <div class="gw" id="gw-{lid}" style="z-index:{10 + i}">'
                  f'<video id="game-{lid}" class="clip game" src="assets/clips/{lid}_game.mp4" data-start="{f(s)}" '
                  f'data-duration="{f(d)}" data-track-index="2" data-has-audio="true" data-volume="1" playsinline '
-                 f'data-color-grading="{attr(G_GAME)}"></video></div>')
+                 f'data-color-grading="{attr(G_RAGE if lid == "e5" else G_GAME)}"></video></div>')
 # WASTED: black-and-white freeze over the end of f4 (both zones)
 ws, wd = WASTED
 games.append(f'        <img id="freeze-game" class="clip still" src="assets/img/f4_freeze.jpg" alt="" style="z-index:60;height:1300px" '
@@ -175,22 +183,25 @@ for sid, s, d, top, emo, txt, cls in STICKERS:
     stk_html.append(f'      <div id="{sid}" class="clip stk" style="top:{top}px" data-start="{f(s)}" data-duration="{f(d)}" '
                     f'data-track-index="6"><div class="stk-in">{inner}</div></div>')
 
-cap_html = [f'        <div id="cap-{i}" class="clip cap" data-start="{f(s)}" data-duration="{f(e - s)}">'
+cap_html = [f'        <div id="cap-{i}" class="clip cap{" rage" if txt.startswith("!") else ""}" data-start="{f(s)}" data-duration="{f(e - s)}">'
             f'<div class="cap-in">{caption_html(txt)}</div></div>' for i, (s, e, txt) in enumerate(caps)]
 
 aud = []
 for mid, src, s, d, ms, vol, fi, fo in MUSIC:
     aud.append(f'      <audio id="{mid}" class="clip" src="{src}" data-start="{f(s)}" data-duration="{f(d)}" '
                f'data-media-start="{f(ms)}" data-volume="{vol}" data-fade-in="{fi}" data-fade-out="{fo}" data-track-index="11"></audio>')
-for i, (name, s, vol, mx) in enumerate(SFX):
-    s = max(0.0, s); d = min(SFXDUR[name], mx or 99, TOTAL - s)
-    aud.append(f'      <audio id="sfx-{i}" class="clip" src="assets/sfx/{name}.mp3" data-start="{f(s)}" data-duration="{f(d)}" '
-               f'data-volume="{vol}"{" data-fade-out=\"0.15\"" if mx else ""} data-track-index="12"></audio>')
+for i, (name, s, vol, mx, *off) in enumerate(SFX):
+    ms = off[0] if off else 0.0
+    s = max(0.0, s); d = min(SFXDUR[name] - ms, mx or 99, TOTAL - s)
+    ext = "wav" if name == "beep" else "mp3"
+    aud.append(f'      <audio id="sfx-{i}" class="clip" src="assets/sfx/{name}.{ext}" data-start="{f(s)}" data-duration="{f(d)}" '
+               f'data-media-start="{f(ms)}" data-volume="{vol}"{" data-fade-out=\"0.12\"" if mx and name != "beep" else ""} data-track-index="12"></audio>')
 
 punches = [{"id": a, "t": at(a, r), "z": z, "shake": sh} for a, r, z, sh in PUNCH]
 T = {"lines": [{"id": l["id"], "start": l["start"], "dur": l["dur"], "cuts": l["cuts"]} for l in LINES],
      "punches": punches, "gshakes": [{"id": a, "t": at(a, r)} for a, r in GSHAKE], "flashes": FLASH,
-     "hook_end": end("h2") - 0.3, "meter": [METER[0], METER[0] + METER[1]], "wasted": [ws, ws + wd], "end_start": END_START}
+     "hook_end": end("h2") - 0.3, "meter": [METER[0], METER[0] + METER[1]], "wasted": [ws, ws + wd], "end_start": END_START,
+     "rage": {"s": at("e5"), "q": at("e5", 1.0), "hit": at("e5", 1.86), "e": end("e5")}}
 
 page = open(os.path.join(ROOT, "build", "template.html")).read()
 for k, v in {"{{TOTAL}}": f(TOTAL), "{{CAMS}}": "\n".join(cams), "{{GAMES}}": "\n".join(games),
@@ -198,6 +209,9 @@ for k, v in {"{{TOTAL}}": f(TOTAL), "{{CAMS}}": "\n".join(cams), "{{GAMES}}": "\
              "{{AUDIO}}": "\n".join(aud), "{{HOOK_DUR}}": f(end("h2") - 0.3),
              "{{METER_START}}": f(METER[0]), "{{METER_DUR}}": f(METER[1]),
              "{{WASTED_START}}": f(ws), "{{WASTED_DUR}}": f(wd),
+             "{{RAGE_Q}}": f(at("e5", 1.0)), "{{RAGE_QD}}": f(0.86),
+             "{{RAGE_S}}": f(at("e5")), "{{RAGE_D}}": f(L["e5"]["dur"]),
+             "{{RAGE_HIT}}": f(at("e5", 1.86)), "{{RAGE_HD}}": f(end("e5") - at("e5", 1.86)),
              "{{END_START}}": f(END_START), "{{END_DUR}}": f(END_DUR), "{{TIMELINE_JSON}}": json.dumps(T)}.items():
     page = page.replace(k, v)
 open(os.path.join(ROOT, "index.html"), "w").write(page)
