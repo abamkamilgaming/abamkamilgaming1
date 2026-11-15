@@ -1,6 +1,6 @@
 # Anastasya (Cryo Archon) — Short (preview draft)
 
-**Format:** 1080×1920 (9:16), 60 fps, **49.8 s** (bawah 1 minit)
+**Format:** 1080×1920 (9:16), 60 fps, **55.9 s** (bawah 1 minit)
 **Status:** PREVIEW sahaja — belum render akhir.
 **Render (bila dah approve):** `npm run render` → 1080×1920, 60 fps, 11 Mbps.
 **Gaya:** muka penuh ↔ B-roll penuh (macam Minslief), caption pop 1–2 perkataan, salji jatuh, tema ais + merah jambu (cinta).
@@ -14,14 +14,16 @@
 | r2 | Kali terakhir the Seven berkumpul? Lima ratus tahun lepas, masa Cataclysm. |
 | l1 | Authority dia, cinta. Kuasa untuk hapuskan sumpahan. |
 | s1 | Rakyat dia kena wabak sumpahan. Dia janji, bila salji turun, semua sembuh. Dan memang jadi! |
+| s2 | Tapi ada satu sumpahan, cinta pun tak boleh ubat. |
 | t1 | Lepas tu Celestia uji dia. Subjek ujian? Cinta. |
 | t2 | Dia sound balik Celestia, korang yang cemarkan makna cinta. Meremang weh! |
 | p1 | Bayangkan bila Anastasya jadi playable nanti. Archon tema cinta, confirm gempak! |
 | p2 | Aku dah mula simpan primo. |
 | e1 | Korang pull tak? Follow for more! |
 
-Dua petikan suara asal game diselit (bukan suara kau):
+Tiga petikan suara asal game diselit (bukan suara kau):
 - selepas `r2`: Pierro — *"Love. That is Her Majesty's power."* (4:57:52)
+- selepas `s2`: Anastasya — *"Love cannot cure you of this curse."* (5:00:35, dari cinematic "Tsaritsa cutscene")
 - selepas `t1`: Anastasya — *"Clearly, even you do not know what love is, Phanes."* (4:59:39 dalam babak ujian, 5:02:58)
 
 ## Keypoint Hoyoverse → di mana dalam video

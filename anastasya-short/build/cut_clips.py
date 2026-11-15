@@ -16,6 +16,8 @@ SHOTS = [  # id, start, dur, crop, slow, keep audio
     ("S1", 17986.2, 2.7, c(), 1.0, 0),       # pesakit wabak
     ("S2", 18000.0, 3.3, c(), 1.0, 0),       # kepingan salji gergasi, dia berjalan
     ("S3", 18004.6, 2.4, c(), 1.0, 0),       # ayah & anak sembuh
+    ("S4", 18022.8, 3.4, c(), 1.0, 0),       # mangsa bertanduk tertimbus salji
+    ("Q3", 18034.9, 3.3, c(), 1.0, 1),       # Anastasya: "Love cannot cure you of this curse."
     ("T1", 18080.6, 3.6, c(520), 1.0, 0),    # peranti ujian Celestia
     ("Q2", 18178.9, 4.5, c(), 1.0, 1),       # Anastasya: "even you do not know what love is, Phanes."
     ("T2", 18166.0, 4.9, c(), 1.0, 0),       # close-up marah

@@ -8,7 +8,7 @@ VO = json.load(open(os.path.join(ROOT, "build", "th_words.json" if MODE == "th" 
 SHOTS = {s[0]: s for s in json.load(open(os.path.join(ROOT, "assets", "clips", "shots.json")))}
 GAP, START, END_HOLD, BGM_VOL = 0.06, 0.08, 1.2, 0.3
 DLG = {"I1", "R1", "R1b", "R2", "Q1", "Q2", "T1", "T2"}       # shot dialog: ada subtitle game -> shade tinggi
-SLAM = {"A", "Q2", "S2", "P2"}
+SLAM = {"A", "Q2", "S2", "P2", "Q3"}
 
 def K(line, key, n=0):
     return [i for i, w in enumerate(VO[line]["words"]) if w[0].lower().strip("?,.!").startswith(key.lower())][n]
@@ -21,6 +21,8 @@ SEQ = [
     ("sync", "Q1"),
     ("vo", "l1", [("L1", K("l1", "kuasa"), "end")]),
     ("vo", "s1", [("S1", 0, K("s1", "dia", 1)), ("S2", K("s1", "dia", 1), K("s1", "dan")), ("S3", K("s1", "dan"), "end")]),
+    ("vo", "s2", [("S4", 0, "end")]),
+    ("sync", "Q3"),
     ("vo", "t1", [("T1", 0, "end")]),
     ("sync", "Q2"),
     ("vo", "t2", [("T2", 0, K("t2", "meremang"))]),
@@ -55,7 +57,7 @@ for i, e in enumerate(ev):
 for i, o in enumerate(shots): o["idx"] = i; o["slam"] = o["sid"] in SLAM
 
 # ---- grades ---------------------------------------------------------------------------------
-TAME = {"A": -0.4, "L1": -0.42, "S1": -0.3, "S2": -0.36, "S3": -0.3, "P1": -0.32, "P2": -0.2, "Q1": -0.2, "I1": -0.12}
+TAME = {"S4": -0.34, "Q3": -0.3, "A": -0.4, "L1": -0.42, "S1": -0.3, "S2": -0.36, "S3": -0.3, "P1": -0.32, "P2": -0.2, "Q1": -0.2, "I1": -0.12}
 LIFT = {"T1": 0.14, "R1": 0.08, "R2": 0.08, "E": 0.1, "T2": 0.04}
 def g_game(sid):
     adj = {"exposure": round(0.02 + LIFT.get(sid, 0) - (0.07 if sid in TAME else 0), 3), "contrast": 0.14,
@@ -135,6 +137,9 @@ card("plague", L("s1"), T_("s1", "dia", 1) - 0.05,
 card("snow", T_("s1", "dia", 1) - 0.05, NX("s1"),
      f'<span class="chip" data-at="{at("s1", "bila")}">❄ BILA SALJI TURUN…</span>'
      f'<div class="big ice" style="font-size:132px" data-at="{at("s1", "semua")}" data-fx="slam">SEMUA SEMBUH!</div>')
+card("nocure", L("s2"), NX("s2"),
+     f'<div class="sub" data-at="{at("s2", "satu")}">TAPI ADA SATU…</div>'
+     f'<div class="big red" style="font-size:104px" data-at="{at("s2", "cinta")}" data-fx="slam">CINTA PUN<br/>TAK BOLEH UBAT</div>')
 card("trial", L("t1"), NX("t1"),
      f'<span class="chip g" data-at="{at("t1", "celestia")}">UJIAN CELESTIA</span>'
      f'<div class="sub" data-at="{at("t1", "subjek")}">SUBJEK:</div>'
@@ -157,6 +162,7 @@ for cid, s, e, inner, cls in CARDS:
 card_html = "\n".join(P); P.clear()
 
 QUOTES = {"Q1": ("THE JESTER · PIERRO", "“<b>Love.</b> That is Her Majesty's power.”", "Cinta. Itulah kuasa Baginda."),
+          "Q3": ("ANASTASYA", "“<b>Love</b> cannot cure you of this curse.”", "Cinta tak mampu sembuhkan sumpahan kau."),
           "Q2": ("ANASTASYA", "“Clearly, even you do not know what <b>love</b> is, Phanes.”", "Kau sendiri pun tak tahu apa itu cinta, Phanes.")}
 for sid, (who, en, bm) in QUOTES.items():
     e = EV[sid]
@@ -167,7 +173,7 @@ quote_html = "\n".join(P); P.clear()
 # ---- captions ---------------------------------------------------------------------------------------------
 ICE = {"tsaritsa", "anastasya", "cryo", "archon", "fatui", "teyvat", "seven", "cataclysm", "salji", "sembuh", "celestia", "playable",
        "primo", "follow", "authority", "kuasa", "7.2", "500"}
-ROSE = {"cinta", "jahat", "salah", "sumpahan", "wabak", "meremang", "gempak"}
+ROSE = {"cinta", "jahat", "salah", "sumpahan", "wabak", "meremang", "gempak", "ubat"}
 NUM = {("r1", "tujuh"): ("7.2", 3), ("r2", "lima"): ("500", 2)}     # (teks ganti, bilangan perkataan digabung)
 caps = []
 for e in ev:
@@ -212,6 +218,7 @@ SFX = [("impact-bass-1", 0.0, 0.45), ("glitch-1", T_("h1", "salah") - 0.05, 0.26
        ("sparkle", T_("l1", "cinta"), 0.34), ("whoosh", T_("l1", "kuasa") - 0.1, 0.3), ("pop", T_("l1", "hapuskan"), 0.36),
        ("glitch-1", L("s1"), 0.22), ("whoosh", T_("s1", "dia", 1) - 0.1, 0.3), ("chime", T_("s1", "salji"), 0.24),
        ("impact-bass-1", T_("s1", "semua") - 0.05, 0.42), ("sparkle", T_("s1", "dan"), 0.3),
+       ("glitch-1", L("s2"), 0.2), ("impact-bass-2", T_("s2", "cinta") - 0.3, 0.36), ("chime", L("Q3") + 0.05, 0.2),
        ("whoosh", L("t1") - 0.1, 0.32), ("riser", T_("t1", "cinta") - 10.03, 0.2), ("impact-bass-2", T_("t1", "cinta") - 0.3, 0.4),
        ("impact-bass-1", L("Q2"), 0.45),
        ("whoosh-short", L("t2") - 0.08, 0.28), ("pop", T_("t2", "korang"), 0.34), ("impact-bass-2", T_("t2", "meremang") - 0.3, 0.42),
