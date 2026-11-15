@@ -6,23 +6,23 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 P, SONG = sys.argv[1:3]
 def c(x=656): return f"crop=608:1080:{x}:0"
 SHOTS = [  # id, start, dur, crop, slow, keep audio
-    ("A", 17964.3, 3.4, c(), 1.0, 0),        # cinematic: pusaran ais -> mata Anastasya
+    ("A", 17964.3, 4.4, c(), 1.0, 0),        # cinematic: pusaran ais -> mata Anastasya
     ("I1", 4476.6, 3.0, c(), 1.0, 0),        # close-up di meja bulat
-    ("R1", 4491.4, 3.2, c(), 1.0, 0),        # meja bulat the Seven
+    ("R1", 4491.4, 4.2, c(), 1.0, 0),        # meja bulat the Seven
     ("R1b", 17862.5, 3.2, c(), 1.0, 0),      # Anastasya + Pierrot + Noy
     ("R2", 4496.5, 4.4, c(), 1.0, 0),        # sekeliling meja
-    ("Q1", 17871.7, 4.9, c(), 1.0, 1),       # Pierro: "Love. That is Her Majesty's power."
+    ("Q1", 17871.85, 4.3, c(), 1.0, 1),       # Pierro: "Love. That is Her Majesty's power."
     ("L1", 17975.6, 3.4, c(), 1.0, 0),       # istana + cahaya
     ("S1", 17986.2, 2.7, c(), 1.0, 0),       # pesakit wabak
-    ("S2", 18000.0, 3.3, c(), 1.0, 0),       # kepingan salji gergasi, dia berjalan
-    ("S3", 18004.6, 2.4, c(), 1.0, 0),       # ayah & anak sembuh
+    ("S2", 18000.0, 4.2, c(), 1.0, 0),       # kepingan salji gergasi, dia berjalan
+    ("S3", 18004.2, 2.6, c(), 1.0, 0),       # ayah & anak sembuh
     ("S4", 18022.8, 3.4, c(), 1.0, 0),       # mangsa bertanduk tertimbus salji
     ("Q3", 18034.9, 3.3, c(), 1.0, 1),       # Anastasya: "Love cannot cure you of this curse."
     ("T1", 18080.6, 3.6, c(520), 1.0, 0),    # peranti ujian Celestia
     ("Q2", 18178.9, 4.5, c(), 1.0, 1),       # Anastasya: "even you do not know what love is, Phanes."
-    ("T2", 18166.0, 4.9, c(), 1.0, 0),       # close-up marah
+    ("T2", 18170.8, 6.2, c(), 1.0, 0),       # close-up marah
     ("P1", 18029.6, 4.2, c(), 1.0, 0),       # berjalan dalam salji
-    ("P2", 18039.3, 3.2, c(), 1.0, 0),       # close-up wajah
+    ("P2", 18039.3, 4.3, c(), 1.0, 0),       # close-up wajah
     ("E", 18046.5, 5.0, c(), 1.0, 0),        # aurora ais
 ]
 out = []

@@ -6,7 +6,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODE = "th" if os.path.exists(os.path.join(ROOT, "build", "th_words.json")) else "tts"
 VO = json.load(open(os.path.join(ROOT, "build", "th_words.json" if MODE == "th" else "vo_words_tight.json")))
 SHOTS = {s[0]: s for s in json.load(open(os.path.join(ROOT, "assets", "clips", "shots.json")))}
-GAP, START, END_HOLD, BGM_VOL = 0.06, 0.08, 1.2, 0.3
+GAP, START, END_HOLD, BGM_VOL = 0.05, 0.08, 1.0, 0.3
 DLG = {"I1", "R1", "R1b", "R2", "Q1", "Q2", "T1", "T2"}       # shot dialog: ada subtitle game -> shade tinggi
 SLAM = {"A", "Q2", "S2", "P2", "Q3"}
 
@@ -17,7 +17,6 @@ SEQ = [
     ("vo", "h1", [("A", K("h1", "salah"), "end")]),
     ("vo", "i1", [("I1", K("i1", "anastasya"), "end")]),
     ("vo", "r1", [("R1b", 0, K("r1", "dia")), ("R1", K("r1", "dia"), "end")]),
-    ("vo", "r2", [("R2", 0, K("r2", "lima"))]),
     ("sync", "Q1"),
     ("vo", "l1", [("L1", K("l1", "kuasa"), "end")]),
     ("vo", "s1", [("S1", 0, K("s1", "dia", 1)), ("S2", K("s1", "dia", 1), K("s1", "dan")), ("S3", K("s1", "dan"), "end")]),
@@ -25,7 +24,7 @@ SEQ = [
     ("sync", "Q3"),
     ("vo", "t1", [("T1", 0, "end")]),
     ("sync", "Q2"),
-    ("vo", "t2", [("T2", 0, K("t2", "meremang"))]),
+    ("vo", "t2", []),
     ("vo", "p1", [("P1", 0, K("p1", "archon")), ("P2", K("p1", "archon"), "end")]),
     ("vo", "p2", []),
     ("vo", "e1", [("E", 0, K("e1", "follow"))]),
@@ -64,9 +63,10 @@ def g_game(sid):
            "highlights": TAME.get(sid, -0.14), "whites": -0.1 if sid in TAME else 0.0, "shadows": 0.1 + (0.08 if sid in LIFT else 0),
            "blacks": -0.06, "vibrance": 0.26, "saturation": 0.04, "temperature": -0.05, "tint": 0.02}
     return {"preset": "deep-contrast", "intensity": 0.5, "adjust": adj, "details": {"vignette": 0.28}, "effects": {"bloom": 0.22}}
-G_FACE = {"preset": "deep-contrast", "intensity": 0.35,
-          "adjust": {"exposure": 0.14, "contrast": 0.16, "highlights": -0.45, "whites": -0.1, "shadows": 0.18, "blacks": -0.12,
-                     "temperature": 0.08, "tint": 0.06, "vibrance": 0.3, "saturation": 0.06}, "details": {"vignette": 0.32}}
+# talking head (rakaman kali ni dah terang & seimbang): kontras ringan, tarik highlight dinding, warm sikit, vignette
+G_FACE = {"preset": "deep-contrast", "intensity": 0.3,
+          "adjust": {"exposure": 0.03, "contrast": 0.12, "highlights": -0.32, "whites": -0.06, "shadows": 0.08, "blacks": -0.08,
+                     "temperature": 0.03, "tint": 0.02, "vibrance": 0.2, "saturation": 0.03}, "details": {"vignette": 0.28}}
 def attr(g): return html.escape(json.dumps(g, separators=(",", ":")), quote=True)
 def f(x): return f"{x:.3f}".rstrip("0").rstrip(".")
 E = html.escape
@@ -125,9 +125,6 @@ card("seven", L("r1"), NX("r1"),
      f'<span class="chip g" data-at="{at("r1", 0)}">ARCHON QUEST 7.2</span>'
      f'<div class="big ice" style="font-size:150px" data-at="{at("r1", "kumpulkan")}" data-fx="slam">7 ARCHON</div>'
      f'<div class="sub" data-at="{at("r1", "selamatkan")}">SELAMATKAN TEYVAT</div>')
-card("500", T_("r2", "lima") - 0.05, NX("r2"),
-     f'<div class="big gold" style="font-size:210px" data-at="{at("r2", "lima")}" data-fx="slam">500</div>'
-     f'<div class="sub" data-at="{at("r2", "tahun")}">TAHUN SEJAK CATACLYSM</div>')
 card("love", L("l1"), NX("l1"),
      f'<span class="chip" data-at="{at("l1", 0)}">AUTHORITY</span>'
      f'<div class="big rose love" style="font-size:230px" data-at="{at("l1", "cinta")}" data-fx="beat">CINTA {H}</div>'
@@ -154,8 +151,8 @@ card("play", L("p1"), NX("p1"),
 card("primo", L("p2"), NX("p2"),
      f'<div class="big gold" style="font-size:126px" data-at="{at("p2", "simpan")}" data-fx="slam">SIMPAN PRIMO!</div>')
 card("end", L("e1"), TOTAL,
-     f'<div class="big white" style="font-size:104px" data-at="{at("e1", 0)}" data-fx="slam">KORANG PULL TAK?</div>'
-     f'<div id="follow-btn" data-at="{at("e1", "follow")}" data-pulse="1">FOLLOW FOR MORE</div>')
+     f'<div class="big white" style="font-size:100px" data-at="{at("e1", 0)}" data-fx="slam">KORANG PULL TAK?</div>'
+     f'<div id="follow-btn" data-at="{at("e1", "follow")}" data-pulse="1">FOLLOW FOR MORE</div>', "low")
 for cid, s, e, inner, cls in CARDS:
     P.append(f'      <div id="card-{cid}" class="clip card {cls}" data-start="{f(s)}" data-duration="{f(e - s)}" data-track-index="7">'
              f'<div class="card-in">{inner}</div></div>')
@@ -174,10 +171,10 @@ quote_html = "\n".join(P); P.clear()
 ICE = {"tsaritsa", "anastasya", "cryo", "archon", "fatui", "teyvat", "seven", "cataclysm", "salji", "sembuh", "celestia", "playable",
        "primo", "follow", "authority", "kuasa", "7.2", "500"}
 ROSE = {"cinta", "jahat", "salah", "sumpahan", "wabak", "meremang", "gempak", "ubat"}
-NUM = {("r1", "tujuh"): ("7.2", 3), ("r2", "lima"): ("500", 2)}     # (teks ganti, bilangan perkataan digabung)
+NUM = {}     # (teks ganti, bilangan perkataan digabung)
 caps = []
 for e in ev:
-    if e["kind"] != "vo" or e["id"] == "h1": continue
+    if e["kind"] != "vo" or e["id"] in ("h1", "e1"): continue
     W = []; skip = 0
     for j, w in enumerate(VO[e["id"]]["words"]):
         if skip: W[-1][2] = w[2]; skip -= 1; continue
@@ -213,7 +210,6 @@ SFX = [("impact-bass-1", 0.0, 0.45), ("glitch-1", T_("h1", "salah") - 0.05, 0.26
        ("sparkle", T_("h1", "cinta"), 0.34),
        ("whoosh-short", T_("i1", "anastasya") - 0.1, 0.3), ("impact-bass-2", T_("i1", "anastasya") - 0.28, 0.36), ("chime", T_("i1", "cryo"), 0.22),
        ("whoosh", L("r1") - 0.1, 0.32), ("whoosh-short", T_("r1", "dia") - 0.1, 0.28), ("impact-bass-2", T_("r1", "kumpulkan") - 0.3, 0.38),
-       ("whoosh-short", L("r2") - 0.08, 0.28), ("ping", T_("r2", "lima"), 0.3),
        ("whoosh", L("Q1") - 0.1, 0.3), ("chime", L("Q1") + 0.1, 0.2),
        ("sparkle", T_("l1", "cinta"), 0.34), ("whoosh", T_("l1", "kuasa") - 0.1, 0.3), ("pop", T_("l1", "hapuskan"), 0.36),
        ("glitch-1", L("s1"), 0.22), ("whoosh", T_("s1", "dia", 1) - 0.1, 0.3), ("chime", T_("s1", "salji"), 0.24),
