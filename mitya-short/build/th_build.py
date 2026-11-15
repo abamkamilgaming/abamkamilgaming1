@@ -9,7 +9,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = sys.argv[1]
 OUT = os.path.join(ROOT, "assets", "th"); os.makedirs(OUT, exist_ok=True)
 MAXGAP, KEEP, SPEED = 0.18, 0.09, 1.15
-CROP = "crop=2160:1920:0:100"      # muka: separuh atas frame portrait 4K
+CROP = "crop=2160:2400:0:60"       # muka zoom-out: lebar penuh, lebih bahu/dada -> 864x960 di tengah panel
+FG_W = 864
+BG = "crop=2160:1920:0:300"        # isi tepi: salinan blur
 LINES = [  # id, mula, tamat (saat dalam rakaman mentah)
     ("h1", 0.70, 4.28), ("s1", 8.66, 15.60), ("m1", 16.37, 18.72), ("m2", 19.64, 22.71), ("m3", 23.11, 26.10),
     ("m4", 26.60, 31.63), ("m5", 32.35, 40.50), ("m6", 41.06, 44.66), ("b1", 58.36, 65.90), ("b2", 76.74, 82.20),
@@ -62,21 +64,28 @@ for lid, a, b in LINES:
                f"afade=t=out:st={max(0, e - s - 0.015):.3f}:d=0.015[a{i}];")
     n = len(keep)
     fc += "".join(f"[v{i}][a{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=1[v0][a0];"
-    fc += (f"[v0]{CROP},scale=1080:960:flags=lanczos,unsharp=5:5:0.5,setpts=PTS/{SPEED},fps=60,format=yuv420p[v];"
+    fc += (f"[v0]split[f0][b0];[b0]{BG},scale=1080:960,gblur=sigma=28,eq=brightness=-0.04[bg];"
+           f"[f0]{CROP},scale={FG_W}:960:flags=lanczos,unsharp=5:5:0.5[fg];[bg][fg]overlay={(1080 - FG_W) // 2}:0,"
+           f"setpts=PTS/{SPEED},fps=60,format=yuv420p[v];"
            f"[a0]atempo={SPEED},{AF}[a]")
     dst = os.path.join(OUT, lid + ".mp4")
-    subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-ss", f"{a - 1:.3f}", "-i", SRC, "-filter_complex",
-                    fc.replace("trim=", "trim=").replace("\0", ""), "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-crf", "16",
-                    "-preset", "fast", "-g", "30", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", dst]
-                   if False else
-                   ["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", SRC, "-filter_complex", fc, "-map", "[v]", "-map", "[a]",
-                    "-c:v", "libx264", "-crf", "16", "-preset", "fast", "-g", "30", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
-                    "-movflags", "+faststart", dst], check=True)
+    off = max(0.0, a - 2.0)
+    fcs = fc
+    for (ks, ke) in keep:
+        fcs = fcs.replace(f"trim={ks:.3f}:{ke:.3f}", f"trim={ks - off:.3f}:{ke - off:.3f}")
+    subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-ss", f"{off:.3f}", "-i", SRC, "-filter_complex", fcs,
+                    "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-crf", "16", "-preset", "fast", "-g", "30", "-c:a", "aac",
+                    "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", dst], check=True)
     dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", dst],
                                capture_output=True, text=True).stdout)
     meta[lid] = {"dur": round(dur, 3), "cuts": cuts, "raw": [a, b]}
     print(lid, f"{b - a:.2f} -> {dur:.2f}  ({len(keep) - 1} potongan)", flush=True)
 
+if "--words" not in sys.argv and os.path.exists(os.path.join(ROOT, "build", "th_words.json")):
+    old = json.load(open(os.path.join(ROOT, "build", "th_words.json")))
+    for k in meta: meta[k]["words"] = old[k]["words"]
+    json.dump(meta, open(os.path.join(ROOT, "build", "th_words.json"), "w"), ensure_ascii=False, indent=0)
+    print("total", round(sum(v["dur"] for v in meta.values()), 2), "(word timing lama dikekalkan)"); sys.exit(0)
 # ---- word timings on the final clips ----
 from faster_whisper import WhisperModel
 m = WhisperModel("large-v3-turbo", device="cpu", compute_type="int8", cpu_threads=4)

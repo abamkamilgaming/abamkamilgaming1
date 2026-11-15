@@ -36,6 +36,7 @@
 - Dibuang untuk masa: "Cara main dan build Mitya under 60 second" (3.8 s) dan talent priority (6.9 s)
 
 ## Colour grade
+- Framing muka: zoom out ~80% (crop 2160x2400 -> 864x960 di tengah, tepi diisi salinan blur), punch-in dikurangkan.
 - Muka: rakaman asal flat + cast hijau-kuning + dinding terlalu terang → kontras & hitam ditambah, highlight dinding ditarik,
   tint magenta lawan hijau, warm untuk kulit, vibrance, vignette, sharpen ringan.
 - Gameplay: deep-contrast + vibrance + bloom + vignette; shot salji terlalu terang diturunkan.
