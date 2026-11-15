@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Noto Color Emoji"; src: url("assets/fonts/NotoColorEmoji.ttf") format("truetype"); }
+      :root {
+        --ground: #07080c;
+        --yellow: #ffd60a;
+        --red: #ff3b4e;
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-cap: "Montserrat", sans-serif;
+        --font-emoji: "Noto Color Emoji", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* panels: face cam top, gameplay bottom */
+      .fw { position: absolute; left: 0; top: 0; width: 1080px; height: 900px; overflow: hidden; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 900px; object-fit: cover; transform-origin: 50% 40%; }
+      .gw { position: absolute; left: 0; top: 900px; width: 1080px; height: 1020px; overflow: hidden; }
+      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 1020px; object-fit: cover; transform-origin: 50% 45%; }
+      #seam { position: absolute; left: 0; right: 0; top: 820px; height: 170px; z-index: 40; pointer-events: none;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.38) 45%, rgba(0,0,0,0.38) 55%, rgba(0,0,0,0) 100%); }
+      #flash { position: absolute; inset: 0; z-index: 90; background: #fff; opacity: 0; pointer-events: none; }
+
+      /* hook — frame 0 is the thumbnail */
+      #hook { position: absolute; left: 0; right: 0; top: 960px; height: 560px; z-index: 75; text-align: center; }
+      .h-top { font-family: var(--font-display); font-size: 82px; color: #fff; line-height: 1;
+        -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
+      .h-big { font-family: var(--font-display); font-size: 150px; line-height: 0.95; margin-top: 12px; color: var(--yellow);
+        -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 12px 0 #000; }
+      .h-emo { font-family: var(--font-emoji); font-size: 150px; line-height: 1; margin-top: 10px; display: inline-block; }
+
+      /* captions on the seam */
+      #captions { position: absolute; left: 0; right: 0; top: 820px; height: 170px; z-index: 80; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 170px; }
+      .cap-in { position: absolute; left: 30px; right: 30px; top: 6px; white-space: nowrap; text-align: center; transform-origin: 50% 60%; }
+      .w { font-family: var(--font-display); font-size: 1em; line-height: 1.05; color: #fff;
+        -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
+      .w.y { color: var(--yellow); }
+      .w + .w { margin-left: 0.24em; }
+
+      /* meme stickers on the gameplay panel */
+      .stk { position: absolute; left: 0; right: 0; height: 420px; z-index: 78; text-align: center; }
+      .stk.g-top { top: 1010px; }
+      .stk.g-mid { top: 1230px; }
+      .stk.g-low { top: 1380px; }
+      .stk-in { position: absolute; left: 30px; right: 30px; top: 0; transform-origin: 50% 50%; }
+      .stk .emo { display: block; font-family: var(--font-emoji); font-size: 150px; line-height: 1.1; }
+      .stk .big { display: block; font-family: var(--font-display); line-height: 0.98;
+        -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; }
+      .stk .sub { display: block; font-family: var(--font-display); font-size: 54px; color: #fff;
+        -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      .yellow { color: var(--yellow); } .red { color: var(--red); } .white { color: #fff; }
+
+      /* live-chat bubble */
+      #chat { position: absolute; left: 0; right: 0; top: 1060px; height: 300px; z-index: 78; }
+      #chat-in { position: absolute; left: 70px; right: 70px; top: 0; display: flex; gap: 26px; align-items: flex-start;
+        padding: 30px 34px; border-radius: 34px; background: rgba(14,16,24,0.88); border: 3px solid rgba(255,214,10,0.8);
+        box-shadow: 0 18px 50px rgba(0,0,0,0.6); }
+      #chat-av { flex: 0 0 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #ff7eb3, #b26bff);
+        font-family: var(--font-display); font-size: 62px; color: #fff; text-align: center; line-height: 110px; }
+      #chat-name { font-family: var(--font-cap); font-weight: 800; font-size: 40px; color: var(--yellow); }
+      #chat-msg { font-family: var(--font-cap); font-weight: 800; font-size: 54px; line-height: 1.12; color: #fff; margin-top: 6px; }
+
+      /* end */
+      #endc { position: absolute; left: 0; right: 0; top: 1240px; height: 400px; z-index: 85; text-align: center; }
+      #end-q { font-family: var(--font-display); font-size: 74px; color: #fff; line-height: 1.05;
+        -webkit-text-stroke: 5px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
+      #end-q b { color: var(--yellow); font-weight: inherit; }
+      #follow { display: inline-block; margin-top: 40px; font-family: var(--font-display); font-size: 66px; color: #111;
+        background: var(--yellow); padding: 22px 60px; border-radius: 999px; box-shadow: 0 10px 0 #8a6d00; }
+      #follow span { font-family: var(--font-emoji); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920">
+{{PANELS}}
+      <div id="seam"></div>
+
+      <div id="hook" class="clip" data-start="0" data-duration="{{HOOK_DUR}}" data-track-index="5">
+        <div id="hook-in">
+          <div class="h-top" id="h-top">BILA GENSHIN PLAYER</div>
+          <div class="h-big" id="h-big">MAIN WARZONE</div>
+          <div class="h-emo" id="h-emo">💀</div>
+        </div>
+      </div>
+
+{{STICKERS}}
+
+      <div id="chat" class="clip" data-start="{{CHAT_START}}" data-duration="{{CHAT_DUR}}" data-track-index="6">
+        <div id="chat-in">
+          <div id="chat-av">F</div>
+          <div><div id="chat-name">Farahin</div><div id="chat-msg">Abam dah buat Archon Quest ke belum?</div></div>
+        </div>
+      </div>
+
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+
+      <div id="endc" class="clip" data-start="{{END_START}}" data-duration="{{END_DUR}}" data-track-index="7">
+        <div id="end-in">
+          <div id="end-q">TEAM <b>GENSHIN</b><br />ATAU TEAM <b>WARZONE?</b></div>
+          <div id="follow">FOLLOW <span>🔔</span></div>
+        </div>
+      </div>
+
+      <div id="flash"></div>
+{{SFX}}
+    </div>
+    <script>
+      const T = {{T}};
+      const tl = gsap.timeline({ paused: true });
+
+      // --- jump-cut punch-ins on the face (alternate 1.0 / 1.1 at every trimmed pause)
+      T.order.forEach((sid, i) => {
+        let z = i % 2 ? 1.08 : 1.0;
+        tl.set("#face-" + sid, { scale: z, x: 0 }, T.start[sid]);
+        tl.set("#game-" + sid, { scale: 1.0, x: 0 }, T.start[sid]);
+        tl.to("#game-" + sid, { scale: 1.06, duration: T.dur[sid], ease: "none" }, T.start[sid]);
+        T.cuts[sid].forEach((c) => { z = z > 1.04 ? 1.0 : 1.1; tl.set("#face-" + sid, { scale: z }, T.start[sid] + c); });
+      });
+      // --- reaction slams on the funny beats
+      T.punch.forEach((t) => {
+        const sid = T.order.filter((k) => T.start[k] <= t + 1e-3).pop();
+        tl.fromTo("#face-" + sid, { scale: 1.32 }, { scale: 1.16, duration: 0.25, ease: "power3.out" }, t);
+      });
+      // --- camera shake
+      T.shake.forEach((t) => {
+        const sid = T.order.filter((k) => T.start[k] <= t + 1e-3).pop();
+        [18, -15, 11, -8, 5, -2, 0].forEach((x, i) => {
+          tl.to(["#game-" + sid, "#face-" + sid], { x: x, duration: 0.035, ease: "none" }, t + i * 0.035);
+        });
+      });
+      // --- white flash on the hook boom
+      tl.fromTo("#flash", { opacity: 0 }, { opacity: 0.6, duration: 0.03, ease: "none" }, T.boom - 0.03);
+      tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, T.boom);
+
+      // --- hook
+      tl.fromTo("#h-big", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 0);
+      tl.fromTo("#h-top", { y: -14 }, { y: 0, duration: 0.25, ease: "power2.out" }, 0);
+      tl.fromTo("#h-emo", { scale: 0.4, rotation: -20 }, { scale: 1, rotation: 8, duration: 0.3, ease: "back.out(3)" }, 0.1);
+      tl.to("#h-emo", { rotation: -8, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut" }, 0.4);
+      tl.to("#h-big", { scale: 1.06, duration: T.hook_end - 0.5, ease: "none" }, 0.3);
+      tl.to("#hook-in", { opacity: 0, y: -30, duration: 0.12, ease: "power2.in" }, T.hook_end - 0.13);
+
+      // --- stickers
+      document.querySelectorAll(".stk").forEach((el, i) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".stk-in"), r = i % 2 ? 4 : -4;
+        tl.fromTo(inner, { scale: 2.3, opacity: 0, rotation: r * 3 }, { scale: 1, opacity: 1, rotation: r, duration: 0.18, ease: "back.out(1.8)" }, s);
+        tl.to(inner, { scale: 1.07, duration: Math.max(0.1, d - 0.32), ease: "none" }, s + 0.18);
+        tl.to(inner, { opacity: 0, scale: 1.2, duration: 0.1, ease: "power2.in" }, s + d - 0.11);
+      });
+
+      // --- chat bubble
+      tl.fromTo("#chat-in", { y: 60, scale: 0.8, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.25, ease: "back.out(2)" }, T.chat[0]);
+      tl.to("#chat-in", { opacity: 0, y: -20, duration: 0.1 }, T.chat[1] - 0.1);
+
+      // --- captions: pop in, hard out
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".cap-in");
+        tl.fromTo(inner, { scale: 0.5, opacity: 0, y: 14 }, { scale: 1, opacity: 1, y: 0, duration: 0.12, ease: "back.out(2.8)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.04 }, s + d - 0.04);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      // --- end
+      tl.fromTo("#end-q", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2)" }, T.end);
+      tl.set("#follow", { scale: 0, opacity: 0 }, 0);
+      tl.to("#follow", { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.5)" }, T.follow);
+      tl.to("#follow", { scale: 1.08, duration: 0.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.follow + 0.32);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
