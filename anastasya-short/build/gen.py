@@ -55,18 +55,26 @@ for i, e in enumerate(ev):
         shots.append({"sid": sid, "start": round(s0, 3), "end": round(s1, 3)})
 for i, o in enumerate(shots): o["idx"] = i; o["slam"] = o["sid"] in SLAM
 
-# ---- grades ---------------------------------------------------------------------------------
-TAME = {"S4": -0.34, "Q3": -0.3, "A": -0.4, "L1": -0.42, "S1": -0.3, "S2": -0.36, "S3": -0.3, "P1": -0.32, "P2": -0.2, "Q1": -0.2, "I1": -0.12}
-LIFT = {"T1": 0.14, "R1": 0.08, "R2": 0.08, "E": 0.1, "T2": 0.04}
+# ---- grades (HyperFrames media-treatment: adjust -> wheels -> curves -> details) -----------------
+# Rupa keseluruhan: bayang sejuk (teal-biru) + highlight hangat, lengkung-S lembut, highlight digulung, tiada hitam hancur.
+S_CURVE = [[0, 0], [0.2, 0.175], [0.5, 0.505], [0.8, 0.835], [1, 1]]
+TAME = {"A": -0.4, "L1": -0.42, "S1": -0.3, "S2": -0.36, "S3": -0.3, "S4": -0.34, "Q3": -0.3, "P1": -0.32, "P2": -0.2, "Q1": -0.2, "I1": -0.12}
+LIFT = {"T1": 0.14, "R1": 0.08, "R1b": 0.04, "E": 0.1}
 def g_game(sid):
-    adj = {"exposure": round(0.02 + LIFT.get(sid, 0) - (0.07 if sid in TAME else 0), 3), "contrast": 0.14,
+    adj = {"exposure": round(0.02 + LIFT.get(sid, 0) - (0.07 if sid in TAME else 0), 3), "contrast": 0.08,
            "highlights": TAME.get(sid, -0.14), "whites": -0.1 if sid in TAME else 0.0, "shadows": 0.1 + (0.08 if sid in LIFT else 0),
-           "blacks": -0.06, "vibrance": 0.26, "saturation": 0.04, "temperature": -0.05, "tint": 0.02}
-    return {"preset": "deep-contrast", "intensity": 0.5, "adjust": adj, "details": {"vignette": 0.28}, "effects": {"bloom": 0.22}}
-# talking head (rakaman kali ni dah terang & seimbang): kontras ringan, tarik highlight dinding, warm sikit, vignette
-G_FACE = {"preset": "deep-contrast", "intensity": 0.3,
-          "adjust": {"exposure": 0.03, "contrast": 0.12, "highlights": -0.32, "whites": -0.06, "shadows": 0.08, "blacks": -0.08,
-                     "temperature": 0.03, "tint": 0.02, "vibrance": 0.2, "saturation": 0.03}, "details": {"vignette": 0.28}}
+           "blacks": -0.04, "vibrance": 0.2, "saturation": 0.02, "temperature": -0.04, "tint": 0.015}
+    return {"preset": "deep-contrast", "intensity": 0.35, "adjust": adj,
+            "wheels": {"shadows": {"hue": 218, "amount": 0.07, "level": 0}, "highlights": {"hue": 335, "amount": 0.03, "level": 0}},
+            "curves": {"master": S_CURVE}, "details": {"vignette": 0.2}, "effects": {"bloom": 0.14}}
+# talking head — resipi "Natural Portrait" (preset skin-soft: vibrance dikurangkan pada tona kulit) + bentuk sinematik:
+#   pendedahan naik sikit, highlight dinding digulung, bayang dibuka, WB hangat sikit untuk kulit,
+#   wheel: bayang teal (padan tema ais), highlight hangat (kulit sihat), lengkung-S lembut, vignette halus. Tiada grain / blur.
+G_FACE = {"preset": "skin-soft", "intensity": 0.6,
+          "adjust": {"exposure": 0.09, "contrast": 0.06, "highlights": -0.18, "whites": -0.06, "shadows": 0.14, "blacks": -0.03,
+                     "temperature": 0.035, "tint": 0.01, "vibrance": 0.05, "saturation": 0.02},
+          "wheels": {"shadows": {"hue": 205, "amount": 0.08, "level": 0}, "highlights": {"hue": 35, "amount": 0.06, "level": 0}},
+          "curves": {"master": S_CURVE}, "details": {"vignette": 0.09}}
 def attr(g): return html.escape(json.dumps(g, separators=(",", ":")), quote=True)
 def f(x): return f"{x:.3f}".rstrip("0").rstrip(".")
 E = html.escape
