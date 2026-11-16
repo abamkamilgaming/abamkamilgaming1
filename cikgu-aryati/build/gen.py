@@ -199,7 +199,7 @@ page = f"""<!doctype html>
       .grp {{ position: absolute; inset: 0; z-index: 15; }}
       .count {{ position: absolute; left: 80px; top: 250px; width: 132px; height: 132px; border-radius: 50%; background: var(--glow); border: 7px solid #111; box-shadow: 6px 6px 0 #111; color: #111; font-size: 70px; display: flex; align-items: center; justify-content: center; padding-top: 10px; }}
       .count small {{ font-size: 34px; margin-left: 2px; }}
-      .top {{ position: absolute; left: 40px; right: 120px; top: 930px; display: flex; justify-content: center; align-items: center; gap: 22px; transform-origin: 50% 50%; }}
+      .top {{ position: absolute; left: 40px; right: 120px; top: 1035px; display: flex; justify-content: center; align-items: center; gap: 22px; transform-origin: 50% 50%; }}
       .word {{ position: relative; color: #fff; line-height: 1; white-space: nowrap; -webkit-text-stroke: 16px #111; paint-order: stroke fill;
                text-shadow: 6px 9px 0 #111, 0 0 26px rgba(255,230,0,.95), 0 0 60px rgba(255,230,0,.7); padding-top: 12px; }}
       .tl, .bl {{ display: inline-block; }}
@@ -209,8 +209,8 @@ page = f"""<!doctype html>
       .badge svg {{ width: 100%; height: 100%; }}
       .bad {{ border-radius: 50%; background: var(--bad); }}
       .good {{ border-radius: 22px; background: var(--good); position: absolute; left: -38px; top: -40px; }}
-      .strip {{ position: absolute; left: 70px; right: 110px; top: 1100px; height: 230px; display: flex; align-items: center; justify-content: center; transform-origin: 50% 50%; }}
-      .strip.wide {{ height: 250px; top: 1090px; }}
+      .strip {{ position: absolute; left: 70px; right: 110px; top: 1200px; height: 225px; display: flex; align-items: center; justify-content: center; transform-origin: 50% 50%; }}
+      .strip.wide {{ height: 250px; top: 1190px; }}
       .paper {{ position: absolute; inset: 0; background-color: #fbfbf7;
                 background-image: repeating-linear-gradient(180deg, transparent 0 34px, #b9d3ee 34px 37px);
                 clip-path: polygon(0% 6%, 3% 0%, 7% 5%, 12% 1%, 17% 6%, 22% 0%, 28% 5%, 33% 1%, 39% 6%, 45% 0%, 51% 5%, 57% 1%, 62% 6%, 68% 0%, 74% 5%, 80% 1%, 86% 6%, 91% 0%, 96% 5%, 100% 1%,
@@ -220,10 +220,10 @@ page = f"""<!doctype html>
       .rb.two {{ text-align: center; line-height: 1.12; }}
       .sticker {{ position: absolute; right: 10px; top: -78px; background: var(--glow); border: 6px solid #111; border-radius: 16px; box-shadow: 5px 5px 0 #111; padding: 8px 20px 4px; }}
       .sticker span {{ font-size: 50px; color: #111; }}
-      .burst {{ position: absolute; left: 500px; top: 1220px; width: 0; height: 0; }}
+      .burst {{ position: absolute; left: 500px; top: 1312px; width: 0; height: 0; }}
       .burst b {{ position: absolute; left: -10px; top: -10px; width: 20px; height: 20px; background: var(--glow); border: 3px solid #111; border-radius: 4px;
                  transform-origin: 10px 10px; transform: rotate(var(--a)) translateY(-300px) rotate(45deg); }}
-      .follow {{ position: absolute; left: 40px; right: 120px; top: 1372px; text-align: center; font-family: "Fredoka"; font-weight: 700; font-size: 46px; color: #fff; -webkit-text-stroke: 8px #111; paint-order: stroke fill; }}
+      .follow {{ position: absolute; left: 40px; right: 120px; top: 1462px; text-align: center; font-family: "Fredoka"; font-weight: 700; font-size: 46px; color: #fff; -webkit-text-stroke: 8px #111; paint-order: stroke fill; }}
       .follow span {{ display: inline-block; background: #fe2c55; color: #fff; -webkit-text-stroke: 0; padding: 4px 22px 8px; border-radius: 14px; border: 5px solid #111; margin-right: 10px; }}
     </style>
   </head>

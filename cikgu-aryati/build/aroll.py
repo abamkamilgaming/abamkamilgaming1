@@ -30,16 +30,24 @@ pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", SRC, "-vn", "-ac", "1", "-a
 a = np.frombuffer(pcm, np.int16).astype(float) / 32768
 H = 160  # 10 ms
 db = 20 * np.log10(np.array([np.sqrt(np.mean(a[i:i + H] ** 2) + 1e-12) for i in range(0, len(a) - H, H)]))
-loud = lambda t: db[min(len(db) - 1, max(0, int(t * 100)))] > THR
+dbat = lambda t: db[min(len(db) - 1, max(0, int(round(t * 100))))]
+# Cikgu's voice is ~5 dB quieter than the asker's (further from the phone mic): her lines get a lower
+# threshold and a 50 ms look-ahead, so soft endings ("sa-YA") are not taken for silence.
+THR_SPK = {"Q": THR, "A": -21.0}
+MIN_END = {1: 2.32}   # "Ya, saya." — the second syllable of "saya" runs to 2.30 s
 
 seg = []
-for spk, txt, s, e in U:
+for k, (spk, txt, s, e) in enumerate(U):
+    thr = THR_SPK[spk]
+    loud = lambda t: any(dbat(t + d * 0.01) > thr for d in range(3 if spk == "A" else 1))
+    lo = U[k - 1][3] + 0.02 if k else 0.0            # never reach into the previous line
+    hi = U[k + 1][2] - 0.04 if k + 1 < len(U) else e + 0.4
     t = s + 0.1
-    while t > s - 0.25 and loud(t - 0.01): t -= 0.01   # walk back to the onset
+    while t > max(lo, s - 0.25) and loud(t - 0.03): t -= 0.01   # walk back to the onset
     s2 = max(0.0, t - 0.03)
     t = e - 0.1
-    while t < e + 0.25 and loud(t + 0.01): t += 0.01   # walk forward to the release
-    e2 = t + 0.06
+    while t < min(hi, e + 0.25) and loud(t + 0.01): t += 0.01    # walk forward to the release
+    e2 = max(t + (0.09 if spk == "A" else 0.06), MIN_END.get(k, 0), e + (0.06 if spk == "A" else 0.0))
     seg.append([spk, txt, round(s2, 3), round(e2, 3)])
 seg[0][2] = 0.0
 seg[-1][3] = round(seg[-1][3] + TAIL, 3)

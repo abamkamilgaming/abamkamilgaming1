@@ -1,7 +1,7 @@
 # Cikgu Aryati: "Biasakan yang betul, betulkan yang biasa"
 
 **Status:** PREVIEW sahaja, belum render final.
-**Format:** 1080×1920 potret, 60 fps, 17.6 s (asal 19.56 s)
+**Format:** 1080×1920 potret, 60 fps, 18.5 s (asal 19.56 s)
 **Render final (lepas approve):** 1080p 60 fps HEVC 11 Mbps. Arahan ada di bawah.
 
 ## Transkrip & timeline (masa dalam video yang dah dipotong)
@@ -40,3 +40,7 @@ Sumber 4K diturunkan dulu (elak kehabisan RAM):
 npx hyperframes render -q delivery --fps 60 -o renders/master.mp4
 ffmpeg -i renders/master.mp4 -c:v libx265 -b:v 11M -maxrate 12M -bufsize 22M -tag:v hvc1 -pix_fmt yuv420p -r 60 -c:a aac -b:a 256k -movflags +faststart renders/CikguAryati_1080p60_HEVC_11M.mp4
 ```
+
+## Revisi v2
+- "Ya, saya": suku kata kedua "saya" terpotong. Suara Cikgu ~5 dB lebih perlahan dari penanya, jadi baris Cikgu kini guna had −21 dB + look-ahead 30 ms, dan "saya" dikunci sampai 2.32 s. Jadual masa di atas ikut v1; masa terkini ada dalam `build/edl.json`.
+- Caption diturunkan supaya tak tutup dagu: perkataan atas 930→1035 px, jalur kertas 1100→1200 px, FOLLOW 1372→1462 px.
