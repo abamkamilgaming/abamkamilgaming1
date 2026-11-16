@@ -1,7 +1,7 @@
 # Cikgu Aryati: "Biasakan yang betul, betulkan yang biasa"
 
 **Status:** PREVIEW sahaja, belum render final.
-**Format:** 1080×1920 potret, 60 fps, 18.5 s (asal 19.56 s)
+**Format:** 1080×1920 potret, 60 fps, 16.5 s (asal 19.56 s)
 **Render final (lepas approve):** 1080p 60 fps HEVC 11 Mbps. Arahan ada di bawah.
 
 ## Transkrip & timeline (masa dalam video yang dah dipotong)
@@ -44,3 +44,8 @@ ffmpeg -i renders/master.mp4 -c:v libx265 -b:v 11M -maxrate 12M -bufsize 22M -ta
 ## Revisi v2
 - "Ya, saya": suku kata kedua "saya" terpotong. Suara Cikgu ~5 dB lebih perlahan dari penanya, jadi baris Cikgu kini guna had −21 dB + look-ahead 30 ms, dan "saya" dikunci sampai 2.32 s. Jadual masa di atas ikut v1; masa terkini ada dalam `build/edl.json`.
 - Caption diturunkan supaya tak tutup dagu: perkataan atas 930→1035 px, jalur kertas 1100→1200 px, FOLLOW 1372→1462 px.
+
+## Revisi v3
+- Suara Cikgu "Swafoto" dan "Tanda pagar" terpotong. Punca 1: masa perkataan Whisper lari 0.2–0.6 s, jadi potongan jatuh dalam perkataan (hujung "Swafoto" dan suku kata "gar"). Kini sempadan setiap baris diukur terus dari gelombang bunyi (`U` dalam `build/aroll.py`), dan potongan hanya dibuat di kawasan yang senyap sepenuhnya (bawah −17.5 dB). Setiap perkataan dapat 0.10 s ruang sebelum dan 0.08 s selepas.
+- Punca 2: denoise yang kuat (afftdn nr=12) "makan" suara perlahan Cikgu. Ditukar ke nr=5 dengan noise tracking, dan compressor dilembutkan.
+- 12 potongan, 19.56 s → 16.5 s. Setiap baris disahkan dengan transcribe dan sama dengan audio asal tanpa potongan.

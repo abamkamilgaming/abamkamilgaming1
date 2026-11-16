@@ -7,61 +7,46 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = sys.argv[1]
 
-# (speaker, caption text, whisper start, whisper end)  Q = penanya, A = Cikgu Aryati
+# (speaker, caption text, speech start, speech end) in the raw take, in seconds.
+# Measured from the audio itself (bursts above -17 dB, soft onsets like "Ya", the "s" of Swafoto and the
+# "T" of Tanda read from the waveform), NOT from whisper: whisper's word times drift 0.2-0.6 s here.
 U = [
-    ("Q", "Cikgu, cikgu!", 0.00, 1.40),
-    ("A", "Ya, saya.", 1.44, 1.98),
-    ("Q", "Viral?", 2.44, 3.04), ("A", "Tular.", 3.06, 3.50),
-    ("Q", "Selfie?", 3.80, 4.40), ("A", "Swafoto.", 4.78, 5.38),
-    ("Q", "Hashtag?", 5.68, 6.28), ("A", "Tanda pagar.", 6.36, 7.00),
-    ("Q", "Emoji?", 7.40, 7.78), ("A", "Emoji.", 8.32, 8.92),
-    ("Q", "Netizen?", 9.18, 9.78), ("A", "Warganet.", 10.02, 10.62),
-    ("Q", "Kuey teow?", 10.74, 11.34), ("A", "Kuetiau.", 11.52, 12.30),
-    ("Q", "Mee hoon?", 12.44, 13.04), ("A", "Bihun atau Mihun.", 13.14, 15.02),
-    ("Q", "Mee goreng?", 15.10, 15.78), ("A", "Mi goreng.", 15.90, 16.70),
-    ("A", "Dapat sesuatu?", 16.94, 18.02),
+    ("Q", "Cikgu, cikgu!", 0.00, 1.51),
+    ("A", "Ya, saya.", 1.50, 2.30),
+    ("Q", "Viral?", 2.62, 3.09), ("A", "Tular.", 3.38, 3.86),
+    ("Q", "Selfie?", 4.00, 4.49), ("A", "Swafoto.", 5.02, 5.58),
+    ("Q", "Hashtag?", 5.80, 6.27), ("A", "Tanda pagar.", 6.43, 7.36),
+    ("Q", "Emoji?", 7.51, 8.03), ("A", "Emoji.", 8.47, 9.00),
+    ("Q", "Netizen?", 9.33, 9.94), ("A", "Warganet.", 10.15, 10.68),
+    ("Q", "Kuey teow?", 10.97, 11.45), ("A", "Kuetiau.", 11.89, 12.41),
+    ("Q", "Mee hoon?", 12.68, 13.08), ("A", "Bihun atau Mihun.", 13.60, 15.06),
+    ("Q", "Mee goreng?", 15.27, 15.85), ("A", "Mi goreng.", 16.17, 16.61),
+    ("A", "Dapat sesuatu?", 17.34, 18.15),
 ]
-TAIL = 1.35          # keep a beat after the last line (thumbs-up)
-GAP_QA, GAP_AQ = 0.07, 0.12   # pause left between question->answer, answer->next question
-THR = -19.0          # dB (room tone sits around -26, speech above -16)
+END_AT = 19.0        # keep her thumbs-up after the last line
+LEAD, TAIL_PAD = 0.10, 0.08   # kept before each line's onset / after its release (never cut into a word)
+SILENCE = -17.5      # a removed stretch must stay below this everywhere (room tone is about -26 dB)
 
 pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", SRC, "-vn", "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
                      capture_output=True).stdout
 a = np.frombuffer(pcm, np.int16).astype(float) / 32768
 H = 160  # 10 ms
 db = 20 * np.log10(np.array([np.sqrt(np.mean(a[i:i + H] ** 2) + 1e-12) for i in range(0, len(a) - H, H)]))
-dbat = lambda t: db[min(len(db) - 1, max(0, int(round(t * 100))))]
-# Cikgu's voice is ~5 dB quieter than the asker's (further from the phone mic): her lines get a lower
-# threshold and a 50 ms look-ahead, so soft endings ("sa-YA") are not taken for silence.
-THR_SPK = {"Q": THR, "A": -21.0}
-MIN_END = {1: 2.32}   # "Ya, saya." — the second syllable of "saya" runs to 2.30 s
 
-seg = []
-for k, (spk, txt, s, e) in enumerate(U):
-    thr = THR_SPK[spk]
-    loud = lambda t: any(dbat(t + d * 0.01) > thr for d in range(3 if spk == "A" else 1))
-    lo = U[k - 1][3] + 0.02 if k else 0.0            # never reach into the previous line
-    hi = U[k + 1][2] - 0.04 if k + 1 < len(U) else e + 0.4
-    t = s + 0.1
-    while t > max(lo, s - 0.25) and loud(t - 0.03): t -= 0.01   # walk back to the onset
-    s2 = max(0.0, t - 0.03)
-    t = e - 0.1
-    while t < min(hi, e + 0.25) and loud(t + 0.01): t += 0.01    # walk forward to the release
-    e2 = max(t + (0.09 if spk == "A" else 0.06), MIN_END.get(k, 0), e + (0.06 if spk == "A" else 0.0))
-    seg.append([spk, txt, round(s2, 3), round(e2, 3)])
-seg[0][2] = 0.0
-seg[-1][3] = round(seg[-1][3] + TAIL, 3)
-
-# keep ranges: cut each gap down to GAP_*
-keep = [[seg[0][2], seg[0][3]]]
+seg = [[spk, txt, s, e] for spk, txt, s, e in U]
+keep = [[0.0, None]]
 for i in range(1, len(seg)):
-    prev_e, s = seg[i - 1][3], seg[i][2]
-    want = GAP_QA if seg[i - 1][0] == "Q" and seg[i][0] == "A" else GAP_AQ
-    if s - prev_e <= want + 0.03:
-        keep[-1][1] = seg[i][3]                 # natural gap is fine, no cut
-    else:
-        keep[-1][1] = round(prev_e + want / 2, 3)
-        keep.append([round(s - want / 2, 3), seg[i][3]])
+    cut_a = round(seg[i - 1][3] + TAIL_PAD, 3)
+    cut_b = round(seg[i][2] - LEAD, 3)
+    quiet = cut_b - cut_a > 0.04 and db[int(cut_a * 100):int(cut_b * 100)].max() < SILENCE
+    if quiet:
+        keep[-1][1] = cut_a
+        keep.append([cut_b, None])
+    elif cut_b - cut_a > 0.04:
+        print(f"  not cut (sound in gap) {cut_a:.2f}-{cut_b:.2f} max {db[int(cut_a*100):int(cut_b*100)].max():.1f} dB")
+keep[-1][1] = END_AT
+for s, e in zip([k[1] for k in keep[:-1]], [k[0] for k in keep[1:]]):
+    print(f"  cut {s:.2f}-{e:.2f} ({e - s:.2f}s) max {db[int(s*100):int(e*100)].max():.1f} dB")
 
 def remap(t):
     acc = 0.0
@@ -82,9 +67,9 @@ for i, (s, e) in enumerate(keep):
 n = len(keep)
 fc += "".join(f"[v{i}][a{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=1[vc][ac];"
 fc += "[vc]fps=60,format=yuv420p[v];"
-# clean classroom fan hiss, tame lows, even out the two voices, about -14 LUFS
-fc += ("[ac]highpass=f=90,afftdn=nf=-30:nr=12,equalizer=f=3500:t=q:w=1.2:g=2,"
-       "acompressor=threshold=0.12:ratio=3:attack=8:release=120:makeup=2,"
+# light fan-hiss reduction only (a strong afftdn chewed up her soft "Swafoto"); clean classroom fan hiss, tame lows, even out the two voices, about -14 LUFS
+fc += ("[ac]highpass=f=80,afftdn=nf=-40:nr=5:tn=1,equalizer=f=3500:t=q:w=1.2:g=2,"
+       "acompressor=threshold=0.15:ratio=2:attack=15:release=200:makeup=1.5,"
        "loudnorm=I=-14:TP=-1.5:LRA=7,aresample=48000[a]")
 dst = os.path.join(ROOT, "assets", "video", "aroll.mp4")
 subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", SRC, "-filter_complex", fc,
