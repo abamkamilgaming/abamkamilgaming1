@@ -1,7 +1,7 @@
 # The Squad — Speed Ramp
 
 **Format:** 1080×1920 (9:16), 60 fps, **14.9 s**
-**Status:** PREVIEW sahaja — belum render final.
+**Status:** FINAL dirender: `renders/the-squad-speedramp.mp4` (1080×1920, 60 fps, 14.9 s, H.264 ~40 Mbps, −12.7 LUFS).
 
 ## Transcript
 
