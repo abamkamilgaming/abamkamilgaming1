@@ -1,0 +1,4 @@
+assets/video/base_draft.mp4
+build/ramp.log
+build/__pycache__/
+*.mp4.tmp
