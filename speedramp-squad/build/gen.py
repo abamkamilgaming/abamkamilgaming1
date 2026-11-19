@@ -44,7 +44,7 @@ def add(src, t, dur, vol, media_start=None):
 for j, h in enumerate(hits):
     if h in (DROP, FINAL): continue
     add("whoosh-short.mp3" if j % 2 else "whoosh.mp3", h - 0.30, 0.57, 0.22 if h > DROP else 0.16)
-add("riser.mp3", DROP - 2.07, 2.07, 0.32, media_start=7.93)
+add("riser.mp3", DROP - 2.07, 2.07, 0.3, media_start=1.45)
 add("whoosh.mp3", DROP - 0.30, 0.57, 0.3)
 add("impact-bass-1.mp3", DROP - 0.015, 2.1, 0.75)
 add("whoosh.mp3", FINAL - 0.30, 0.57, 0.25)
@@ -95,24 +95,27 @@ html = f"""<!doctype html>
       #black {{ position: absolute; inset: 0; z-index: 95; background: #000; opacity: 0; pointer-events: none; }}
 
       /* type */
-      .shadow {{ text-shadow: 0 6px 30px rgba(0,0,0,0.45); }}
-      #intro {{ position: absolute; left: 0; right: 0; top: 1290px; z-index: 70; text-align: center; color: var(--ink); }}
-      #i-label {{ font: 600 34px/1 var(--font-label); letter-spacing: 14px; color: var(--gold); opacity: 0; }}
+      .shadow {{ text-shadow: 0 2px 6px rgba(0,0,0,0.55), 0 6px 34px rgba(0,0,0,0.6); }}
+      .ctr {{ text-shadow: 0 2px 6px rgba(0,0,0,0.6), 0 4px 22px rgba(0,0,0,0.55); }}
+      #scrim {{ position: absolute; inset: 0; z-index: 65; pointer-events: none; opacity: 0;
+        background: radial-gradient(ellipse 760px 520px at 50% 45%, rgba(0,0,0,0.5), rgba(0,0,0,0) 70%); }}
+      #intro {{ position: absolute; left: 0; right: 0; top: 960px; z-index: 70; text-align: center; color: var(--ink); }}
+      #i-label {{ font: 600 32px/1 var(--font-label); letter-spacing: 10px; color: var(--gold); opacity: 0; }}
       #i-the {{ font: 800 70px/1 var(--font-display); letter-spacing: 18px; margin-top: 26px; opacity: 0; }}
-      #i-word {{ font: 900 210px/0.95 var(--font-display); letter-spacing: 6px; margin-top: 4px; white-space: nowrap; }}
+      #i-word {{ font: 900 176px/0.95 var(--font-display); letter-spacing: 6px; margin-top: 4px; white-space: nowrap; }}
       #i-word span {{ display: inline-block; opacity: 0; }}
       #i-rule {{ width: 520px; height: 4px; margin: 26px auto 0; background: var(--gold); transform-origin: 50% 50%; transform: scaleX(0); }}
 
-      .ctr {{ position: absolute; left: 72px; bottom: 210px; z-index: 70; display: flex; align-items: center; gap: 18px; color: var(--ink); opacity: 0; }}
+      .ctr {{ position: absolute; left: 140px; top: 400px; z-index: 70; display: flex; align-items: center; gap: 18px; color: var(--ink); opacity: 0; }}
       .ctr-n {{ font: 700 92px/1 var(--font-label); letter-spacing: 2px; }}
       .ctr-bar {{ position: relative; width: 120px; height: 4px; background: rgba(255,248,236,0.3); overflow: hidden; }}
       .ctr-bar i {{ position: absolute; inset: 0; background: var(--gold); transform-origin: 0 50%; transform: scaleX(0); }}
       .ctr-t {{ font: 500 34px/1 var(--font-label); letter-spacing: 6px; opacity: 0.85; }}
 
       #outro {{ position: absolute; left: 0; right: 0; top: 760px; z-index: 70; text-align: center; color: var(--ink); opacity: 0; }}
-      #o-word {{ font: 900 150px/1 var(--font-display); letter-spacing: 8px; white-space: nowrap; }}
+      #o-word {{ font: 900 104px/1 var(--font-display); letter-spacing: 6px; white-space: nowrap; }}
       #o-word span {{ display: inline-block; }}
-      #o-sub {{ font: 600 36px/1 var(--font-label); letter-spacing: 16px; color: var(--gold); margin-top: 22px; }}
+      #o-sub {{ font: 600 34px/1 var(--font-label); letter-spacing: 12px; color: var(--gold); margin-top: 22px; }}
     </style>
   </head>
   <body>
@@ -123,6 +126,7 @@ html = f"""<!doctype html>
       <div class="leak" id="leak-a"></div>
       <div class="leak" id="leak-b"></div>
       <div id="flash"></div>
+      <div id="scrim"></div>
 
       <div id="intro" class="shadow">
         <div id="i-label">SPEED RAMP · 2026</div>
@@ -163,11 +167,12 @@ html = f"""<!doctype html>
 
       // --- light leaks + flash on every cut (cuts sit mid-whip, 0.12 s before the hit)
       T.cuts.forEach((c, i) => {{
+        const nearHit = Math.abs(c - T.drop) < 0.3 || Math.abs(c - T.final) < 0.3;
         const el = i % 2 ? "#leak-b" : "#leak-a";
         tl.fromTo(el, {{ opacity: 0, x: i % 2 ? 60 : -60 }}, {{ opacity: 0.75, x: 0, duration: 0.1, ease: "none", immediateRender: false }}, c - 0.06);
         tl.to(el, {{ opacity: 0, x: i % 2 ? -40 : 40, duration: 0.42, ease: "power2.out" }}, c + 0.04);
-        tl.fromTo("#flash", {{ opacity: 0 }}, {{ opacity: 0.22, duration: 0.03, ease: "none", immediateRender: false }}, c - 0.01);
-        tl.to("#flash", {{ opacity: 0, duration: 0.18, ease: "power2.out" }}, c + 0.02);
+        if (!nearHit) tl.fromTo("#flash", {{ opacity: 0 }}, {{ opacity: 0.22, duration: 0.03, ease: "none", immediateRender: false }}, c - 0.01);
+        if (!nearHit) tl.to("#flash", {{ opacity: 0, duration: 0.18, ease: "power2.out" }}, c + 0.02);
       }});
       [[T.drop, 0.85], [T.final, 0.6]].forEach(([t, a]) => {{
         tl.fromTo("#flash", {{ opacity: 0 }}, {{ opacity: a, duration: 0.03, ease: "none", immediateRender: false }}, t - 0.03);
@@ -179,7 +184,7 @@ html = f"""<!doctype html>
       tl.fromTo("#i-label", {{ opacity: 0, y: 14 }}, {{ opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }}, b[0]);
       tl.fromTo("#i-the", {{ opacity: 0, scale: 1.4 }}, {{ opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2)" }}, b[0]);
       gsap.utils.toArray("#i-word span").forEach((s, i) =>
-        tl.fromTo(s, {{ opacity: 0, scale: 1.8, y: -30 }}, {{ opacity: 1, scale: 1, y: 0, duration: 0.18, ease: "back.out(2.6)" }}, b[1] + i * half));
+        tl.fromTo(s, {{ opacity: 0, scale: 1.4, y: -24 }}, {{ opacity: 1, scale: 1, y: 0, duration: 0.18, ease: "back.out(2.6)" }}, b[1] + i * half));
       tl.fromTo("#i-rule", {{ scaleX: 0 }}, {{ scaleX: 1, duration: 0.5, ease: "power3.out" }}, b[3] + half);
       gsap.utils.toArray("#i-word span").forEach((s, i) =>
         tl.to(s, {{ x: (i - 2) * 9, duration: T.introEnd - b[3], ease: "none" }}, b[3] + 0.2));
@@ -195,9 +200,10 @@ html = f"""<!doctype html>
       }});
 
       // --- outro
+      tl.fromTo("#scrim", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, T.final);
       tl.fromTo("#outro", {{ opacity: 0, scale: 1.25 }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "power3.out" }}, T.final);
       gsap.utils.toArray("#o-word span").forEach((s, i) =>
-        tl.fromTo(s, {{ x: 0 }}, {{ x: (i - 4) * 7, duration: T.dur - T.final, ease: "none" }}, T.final));
+        tl.fromTo(s, {{ x: 0 }}, {{ x: (i - 4) * 4, duration: T.dur - T.final, ease: "none" }}, T.final));
       tl.fromTo("#black", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.6, ease: "power1.in" }}, T.dur - 0.6);
 
       window.__timelines = window.__timelines || {{}};
