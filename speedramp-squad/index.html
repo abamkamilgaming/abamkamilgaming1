@@ -25,8 +25,8 @@
       #flash { position: absolute; inset: 0; z-index: 60; background: #fff6e6; opacity: 0; pointer-events: none; }
       /* slow-mo: letterbox bars + warm glow while time stretches */
       .lbar { position: absolute; left: 0; right: 0; height: 120px; background: #000; z-index: 55; pointer-events: none; }
-      #lbar-t { top: 0; transform: translateY(-100%); }
-      #lbar-b { bottom: 0; transform: translateY(100%); }
+      #lbar-t { top: 0; }
+      #lbar-b { bottom: 0; }
       #glow { position: absolute; inset: 0; z-index: 45; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
         background: radial-gradient(ellipse 700px 1000px at 50% 42%, rgba(255,214,150,0.9), rgba(255,170,90,0.35) 55%, rgba(20,10,0,0.6) 100%); }
       #black { position: absolute; inset: 0; z-index: 95; background: #000; opacity: 0; pointer-events: none; }
@@ -43,7 +43,7 @@
       #i-word span { display: inline-block; opacity: 0; }
       #i-rule { width: 520px; height: 4px; margin: 26px auto 0; background: var(--gold); transform-origin: 50% 50%; transform: scaleX(0); }
 
-      .ctr { position: absolute; left: 140px; top: 400px; z-index: 70; display: flex; align-items: center; gap: 18px; color: var(--ink); opacity: 0; }
+      .ctr { position: absolute; left: 110px; top: 1330px; z-index: 70; display: flex; align-items: center; gap: 18px; color: var(--ink); opacity: 0; }
       .ctr-n { font: 700 92px/1 var(--font-label); letter-spacing: 2px; }
       .ctr-bar { position: relative; width: 120px; height: 4px; background: rgba(255,248,236,0.3); overflow: hidden; }
       .ctr-bar i { position: absolute; inset: 0; background: var(--gold); transform-origin: 0 50%; transform: scaleX(0); }
@@ -134,9 +134,11 @@
 
       // --- beat punch: every slow-mo hit lands with a small scale kick
       tl.set(cam, { scale: 1.0, x: 0, y: 0, rotation: 0 }, 0);
+      tl.set("#lbar-t", { yPercent: -100 }, 0);
+      tl.set("#lbar-b", { yPercent: 100 }, 0);
       T.hits.concat(T.extra).forEach((h) => {
         if (h === T.drop || h === T.final) return;
-        if (T.deep.some((d) => Math.abs(d.t - h) < 0.01)) return;
+        if (T.deep.some((d) => h > d.t - 0.01 && h < d.end - 0.01)) return;
         tl.fromTo(cam, { scale: 1.055 }, { scale: 1.0, duration: 0.3, ease: "power3.out", immediateRender: false }, h);
       });
       // --- the drop: big slam + shake

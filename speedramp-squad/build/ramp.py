@@ -18,6 +18,7 @@ import numpy as np, cv2
 ROOT = Path(__file__).resolve().parent.parent
 PROXY = Path(sys.argv[1])
 DRAFT = "--draft" in sys.argv
+ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--only=")), None)
 plan = json.load(open(ROOT / "build/plan.json"))
 beats = json.load(open(ROOT / "build/beats.json"))
 FPS = plan["fps"]; W, H = 1080, 1920
@@ -202,6 +203,10 @@ def grain(n):
 # ---------- render -------------------------------------------------------------
 def main():
     out = ROOT / ("assets/video/base_draft.mp4" if DRAFT else "assets/video/base.mp4")
+    prev = None
+    if ONLY:  # keep untouched shots from the current render
+        import shutil
+        keep = out.with_name("base_prev.mp4"); shutil.move(out, keep); prev = cv2.VideoCapture(str(keep))
     total = int(round(plan["duration"] * FPS))
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgr24", "-s", f"{W}x{H}",
                             "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "medium" if not DRAFT else "veryfast",
@@ -212,6 +217,14 @@ def main():
     for shot in plan["shots"]:
         ts, F, vs = build_map(shot)
         if len(ts) == 0: continue
+        if ONLY and shot["id"] not in ONLY:
+            for t in ts:
+                if n >= total: break
+                ok, f = prev.read(); enc.stdin.write(f.tobytes()); n += 1
+            print(shot["id"], "kept", flush=True)
+            continue
+        if prev is not None:
+            for _ in ts: prev.read()
         srcs = F(np.concatenate([[ts[0] - 0.02], ts, [ts[-1] + 0.02]]))
         src = Src(shot["clip"], srcs.min(), srcs.max())
         # exposure match: aim mid-grey of the shot at 0.40
