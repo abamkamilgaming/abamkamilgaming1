@@ -32,37 +32,53 @@ def tval(x):
 
 
 # ---------- time remap -------------------------------------------------------
-def seg_profile(kind, n=400):
+# A key is [time, src] or [time, src, {"slow": x, "hold": h}]: the hit at that key plays at
+# `slow` x real time and stays there for the first `hold` fraction of the gap to the next hit
+# (deep slow-mo on the musical "breaths"), then whips into the next hit.
+def seg_profile(kind, hold=0.25, n=400):
     u = (np.arange(n) + 0.5) / n
     if kind == "mid":      # hold, then accelerate late and slam into the next hit
-        x = np.clip((u - 0.25) / 0.75, 0, 1); p = x ** 2.5 * (1 - x)
+        x = np.clip((u - hold) / (0.92 - hold), 0, 1); p = x ** 2.5 * (1 - x)   # whip done ~8% before the hit
     elif kind == "entry":  # cut lands mid-whip, decelerate into the hit
-        p = (1 - u) ** 2
-    elif kind == "exit":   # leave the hit, accelerate into the cut
-        p = u ** 2
+        p = np.clip(1 - u / 0.7, 0, 1) ** 2
+    elif kind == "exit":   # leave the hit (after its hold), accelerate into the cut
+        x = np.clip((u - max(0.2, hold * 0.5)) / (1 - max(0.2, hold * 0.5)), 0, 1); p = x ** 2
     else:
         p = np.zeros(n)
     return u, p / (p.mean() if p.mean() > 0 else 1)
 
 
+def key_opt(k):
+    return k[2] if len(k) > 2 else {}
+
+
 def build_map(shot):
-    keys = [(tval(a), float(b)) for a, b in shot["keys"]]
+    raw = shot["keys"]
+    keys = [(tval(k[0]), float(k[1])) for k in raw]
     vs = shot.get("slow", plan["slow"])
     t0, t1 = keys[0][0], keys[-1][0]
     ts = np.arange(math.ceil(t0 * FPS - 1e-6), math.ceil(t1 * FPS - 1e-6)) / FPS
-    # dense curve
+    is_cut = lambda k: isinstance(k[0], str) and k[0].endswith("-")
+    slow_at = [key_opt(k).get("slow", vs) for k in raw]
     T, Sx = [keys[0][0]], [keys[0][1]]
     for i in range(len(keys) - 1):
         (ta, sa), (tb, sb) = keys[i], keys[i + 1]
         dur, D = tb - ta, sb - sa
+        avg = D / dur
         kind = "mid"
-        if i == 0 and isinstance(shot["keys"][0][0], str) and shot["keys"][0][0].endswith("-"): kind = "entry"
-        if i == len(keys) - 2 and isinstance(shot["keys"][-1][0], str) and shot["keys"][-1][0].endswith("-"): kind = "exit"
-        if i == len(keys) - 2 and not isinstance(shot["keys"][-1][0], str): kind = "lin"
-        if i == 0 and shot["keys"][0][0] == 0 and kind == "mid": kind = "mid"
-        u, p = seg_profile(kind)
-        v0 = min(vs, 0.85 * D / dur) if kind != "lin" else D / dur
-        v = v0 + (D / dur - v0) * p          # mean(v) == D/dur
+        if i == 0 and is_cut(raw[0]): kind = "entry"
+        if i == len(keys) - 2 and is_cut(raw[-1]): kind = "exit"
+        if i == len(keys) - 2 and not isinstance(raw[-1][0], str): kind = "lin"
+        hold = key_opt(raw[i]).get("hold", 0.25)
+        u, p = seg_profile(kind, hold)
+        if kind == "lin":
+            v = np.full_like(u, avg)
+        else:
+            va = slow_at[i] if kind != "entry" else 0.0     # entry: fast at the cut
+            vb = slow_at[i + 1] if kind != "exit" else 0.0  # exit: fast at the cut
+            va, vb = min(va, 0.85 * avg), min(vb, 0.85 * avg)
+            base = va + (vb - va) * (u * u * (3 - 2 * u))   # speeds meet the neighbours' slow-mo
+            v = base + (avg - base.mean()) * p              # mean(v) == avg
         cum = np.concatenate([[0], np.cumsum(v)]) / len(v) * dur
         T += list(ta + np.linspace(0, dur, len(cum))[1:]); Sx += list(sa + cum[1:])
     T, Sx = np.array(T), np.array(Sx)

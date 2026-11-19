@@ -22,12 +22,17 @@ def tv(x):
 
 hits, cuts = [], []
 for i, s in enumerate(plan["shots"]):
-    for k, _ in s["keys"]:
+    for kk in s["keys"]:
+        k = kk[0]
         if isinstance(k, str) and not k.endswith("-"): hits.append(round(tv(k), 3))
     if i > 0: cuts.append(round(tv(s["keys"][0][0]), 3))
 hits = sorted(set(hits))
 DROP, FINAL = B[11], B[39]
 extra_punch = [B[28]]  # snare accent the plan does not land a hit on
+# deep slow-mo holds (from songfx.py): the pre-drop one stays held until the drop
+deep = json.load(open(ROOT / "build/deep.json"))
+for d in deep:
+    d["end"] = round(DROP if d["t"] < DROP < d["t"] + 1.0 else d["t"] + d["hold"], 3)
 
 # ---------- audio ----------
 sfx, n, lanes = [], 0, []
@@ -52,16 +57,18 @@ add("impact-bass-2.mp3", FINAL - 0.015, 1.3, 0.55)
 add("sparkle.mp3", FINAL + 0.25, 1.05, 0.22)
 for t in [B[1], B[2], B[3]]:
     add("pop.mp3", t - 0.01, 0.3, 0.14)
+for d in deep:
+    add("slowmo-down.wav", d["t"] - 0.02, 1.2, 0.5)
 
 # counters: one per kid (shots s1..s7)
 counters = []
 for i, s in enumerate(plan["shots"][:7]):
-    first_hit = next(tv(k) for k, _ in s["keys"] if isinstance(k, str) and not k.endswith("-")) if i else B[0]
+    first_hit = next(tv(kk[0]) for kk in s["keys"] if isinstance(kk[0], str) and not kk[0].endswith("-")) if i else B[0]
     end = tv(s["keys"][-1][0])
     counters.append({"i": i + 1, "start": round(first_hit, 3), "end": round(end, 3)})
 
 T = {"dur": DUR, "hits": hits, "cuts": cuts, "drop": DROP, "final": FINAL, "beats": B,
-     "extra": extra_punch, "counters": counters, "introEnd": round(tv("b5-"), 3)}
+     "extra": extra_punch, "deep": deep, "counters": counters, "introEnd": round(tv("b5-"), 3)}
 
 counter_html = "\n".join(
     f'        <div class="ctr" id="ctr-{c["i"]}"><span class="ctr-n">{c["i"]:02d}</span><span class="ctr-bar"><i></i></span><span class="ctr-t">/ 07</span></div>'
@@ -92,6 +99,12 @@ html = f"""<!doctype html>
       #leak-a {{ background: radial-gradient(ellipse 520px 900px at 8% 30%, rgba(255,150,40,0.95), rgba(255,90,20,0.45) 45%, rgba(0,0,0,0) 75%); }}
       #leak-b {{ background: radial-gradient(ellipse 600px 760px at 96% 70%, rgba(255,205,120,0.9), rgba(255,120,60,0.4) 45%, rgba(0,0,0,0) 75%); }}
       #flash {{ position: absolute; inset: 0; z-index: 60; background: #fff6e6; opacity: 0; pointer-events: none; }}
+      /* slow-mo: letterbox bars + warm glow while time stretches */
+      .lbar {{ position: absolute; left: 0; right: 0; height: 120px; background: #000; z-index: 55; pointer-events: none; }}
+      #lbar-t {{ top: 0; transform: translateY(-100%); }}
+      #lbar-b {{ bottom: 0; transform: translateY(100%); }}
+      #glow {{ position: absolute; inset: 0; z-index: 45; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
+        background: radial-gradient(ellipse 700px 1000px at 50% 42%, rgba(255,214,150,0.9), rgba(255,170,90,0.35) 55%, rgba(20,10,0,0.6) 100%); }}
       #black {{ position: absolute; inset: 0; z-index: 95; background: #000; opacity: 0; pointer-events: none; }}
 
       /* type */
@@ -126,6 +139,9 @@ html = f"""<!doctype html>
       <div class="leak" id="leak-a"></div>
       <div class="leak" id="leak-b"></div>
       <div id="flash"></div>
+      <div id="glow"></div>
+      <div class="lbar" id="lbar-t"></div>
+      <div class="lbar" id="lbar-b"></div>
       <div id="scrim"></div>
 
       <div id="intro" class="shadow">
@@ -141,7 +157,7 @@ html = f"""<!doctype html>
       </div>
       <div id="black"></div>
 
-      <audio id="song" class="clip" src="assets/audio/song.wav" data-start="0" data-duration="{DUR}" data-volume="1" data-track-index="2"></audio>
+      <audio id="song" class="clip" src="assets/audio/song_fx.wav" data-start="0" data-duration="{DUR}" data-volume="1" data-track-index="2"></audio>
 {chr(10).join(sfx)}
     </div>
     <script>
@@ -153,6 +169,7 @@ html = f"""<!doctype html>
       tl.set(cam, {{ scale: 1.0, x: 0, y: 0, rotation: 0 }}, 0);
       T.hits.concat(T.extra).forEach((h) => {{
         if (h === T.drop || h === T.final) return;
+        if (T.deep.some((d) => Math.abs(d.t - h) < 0.01)) return;
         tl.fromTo(cam, {{ scale: 1.055 }}, {{ scale: 1.0, duration: 0.3, ease: "power3.out", immediateRender: false }}, h);
       }});
       // --- the drop: big slam + shake
@@ -164,6 +181,18 @@ html = f"""<!doctype html>
       [[10, -6], [-8, 5], [5, -3], [0, 0]].forEach(([x, y], i) => tl.to(cam, {{ x: x, y: y, duration: 0.04, ease: "none" }}, T.final + i * 0.04));
       // slow creep on the outro
       tl.to(cam, {{ scale: 1.06, duration: T.dur - T.final - 0.5, ease: "none" }}, T.final + 0.5);
+
+      // --- deep slow-mo on the song's breath beats: bars in, warm glow, gentle push; snap back on the whip
+      T.deep.forEach((d) => {{
+        const len = d.end - d.t;
+        tl.fromTo(cam, {{ scale: 1.0 }}, {{ scale: 1.045, duration: len, ease: "sine.out", immediateRender: false }}, d.t);
+        tl.fromTo("#lbar-t", {{ yPercent: -100 }}, {{ yPercent: 0, duration: 0.14, ease: "power3.out", immediateRender: false }}, d.t);
+        tl.fromTo("#lbar-b", {{ yPercent: 100 }}, {{ yPercent: 0, duration: 0.14, ease: "power3.out", immediateRender: false }}, d.t);
+        tl.to("#lbar-t", {{ yPercent: -100, duration: 0.08, ease: "power2.in" }}, d.end - 0.04);
+        tl.to("#lbar-b", {{ yPercent: 100, duration: 0.08, ease: "power2.in" }}, d.end - 0.04);
+        tl.fromTo("#glow", {{ opacity: 0 }}, {{ opacity: 0.55, duration: 0.12, ease: "power2.out", immediateRender: false }}, d.t);
+        tl.to("#glow", {{ opacity: 0, duration: 0.1, ease: "power2.in" }}, d.end - 0.06);
+      }});
 
       // --- light leaks + flash on every cut (cuts sit mid-whip, 0.12 s before the hit)
       T.cuts.forEach((c, i) => {{

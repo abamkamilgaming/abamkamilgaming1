@@ -23,6 +23,12 @@
       #leak-a { background: radial-gradient(ellipse 520px 900px at 8% 30%, rgba(255,150,40,0.95), rgba(255,90,20,0.45) 45%, rgba(0,0,0,0) 75%); }
       #leak-b { background: radial-gradient(ellipse 600px 760px at 96% 70%, rgba(255,205,120,0.9), rgba(255,120,60,0.4) 45%, rgba(0,0,0,0) 75%); }
       #flash { position: absolute; inset: 0; z-index: 60; background: #fff6e6; opacity: 0; pointer-events: none; }
+      /* slow-mo: letterbox bars + warm glow while time stretches */
+      .lbar { position: absolute; left: 0; right: 0; height: 120px; background: #000; z-index: 55; pointer-events: none; }
+      #lbar-t { top: 0; transform: translateY(-100%); }
+      #lbar-b { bottom: 0; transform: translateY(100%); }
+      #glow { position: absolute; inset: 0; z-index: 45; pointer-events: none; opacity: 0; mix-blend-mode: soft-light;
+        background: radial-gradient(ellipse 700px 1000px at 50% 42%, rgba(255,214,150,0.9), rgba(255,170,90,0.35) 55%, rgba(20,10,0,0.6) 100%); }
       #black { position: absolute; inset: 0; z-index: 95; background: #000; opacity: 0; pointer-events: none; }
 
       /* type */
@@ -57,6 +63,9 @@
       <div class="leak" id="leak-a"></div>
       <div class="leak" id="leak-b"></div>
       <div id="flash"></div>
+      <div id="glow"></div>
+      <div class="lbar" id="lbar-t"></div>
+      <div class="lbar" id="lbar-b"></div>
       <div id="scrim"></div>
 
       <div id="intro" class="shadow">
@@ -78,7 +87,7 @@
       </div>
       <div id="black"></div>
 
-      <audio id="song" class="clip" src="assets/audio/song.wav" data-start="0" data-duration="14.9" data-volume="1" data-track-index="2"></audio>
+      <audio id="song" class="clip" src="assets/audio/song_fx.wav" data-start="0" data-duration="14.9" data-volume="1" data-track-index="2"></audio>
       <audio id="sfx-0" class="clip" src="assets/sfx/whoosh.mp3" data-start="0.577" data-duration="0.570" data-volume="0.16" data-track-index="3"></audio>
       <audio id="sfx-1" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="1.262" data-duration="0.570" data-volume="0.16" data-track-index="3"></audio>
       <audio id="sfx-2" class="clip" src="assets/sfx/whoosh.mp3" data-start="1.598" data-duration="0.570" data-volume="0.16" data-track-index="4"></audio>
@@ -113,9 +122,13 @@
       <audio id="sfx-31" class="clip" src="assets/sfx/pop.mp3" data-start="0.524" data-duration="0.300" data-volume="0.14" data-track-index="8"></audio>
       <audio id="sfx-32" class="clip" src="assets/sfx/pop.mp3" data-start="0.867" data-duration="0.300" data-volume="0.14" data-track-index="8"></audio>
       <audio id="sfx-33" class="clip" src="assets/sfx/pop.mp3" data-start="1.203" data-duration="0.300" data-volume="0.14" data-track-index="8"></audio>
+      <audio id="sfx-34" class="clip" src="assets/sfx/slowmo-down.wav" data-start="3.271" data-duration="1.200" data-volume="0.5" data-track-index="8"></audio>
+      <audio id="sfx-35" class="clip" src="assets/sfx/slowmo-down.wav" data-start="6.702" data-duration="1.200" data-volume="0.5" data-track-index="6"></audio>
+      <audio id="sfx-36" class="clip" src="assets/sfx/slowmo-down.wav" data-start="9.454" data-duration="1.200" data-volume="0.5" data-track-index="6"></audio>
+      <audio id="sfx-37" class="clip" src="assets/sfx/slowmo-down.wav" data-start="12.200" data-duration="1.200" data-volume="0.5" data-track-index="6"></audio>
     </div>
     <script>
-      const T = {"dur": 14.9, "hits": [0.877, 1.562, 1.898, 2.589, 3.291, 3.599, 3.965, 4.656, 5.004, 5.689, 6.38, 6.722, 7.407, 7.75, 8.092, 8.783, 9.131, 9.474, 10.159, 10.513, 10.844, 11.54, 11.883, 12.22, 12.91, 13.253, 13.597], "cuts": [1.778, 3.845, 6.602, 7.972, 9.354, 10.724, 12.1, 13.477], "drop": 3.965, "final": 13.597, "beats": [0.192, 0.534, 0.877, 1.213, 1.562, 1.898, 2.247, 2.589, 2.943, 3.291, 3.599, 3.965, 4.307, 4.656, 5.004, 5.341, 5.689, 6.031, 6.38, 6.722, 7.059, 7.407, 7.75, 8.092, 8.44, 8.783, 9.131, 9.474, 9.816, 10.159, 10.513, 10.844, 11.192, 11.54, 11.883, 12.22, 12.568, 12.91, 13.253, 13.597, 13.941, 14.285, 14.629, 14.973, 15.317], "extra": [9.816], "counters": [{"i": 1, "start": 0.192, "end": 1.778}, {"i": 2, "start": 1.898, "end": 3.845}, {"i": 3, "start": 3.965, "end": 6.602}, {"i": 4, "start": 6.722, "end": 7.972}, {"i": 5, "start": 8.092, "end": 9.354}, {"i": 6, "start": 9.474, "end": 10.724}, {"i": 7, "start": 10.844, "end": 12.1}], "introEnd": 1.778};
+      const T = {"dur": 14.9, "hits": [0.877, 1.562, 1.898, 2.589, 3.291, 3.599, 3.965, 4.656, 5.004, 5.689, 6.38, 6.722, 7.407, 7.75, 8.092, 8.783, 9.131, 9.474, 10.159, 10.513, 10.844, 11.54, 11.883, 12.22, 12.91, 13.253, 13.597], "cuts": [1.778, 3.845, 6.602, 7.972, 9.354, 10.724, 12.1, 13.477], "drop": 3.965, "final": 13.597, "beats": [0.192, 0.534, 0.877, 1.213, 1.562, 1.898, 2.247, 2.589, 2.943, 3.291, 3.599, 3.965, 4.307, 4.656, 5.004, 5.341, 5.689, 6.031, 6.38, 6.722, 7.059, 7.407, 7.75, 8.092, 8.44, 8.783, 9.131, 9.474, 9.816, 10.159, 10.513, 10.844, 11.192, 11.54, 11.883, 12.22, 12.568, 12.91, 13.253, 13.597, 13.941, 14.285, 14.629, 14.973, 15.317], "extra": [9.816], "deep": [{"t": 3.291, "hold": 0.231, "end": 3.965}, {"t": 6.722, "hold": 0.411, "end": 7.133}, {"t": 9.474, "hold": 0.411, "end": 9.885}, {"t": 12.22, "hold": 0.414, "end": 12.634}], "counters": [{"i": 1, "start": 0.192, "end": 1.778}, {"i": 2, "start": 1.898, "end": 3.845}, {"i": 3, "start": 3.965, "end": 6.602}, {"i": 4, "start": 6.722, "end": 7.972}, {"i": 5, "start": 8.092, "end": 9.354}, {"i": 6, "start": 9.474, "end": 10.724}, {"i": 7, "start": 10.844, "end": 12.1}], "introEnd": 1.778};
       const tl = gsap.timeline({ paused: true });
       const cam = "#cam";
 
@@ -123,6 +136,7 @@
       tl.set(cam, { scale: 1.0, x: 0, y: 0, rotation: 0 }, 0);
       T.hits.concat(T.extra).forEach((h) => {
         if (h === T.drop || h === T.final) return;
+        if (T.deep.some((d) => Math.abs(d.t - h) < 0.01)) return;
         tl.fromTo(cam, { scale: 1.055 }, { scale: 1.0, duration: 0.3, ease: "power3.out", immediateRender: false }, h);
       });
       // --- the drop: big slam + shake
@@ -134,6 +148,18 @@
       [[10, -6], [-8, 5], [5, -3], [0, 0]].forEach(([x, y], i) => tl.to(cam, { x: x, y: y, duration: 0.04, ease: "none" }, T.final + i * 0.04));
       // slow creep on the outro
       tl.to(cam, { scale: 1.06, duration: T.dur - T.final - 0.5, ease: "none" }, T.final + 0.5);
+
+      // --- deep slow-mo on the song's breath beats: bars in, warm glow, gentle push; snap back on the whip
+      T.deep.forEach((d) => {
+        const len = d.end - d.t;
+        tl.fromTo(cam, { scale: 1.0 }, { scale: 1.045, duration: len, ease: "sine.out", immediateRender: false }, d.t);
+        tl.fromTo("#lbar-t", { yPercent: -100 }, { yPercent: 0, duration: 0.14, ease: "power3.out", immediateRender: false }, d.t);
+        tl.fromTo("#lbar-b", { yPercent: 100 }, { yPercent: 0, duration: 0.14, ease: "power3.out", immediateRender: false }, d.t);
+        tl.to("#lbar-t", { yPercent: -100, duration: 0.08, ease: "power2.in" }, d.end - 0.04);
+        tl.to("#lbar-b", { yPercent: 100, duration: 0.08, ease: "power2.in" }, d.end - 0.04);
+        tl.fromTo("#glow", { opacity: 0 }, { opacity: 0.55, duration: 0.12, ease: "power2.out", immediateRender: false }, d.t);
+        tl.to("#glow", { opacity: 0, duration: 0.1, ease: "power2.in" }, d.end - 0.06);
+      });
 
       // --- light leaks + flash on every cut (cuts sit mid-whip, 0.12 s before the hit)
       T.cuts.forEach((c, i) => {

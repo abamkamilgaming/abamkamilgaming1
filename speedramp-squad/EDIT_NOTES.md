@@ -56,6 +56,27 @@ Cut berlaku di tengah whip. Ada zoom blur radial, grade golden-hour (teal/oren),
 - **SFX:** whoosh setiap whip, riser ke drop, impact bass masa drop & hit akhir, pop masa huruf intro,
   sparkle masa outro.
 
+## Slow-mo ikut beat (v2)
+Analisis tenaga setiap beat jumpa "nafas" lagu, iaitu tenaga jatuh setiap 8 beat. Bass pula hilang tepat sebelum drop.
+Di situ slow-mo dibuat lebih dalam dan lebih lama:
+
+| Masa | Beat | Slow-mo | Kenapa |
+|---|---|---|---|
+| 0.88 | b2 | 0.30×, tahan 45% | tukar kord intro |
+| 2.59 | b7 | 0.30×, tahan 45% | tukar kord intro |
+| 3.29 | b9 | **0.15×**, tahan 75% hingga drop | bass hilang, "terapung" sebelum drop |
+| 3.97 | b11 | 0.28×, tahan 45% | drop mendarat |
+| 6.72 | b19 | **0.20×**, tahan 60% | nafas frasa 1 |
+| 9.47 | b27 | **0.20×**, tahan 60% | nafas frasa 2 |
+| 12.22 | b35 | **0.20×**, tahan 60% | nafas frasa 3 |
+| 13.60 | b39 | 0.35× hingga akhir | outro |
+
+- Setiap hit lain mendarat tepat pada 0.35×. Whip habis ~8% sebelum beat supaya pukulan terasa "berhenti".
+- Kelajuan bersambung licin antara segmen.
+- Masa slow-mo dalam, ada letterbox hitam, glow keemasan, push perlahan dan SFX "bwoom" pitch rendah (`assets/sfx/slowmo-down.wav`).
+  Lagu pula di-muffle (low-pass 650 Hz, `assets/audio/song_fx.wav`, `build/songfx.py`). Sebelum drop, lagu kekal muffle sampai drop, lepas tu terbuka penuh.
+- Format key dalam plan: `["b19", 0.7, {"slow": 0.2, "hold": 0.6}]`.
+
 ## Ubah
 - Teks "THE SQUAD" / "SPEED RAMP · 2026" ada dalam `build/gen.py`.
 - Hit / sumber klip ada dalam `build/plan.json`.
@@ -64,6 +85,7 @@ Cut berlaku di tengah whip. Ada zoom blur radial, grade golden-hour (teal/oren),
 ```
 python3 build/beats.py assets/audio/song.wav build/beats.json
 python3 build/ramp.py <folder proxy 1080x1920>          # assets/video/base.mp4 (lambat, ~30 min)
+python3 build/songfx.py                                 # song_fx.wav + SFX slow-mo + deep.json
 python3 build/gen.py                                    # index.html
 npx hyperframes preview                                 # preview
 npx hyperframes render --fps 60 -o out.mp4              # render final (selepas approve)
