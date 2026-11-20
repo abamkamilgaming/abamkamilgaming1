@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #07061a;
+        --ink: #ffffff;
+        --yellow: #ffd23f;
+        --violet: #9b6bff;
+        --violet-2: #c9b3ff;
+        --red: #ff3b4e;
+        --green: #3ddc84;
+        --cyan: #58e1ff;
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-cap: "Montserrat", sans-serif;
+        --font-label: "Oswald", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* split layout: facecam 0-760, gameplay 760-1920 */
+      .facewrap { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; overflow: hidden; transform-origin: 50% 42%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; object-fit: cover; }
+      .gamewrap { position: absolute; left: 0; top: 760px; width: 1080px; height: 1160px; overflow: hidden; transform-origin: 50% 40%; }
+      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 1160px; object-fit: cover; }
+      #seam { position: absolute; left: 0; top: 754px; width: 1080px; height: 12px; z-index: 60;
+        background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--violet)); box-shadow: 0 0 26px rgba(155,107,255,0.9); }
+      #shade { position: absolute; left: 0; top: 1500px; width: 1080px; height: 420px; z-index: 58; pointer-events: none;
+        background: linear-gradient(180deg, rgba(7,6,26,0) 0%, rgba(7,6,26,0.85) 28%, #07061a 50%); }
+      #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+
+      /* HUD chip */
+      #hud { position: absolute; left: 0; top: 0; width: 1080px; height: 300px; z-index: 70; }
+      #hud-in { position: absolute; left: 60px; top: 226px; display: flex; align-items: center; gap: 14px;
+        padding: 8px 24px 8px 8px; border-radius: 999px; background: rgba(12,8,36,0.78); border: 3px solid var(--violet-2); }
+      #hud-av { width: 64px; height: 64px; border-radius: 50%; background: url(assets/img/mitya.jpg) 72% 22% / 260% auto no-repeat; border: 3px solid var(--yellow); }
+      #hud-t { font-family: var(--font-display); font-size: 32px; color: #fff; letter-spacing: 0.02em; }
+      #hud-t b { color: var(--yellow); font-weight: 400; }
+
+      /* hook */
+      .hook { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 80; }
+      .hk-badge { position: absolute; left: 0; right: 0; top: 800px; text-align: center; }
+      .hk-badge span { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.1em;
+        color: #120a2e; background: var(--yellow); padding: 8px 26px; border-radius: 12px; }
+      .hk-big { position: absolute; left: 40px; right: 120px; top: 876px; text-align: center; font-family: var(--font-display);
+        font-size: 118px; line-height: 0.98; color: #fff; -webkit-text-stroke: 7px #000; paint-order: stroke fill;
+        text-shadow: 0 10px 0 #000, 0 0 50px rgba(255,59,78,0.7); }
+      .hk-big .r { color: var(--red); }
+      .hk-big .y { color: var(--yellow); }
+      /* chat bubble (TikTok live style) */
+      .chat { position: absolute; left: 70px; right: 160px; top: 0; display: flex; align-items: center; gap: 20px;
+        padding: 18px 26px 18px 18px; border-radius: 26px; background: rgba(255,255,255,0.96); box-shadow: 0 14px 40px rgba(0,0,0,0.55); }
+      .chat .av { width: 92px; height: 92px; flex: none; border-radius: 50%; background: linear-gradient(135deg, #ff9a3d, #ff3b8e);
+        display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 46px; color: #fff; }
+      .chat .nm { font-family: var(--font-cap); font-weight: 900; font-size: 34px; color: #e8304a; }
+      .chat .tx { font-family: var(--font-cap); font-weight: 800; font-size: 48px; color: #111; line-height: 1.1; }
+      #hk1-chat { position: absolute; left: 0; right: 0; top: 1150px; }
+      #hk3-card { position: absolute; left: 70px; right: 160px; top: 950px; text-align: center; }
+      #hk3-in { display: inline-flex; align-items: center; gap: 26px; padding: 22px 40px 22px 22px; border-radius: 30px;
+        background: linear-gradient(120deg, rgba(40,20,110,0.92), rgba(110,60,220,0.92)); border: 5px solid var(--yellow);
+        box-shadow: 0 0 60px rgba(155,107,255,0.8); }
+      #hk3-av { width: 130px; height: 130px; border-radius: 24px; background: url(assets/img/mitya.jpg) 72% 22% / 230% auto no-repeat; border: 4px solid #fff; }
+      #hk3-t { text-align: left; font-family: var(--font-display); color: #fff; font-size: 64px; line-height: 1; -webkit-text-stroke: 3px #000; paint-order: stroke fill; }
+      #hk3-t small { display: block; font-size: 38px; color: var(--yellow); margin-top: 8px; }
+
+      /* captions on the seam */
+      #captions { position: absolute; left: 0; top: 770px; width: 1080px; height: 200px; z-index: 82; }
+      .cap { position: absolute; left: 0; top: 0; width: 1080px; height: 200px; }
+      .cap-in { position: absolute; left: 110px; right: 230px; top: 24px; text-align: center; transform-origin: 50% 50%; }
+      .w { font-family: var(--font-cap); font-weight: 900; font-size: 92px; line-height: 1.04; color: #fff;
+        -webkit-text-stroke: 6px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000, 0 0 26px rgba(0,0,0,0.6); }
+      .w.k { color: var(--yellow); }
+      .w + .w { margin-left: 0.24em; }
+
+      /* stickers */
+      .stk { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 78; pointer-events: none; }
+      .stk-in { position: absolute; left: 80px; right: 170px; top: 1010px; text-align: center; font-family: var(--font-display);
+        font-size: 120px; line-height: 0.95; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; transform-origin: 50% 50%; }
+      .stk-in small { display: block; font-size: 60px; color: #fff; margin-top: 6px; }
+      .stk-in.red { color: var(--red); }
+      .stk-in.violet { color: var(--violet-2); text-shadow: 0 10px 0 #000, 0 0 60px rgba(155,107,255,0.9); }
+      .stk-in.gold { color: var(--yellow); }
+      .stk-in.green { color: var(--green); font-size: 104px; }
+      .stk-in.num { top: 940px; font-size: 330px; color: var(--yellow); -webkit-text-stroke: 10px #000; }
+      .stk-in.emoji { top: 1040px; font-size: 130px; -webkit-text-stroke: 0; }
+      .stk-in.zap { right: auto; width: 440px; font-size: 128px; color: var(--cyan); text-shadow: 0 8px 0 #000, 0 0 50px rgba(88,225,255,0.95); }
+      .stk-in.z1 { left: 40px; top: 1000px; }
+      .stk-in.z2 { left: 470px; top: 1080px; }
+      .stk-in.z3 { left: 80px; top: 1170px; }
+      .stk-in.z4 { left: 440px; top: 1220px; font-size: 140px; }
+
+      /* galaxy-brain PIP */
+      #gal-wrap { position: absolute; left: 560px; top: 1010px; width: 470px; height: 265px; z-index: 77; transform-origin: 50% 50%; }
+      #galaxy { position: absolute; left: 0; top: 0; width: 470px; height: 265px; object-fit: cover; border-radius: 22px;
+        border: 5px solid #fff; box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+
+      /* live-chat bubble */
+      #chat2 { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
+      #chat2 .chat { top: 1010px; }
+
+      /* quote card for Mitya's voice lines */
+      .quote { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
+      .q-in { position: absolute; left: 110px; right: 230px; top: 880px; padding: 22px 28px 26px; border-radius: 30px; text-align: center;
+        background: rgba(14,10,40,0.82); border: 4px solid var(--violet-2); box-shadow: 0 0 50px rgba(155,107,255,0.55); }
+      .q-who { display: inline-flex; align-items: center; gap: 14px; font-family: var(--font-label); font-weight: 700; font-size: 38px;
+        letter-spacing: 0.14em; color: #120a2e; background: var(--yellow); padding: 6px 20px 6px 8px; border-radius: 999px; }
+      .q-who i { width: 52px; height: 52px; border-radius: 50%; background: url(assets/img/mitya.jpg) 72% 22% / 260% auto no-repeat; }
+      .q-en { font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; font-size: 38px; line-height: 1.16; color: #fff; margin-top: 18px; }
+      .q-bm { font-family: var(--font-cap); font-weight: 900; font-size: 48px; line-height: 1.15; color: var(--yellow); margin-top: 16px; }
+
+      /* verdict stamp */
+      #verdict { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 81; }
+      #vd-in { position: absolute; left: 325px; top: 1000px; width: 430px; padding: 14px 10px; text-align: center; border-radius: 22px;
+        border: 8px solid var(--green); color: var(--green); background: rgba(6,30,16,0.75); font-family: var(--font-display);
+        font-size: 66px; line-height: 1; transform-origin: 50% 50%; box-shadow: 0 0 40px rgba(61,220,132,0.6); }
+      #vd-in small { display: block; font-family: var(--font-label); font-weight: 700; font-size: 46px; letter-spacing: 0.18em; color: #fff; margin-bottom: 6px; }
+
+      /* CTA */
+      #cta { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 80; }
+      #cta-in { position: absolute; left: 110px; right: 230px; top: 1050px; text-align: center; }
+      #cta-pill { display: inline-flex; align-items: center; gap: 18px; padding: 22px 40px; border-radius: 999px;
+        background: linear-gradient(90deg, #ff2f6d, #ff6a3d); border: 5px solid #fff; box-shadow: 0 12px 0 #8a1036, 0 0 50px rgba(255,47,109,0.7); }
+      #cta-pill span { font-family: var(--font-display); font-size: 40px; color: #fff; }
+      #cta-heart { font-size: 70px; }
+
+      /* end card */
+      #endcard { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 90; }
+      #ec-bg { position: absolute; inset: 0; background: url(assets/img/mitya.jpg) 70% 30% / auto 100% no-repeat; }
+      #ec-dim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,6,26,0.25) 0%, rgba(7,6,26,0.55) 45%, rgba(7,6,26,0.95) 75%); }
+      #ec-in { position: absolute; left: 60px; right: 140px; top: 1000px; text-align: center; }
+      .ec-k { font-family: var(--font-label); font-weight: 700; font-size: 44px; letter-spacing: 0.2em; color: var(--violet-2); }
+      .ec-v { font-family: var(--font-display); font-size: 100px; line-height: 1; color: var(--green); white-space: nowrap; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; margin-top: 34px; }
+      .ec-l { font-family: var(--font-cap); font-weight: 900; font-size: 48px; color: #fff; margin-top: 40px; -webkit-text-stroke: 3px #000; paint-order: stroke fill; }
+      .ec-l b { color: var(--yellow); }
+      #ec-follow { display: inline-block; margin-top: 40px; font-family: var(--font-display); font-size: 56px; color: #120a2e;
+        background: var(--yellow); padding: 20px 54px; border-radius: 999px; box-shadow: 0 10px 0 #8a6a00; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920">
+{{MEDIA}}
+      <div id="seam"></div>
+      <div id="shade"></div>
+
+      <div id="hud" class="clip" data-start="{{HUD_START}}" data-duration="{{HUD_DUR}}" data-track-index="4">
+        <div id="hud-in"><div id="hud-av"></div><div id="hud-t">TEST RUN <b>MITYA</b> · FIRST TIME</div></div>
+      </div>
+
+      <div id="hook1" class="clip hook" data-start="0" data-duration="{{H1_DUR}}" data-track-index="4">
+        <div class="hk-badge" id="hk1-badge"><span>VIEWER CAKAP…</span></div>
+        <div class="hk-big" id="hk1-big">MITYA <span class="r">KENA</span><br /><span class="r">NERF?!</span> 😱</div>
+        <div id="hk1-chat"><div class="chat" id="hk1-bubble"><div class="av">Z</div><div><div class="nm">Zangetsu</div><div class="tx">7.3 nt neft katanya 💀</div></div></div></div>
+      </div>
+      <div id="hook2" class="clip hook" data-start="{{H2_START}}" data-duration="{{H2_DUR}}" data-track-index="4">
+        <div class="hk-badge" id="hk2-badge"><span>TAPI LEPAS AKU TEST…</span></div>
+        <div class="hk-big" id="hk2-big"><span class="y">OH MY</span><br /><span class="y">GOD!</span> 🤯</div>
+      </div>
+      <div id="hook3" class="clip hook" data-start="{{H3_START}}" data-duration="{{H3_DUR}}" data-track-index="4">
+        <div id="hk3-card"><div id="hk3-in"><div id="hk3-av"></div><div id="hk3-t">WORTH IT<br />KE TAK? 🤔<small>AKU YANG DECIDE</small></div></div></div>
+      </div>
+
+      <div id="gal-wrap"><video id="galaxy" class="clip" src="assets/vfx/galaxy.mp4" data-start="{{GAL_START}}" data-duration="{{GAL_DUR}}" data-track-index="5" muted playsinline></video></div>
+
+      <div id="chat2" class="clip" data-start="{{CHAT_START}}" data-duration="{{CHAT_DUR}}" data-track-index="5">
+        <div class="chat" id="chat2-bubble"><div class="av">💬</div><div><div class="nm">Live chat</div><div class="tx">Bang buat apa ni?</div></div></div>
+      </div>
+
+      <div id="q1" class="clip quote" data-start="{{Q1_START}}" data-duration="{{Q1_DUR}}" data-track-index="5">
+        <div class="q-in" id="q1-in"><div class="q-who"><i></i>MITYA</div>
+          <div class="q-en">“I'd love to tell you some funny stories from work, but Scarf won't let me.”</div>
+          <div class="q-bm">Aku nak cerita kisah lawak kat tempat kerja… tapi Scarf tak bagi 😭</div></div>
+      </div>
+      <div id="q2" class="clip quote" data-start="{{Q2_START}}" data-duration="{{Q2_DUR}}" data-track-index="5">
+        <div class="q-in" id="q2-in"><div class="q-who"><i></i>MITYA</div>
+          <div class="q-en">“Did you see the show at the theater yesterday? It was pretty good. It'd be even better if I could remember what it was about.”</div>
+          <div class="q-bm">Show teater semalam best… kalau aku ingat cerita dia pasal apa 🤡</div></div>
+      </div>
+
+{{STICKERS}}
+
+      <div id="verdict" class="clip" data-start="{{VERDICT_START}}" data-duration="{{VERDICT_DUR}}" data-track-index="6">
+        <div id="vd-in"><small>VERDICT</small>WORTH IT ✅</div>
+      </div>
+
+      <div id="cta" class="clip" data-start="{{CTA_START}}" data-duration="{{CTA_DUR}}" data-track-index="6">
+        <div id="cta-in"><div id="cta-pill"><div id="cta-heart">❤️</div><span>20K LIKE = AKU PULL</span></div></div>
+      </div>
+
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+
+      <div id="endcard" class="clip" data-start="{{END_START}}" data-duration="{{END_DUR}}" data-track-index="8">
+        <div id="ec-bg"></div><div id="ec-dim"></div>
+        <div id="ec-in">
+          <div class="ec-k" id="ec-k">TEST RUN MITYA · VERDICT</div>
+          <div class="ec-v" id="ec-v">WORTH IT ✅</div>
+          <div class="ec-l" id="ec-l">Tekan ❤️ — <b>20K LIKE</b> aku pull!</div>
+          <div id="ec-follow">FOLLOW FOR MORE</div>
+        </div>
+      </div>
+
+      <div id="flash"></div>
+
+      <audio id="bgm1" class="clip" src="assets/music/carmen.mp3" data-start="{{CARMEN_START}}" data-duration="{{CARMEN_DUR}}" data-volume="0.13"
+        data-fade-in="0.3" data-fade-out="0.3" data-track-index="11"></audio>
+      <audio id="bgm2" class="clip" src="assets/music/win.mp3" data-start="{{WIN_START}}" data-duration="{{WIN_DUR}}" data-volume="0.16"
+        data-fade-in="0.15" data-fade-out="1.2" data-track-index="11"></audio>
+{{SFX}}
+    </div>
+    <script>
+      const T = {{TIMELINE_JSON}};
+      const tl = gsap.timeline({ paused: true });
+
+      // --- facecam: jump-cut punch-ins (1.0 <-> 1.12), game: slow push-in
+      T.order.forEach((sid, i) => {
+        const fw = "#fw-" + sid, gw = "#gw-" + sid, s = T.t0[sid], d = T.dur[sid];
+        let z = i % 2 ? 1.1 : 1.0;
+        tl.set(fw, { scale: z, x: 0, rotation: 0 }, s);
+        (T.cuts[sid] || []).forEach((c) => { z = z > 1.05 ? 1.0 : 1.12; tl.set(fw, { scale: z }, s + c); });
+        tl.fromTo(gw, { scale: 1.0 }, { scale: 1.06, duration: d, ease: "none" }, s);
+      });
+      // --- reaction punches + shake
+      const punch = (sid, t, big) => {
+        const el = "#fw-" + sid;
+        tl.fromTo(el, { scale: big }, { scale: big - 0.16, duration: 0.3, ease: "power3.out" }, t);
+        [18, -16, 12, -8, 4, 0].forEach((x, i) => tl.to(el, { x: x, duration: 0.035, ease: "none" }, t + i * 0.035));
+      };
+      punch("h2", T.omg, 1.42);
+      punch("s5a", T.serius, 1.4);
+      punch("s4", T.boy, 1.36);
+      punch("s2", T.salah, 1.32);
+      punch("s6", T.tinggi, 1.3);
+      punch("e1", T.elok, 1.34);
+      tl.fromTo("#gw-h2", { scale: 1.3 }, { scale: 1.05, duration: 0.45, ease: "power3.out" }, T.h2);
+      tl.fromTo("#gw-ff", { x: 0 }, { x: -14, duration: 0.05, yoyo: true, repeat: 25, ease: "none" }, T.ff);
+
+      // --- white flashes
+      [[T.h2, 0.85], [T.elok, 0.55], [T.end, 0.5]].forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.04, ease: "none" }, Math.max(0, t - 0.04));
+        tl.to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, t);
+      });
+
+      // --- hook 1 (frame 0 already carries the line: it is the thumbnail)
+      tl.fromTo("#hk1-big", { scale: 1.35 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 0);
+      tl.fromTo("#hk1-badge", { y: -20 }, { y: 0, duration: 0.25, ease: "power2.out" }, 0);
+      tl.fromTo("#hk1-bubble", { x: -700, rotation: -4 }, { x: 0, rotation: -2, duration: 0.3, ease: "back.out(1.6)" }, 0.12);
+      tl.to("#hk1-big", { scale: 1.06, duration: T.h2 - 0.4, ease: "none" }, 0.3);
+      // --- hook 2
+      tl.fromTo("#hk2-big", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2)" }, T.h2);
+      tl.fromTo("#hk2-badge", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2 }, T.h2 + 0.1);
+      [14, -12, 9, -6, 0].forEach((x, i) => tl.to("#hk2-big", { x: x, duration: 0.04, ease: "none" }, T.h2 + 0.24 + i * 0.04));
+      // --- hook 3
+      tl.fromTo("#hk3-in", { scale: 0.3, opacity: 0, rotation: -8 }, { scale: 1, opacity: 1, rotation: -2, duration: 0.35, ease: "back.out(2)" }, T.h3 + 0.1);
+      tl.fromTo("#hk3-av", { rotation: 0 }, { rotation: 6, duration: 0.4, yoyo: true, repeat: 5, ease: "sine.inOut" }, T.h3 + 0.5);
+      tl.to("#hk3-in", { opacity: 0, scale: 0.9, duration: 0.15, ease: "power2.in" }, T.h3 + T.dur.h3 - 0.17);
+
+      // --- HUD
+      tl.fromTo("#hud-in", { x: -500 }, { x: 0, duration: 0.35, ease: "power3.out" }, T.t0.s1);
+      tl.fromTo("#hud-av", { rotation: 0 }, { rotation: 360, duration: 0.6, ease: "power2.out" }, T.t0.s1 + 0.1);
+
+      // --- galaxy brain PIP
+      tl.fromTo("#gal-wrap", { scale: 0, rotation: 12 }, { scale: 1, rotation: 4, duration: 0.3, ease: "back.out(2)" }, T.galaxy[0]);
+      tl.to("#gal-wrap", { scale: 0, duration: 0.15, ease: "power2.in" }, T.galaxy[1] - 0.16);
+
+      // --- chat bubble
+      tl.fromTo("#chat2-bubble", { x: -760, rotation: -5 }, { x: 0, rotation: -2, duration: 0.3, ease: "back.out(1.6)" }, T.chat[0] + 0.02);
+      tl.to("#chat2-bubble", { x: 760, duration: 0.18, ease: "power2.in" }, T.chat[1] - 0.2);
+
+      // --- quote cards
+      [["#q1-in", T.q1], ["#q2-in", T.q2]].forEach(([el, [s, e]]) => {
+        tl.fromTo(el, { y: 60, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.25, ease: "back.out(1.8)" }, s);
+        tl.to(el, { opacity: 0, y: -30, duration: 0.14, ease: "power2.in" }, e - 0.16);
+      });
+
+      // --- stickers
+      document.querySelectorAll(".stk").forEach((el, i) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".stk-in");
+        const num = inner.classList.contains("num");
+        const r = num ? 0 : (inner.classList.contains("tilt-r") ? 4 : -4);
+        tl.fromTo(inner, { scale: num ? 2.6 : 2.2, opacity: 0, rotation: r * 3 }, { scale: 1, opacity: 1, rotation: r, duration: 0.18, ease: "back.out(2)" }, s);
+        tl.to(inner, { scale: 1.07, duration: Math.max(0.05, d - 0.32), ease: "none" }, s + 0.18);
+        tl.to(inner, { opacity: 0, scale: 1.2, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+      });
+
+      // --- verdict stamp: slam then settle smaller
+      tl.fromTo("#vd-in", { scale: 3, opacity: 0, rotation: -20 }, { scale: 1, opacity: 1, rotation: -8, duration: 0.25, ease: "back.out(1.5)" }, T.elok);
+      tl.to("#vd-in", { scale: 1.08, duration: 0.9, ease: "none" }, T.elok + 0.25);
+      tl.to("#vd-in", { scale: 0.4, opacity: 0, y: -60, duration: 0.2, ease: "power2.in" }, T.elok + 1.4);
+
+      // --- CTA
+      tl.fromTo("#cta-pill", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)" }, T.e3 + 0.05);
+      tl.fromTo("#cta-heart", { scale: 1 }, { scale: 1.3, duration: 0.18, yoyo: true, repeat: 5, ease: "sine.inOut" }, T.e3 + 0.4);
+
+      // --- captions: pop in, hard kill
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Montserrat", fontWeight: 900, maxWidth: 680, baseSize: 90, minSize: 52 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.5, opacity: 0, y: 14 }, { scale: 1, opacity: 1, y: 0, duration: 0.12, ease: "back.out(2.6)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.05, ease: "power2.in" }, s + d - 0.05);
+        tl.set(el, { visibility: "hidden" }, s + d);
+      });
+
+      // --- end card
+      tl.fromTo("#ec-bg", { scale: 1.15 }, { scale: 1.0, duration: 2.4, ease: "power2.out" }, T.end);
+      tl.fromTo("#ec-k", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2 }, T.end + 0.05);
+      tl.fromTo("#ec-v", { scale: 2.4, opacity: 0, rotation: -10 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.28, ease: "back.out(1.8)" }, T.end + 0.12);
+      tl.fromTo("#ec-l", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.22 }, T.end + 0.4);
+      tl.fromTo("#ec-follow", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "back.out(2.5)" }, T.end + 0.55);
+      tl.to("#ec-follow", { scale: 1.07, duration: 0.25, yoyo: true, repeat: 5, ease: "sine.inOut" }, T.end + 0.85);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
