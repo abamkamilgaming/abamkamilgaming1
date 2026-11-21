@@ -1,8 +1,42 @@
-# Test Run Mitya — TikTok short (PREVIEW, belum render)
+# Test Run Mitya — TikTok short (PREVIEW v2, belum render final)
 
-**Format:** 1080×1920 (9:16), 60 fps, **63.8 s** · gaya Doro44 / thejonathon (facecam atas, gameplay bawah, caption 2–3 perkataan, chat bubble, meme SFX/VFX)
-**Status:** PREVIEW sahaja — belum render. Storyboard: `preview-frames/storyboard-1.jpg`, `storyboard-2.jpg`.
+**Format:** 1080×1920 (9:16), 60 fps, **80.2 s (1:20)** · gaya Doro44 / thejonathon
+**Status:** PREVIEW — draft v2 untuk semakan, belum render final.
 
+## v2 — pembetulan ikut teguran
+1. **Lisa:** masa sebut "Lisa", `Lisa_Card.webp` masuk ke panel gameplay; masa "boy!" → misai palsu pop + zoom ke muka Lisa + **vine boom**.
+2. **Idle animation Mitya (2):** blok baru — "Not bad, not bad" → **IDLE ANIMATION #1** (kiub ungu, 1:41–1:48) dengan reaksi muka kau senyum/gelak ("Ini idle satu eh") → **IDLE ANIMATION #2** (Scarf melambai, 1:52–1:59) dengan muka kau berfikir → baca chat "Sis suka Mitya selalu gaduh dengan Scarf dia". Label "REAKSI AKU 😂" + punch-in pada muka.
+3. **Durasi:** 1:20 (dalam had < 1:30).
+4. **Muka:** crop baru lebih tinggi (kepala sampai dagu + mic), panel muka 840 px / gameplay 1080 px supaya seimbang. Teks overlay stream "live yang penting" dibuang (delogo) dan bucu kiri digelapkan.
+5. **Voice line bertindih dibuang:** "I'd love to tell you some funny stories…" (bertindih dengan suara kau) dikeluarkan. Voice line teater dikekalkan sebab bersih (tiada suara kau bertindih).
+6. **Lebih banyak reaksi:** gelak besar tengok Mitya main dengan Scarf (6:15–6:28, "Dia main awesome eh… nice nice nice"), senyum lebar masa **burst Mitya** + muka terkejut "WAIT WHAT" (14:31–14:45), tangan atas kepala "Gosh… sedap je" (16:16–16:20).
+- Dibuang untuk muat masa: line "Aku dah dengar tapi apa bug?" dan "Bang buat apa ni?".
+
+## Urutan v2
+| Video | Babak | Footage asal |
+|---|---|---|
+| 0.00 | Hook: "Hoyo nerf Mitya 7.3?" + chat Zangetsu | 0:21 |
+| 1.48 | Hook: "Oh my god!" | 15:55 |
+| 2.61 | Hook: "I will be the one who decides…" | 0:38 |
+| 6.16 | Salah sebut nerf/bug (Galaxy Brain, X-Files, awkward) | 0:46 |
+| 12.48 | "Not bad, not bad" | 1:25 |
+| 14.29 | IDLE #1 + reaksi gelak | 1:41 |
+| 18.96 | IDLE #2 + reaksi berfikir | 1:52 |
+| 22.60 | Chat "Sis suka Mitya selalu gaduh dengan Scarf dia" | 1:59 |
+| 25.43 | Reaksi gelak: "Dia main awesome eh… nice nice nice" | 6:15 |
+| 30.92 | Lisa → misai + vine boom | 7:07 |
+| 35.17 | "25 second? Serius lah?!" | 9:27 |
+| 36.65 | Timer 3-2-1 → FF▶▶ → "25 freaking second… berguna" | 10:13–11:00 |
+| 45.63 | Voice line teater → "Kenapa aku pula yang tinggi suara ni?" | 12:50 |
+| 52.78 | "Sedap tak pula Mitya ni?" → BURST MITYA 💥 → WAIT WHAT 😱 | 14:31–14:45 |
+| 62.23 | FEEDBACK: "Memang elok sangat lah… Mitya Mitya Mitya" + VERDICT | 15:53 |
+| 65.88 | "Satisfying feeling… zap zap zap gitu" | 16:21 |
+| 72.22 | "20k like aku terpaksa pull… Gosh, sedap je" (tangan atas kepala) | 16:10–16:20 |
+| 77.68 | End card WORTH IT ✅ | — |
+
+---
+
+## (v1 — rujukan lama)
 ## Flow & EDL (masa footage asal → masa dalam video)
 
 | Video | Babak | Audio (apa kau cakap) | Footage asal | Edit / SFX / VFX |

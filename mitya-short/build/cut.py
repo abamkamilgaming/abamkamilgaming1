@@ -19,32 +19,34 @@ SRC = sys.argv[1]
 ONLY = sys.argv[2].split(",") if len(sys.argv) > 2 else None
 MAXGAP, KEEP, LEAD, TAIL = 0.22, 0.10, 0.06, 0.12
 SPEED = 1.07
-FACE_CROP = "crop=611:430:225:0"          # stays above the "live yang penting" overlay
-GAME_CROP = "crop=540:583:{x}:680"        # 540-wide window of the 1080x583 gameplay strip
+FACE_CROP = "delogo=x=232:y=440:w=294:h=96,crop=720:560:230:0"   # head + chin; "live yang penting" overlay removed
+GAME_CROP = "crop=583:583:{x}:680"        # square window of the 1080x583 gameplay strip
 
 # id, face/audio pieces [(in,out)], game source: None = same times (synced) | float = continuous from t
 # game_x = left edge of the gameplay crop window, rate = extra speed (fast-forward)
 SEGS = [
     # HOOK
-    ("h1", [(20.98, 22.56)], 403.2, 270, 1.0),          # "Hoyo nerf Mitya 7.3?"  (viewer chat bubble on screen)
-    ("h2", [(955.42, 957.36)], 917.3, 270, 1.0),        # "Oh my god!"            (burst explosion)
-    ("h3", [(38.30, 42.56)], None, 270, 1.0),           # "I will be the one who decides he is worthy or not"
+    ("h1", [(20.98, 22.56)], 403.2, 248, 1.0),          # "Hoyo nerf Mitya 7.3?"  (viewer chat bubble on screen)
+    ("h2", [(955.42, 957.36)], 917.3, 248, 1.0),        # "Oh my god!"            (burst explosion)
+    ("h3", [(38.30, 42.56)], None, 248, 1.0),           # "I will be the one who decides he is worthy or not"
     # TEST RUN
-    ("s1", [(23.02, 25.38), (25.66, 27.80)], 98.0, 270, 1.0),  # "Aku dah dengar tapi apa bug? Teruk sangat ke bug tu?"
-    ("s2", [(46.18, 48.88), (51.62, 52.88), (54.92, 58.56)], 108.0, 270, 1.0),  # nerf vs bug slip
-    ("sm", [(85.10, 87.04, "raw"), (89.66, 93.74)], None, 270, 1.0),  # "Idle dia... not bad not bad" + Mitya: "I'd love to tell you some funny stories from work, but Scarf won't let me."
-    ("s3", [(131.36, 132.50), (136.12, 140.32)], None, 270, 1.0),  # "Bang buat apa ni?" -> first time in lifetime
-    ("s4", [(427.36, 432.98)], None, 270, 1.0),         # "Dia macam Lisa... version Lisa tapi boy"
+    ("s2", [(46.18, 48.88), (51.62, 52.88), (54.92, 58.56)], 140.0, 248, 1.0),  # nerf vs bug slip
+    ("i0", [(85.10, 87.04, "raw")], None, 248, 1.0),    # "Not bad, not bad, idle dia"
+    ("i1", [(100.90, 108.40, "raw")], None, 248, 1.5),  # IDLE #1: purple cube (face smiling / laughing)
+    ("i2", [(112.40, 119.40, "raw")], None, 248, 1.8),  # IDLE #2: Scarf waves (face hand on chin)
+    ("i3", [(119.60, 123.16)], None, 248, 1.0),         # reads chat: "Sis suka Mitya selalu gaduh dengan Scarf dia"
+    ("sk", [(375.26, 376.72), (378.00, 381.40), (386.05, 388.80)], None, 248, 1.0),  # laughing: "Eh dia main. Dia main awesome eh, dengan Scarf dia... nice nice nice"
+    ("s4", [(427.36, 432.98)], None, 248, 1.0),         # "Dia macam Lisa... version Lisa tapi boy"
     ("s5a", [(567.36, 569.22)], None, 0, 1.0),          # "25 second? Serius lah?"  (skill screen)
-    ("s5b", [(613.92, 619.62)], None, 270, 1.0),        # "Aku set timer phone aku. 3, 2, 1"
-    ("ff", [(619.70, 645.70)], None, 270, 20.0),        # fast-forward through the 25 s (muted, sfx instead)
-    ("s5c", [(646.26, 647.08), (651.50, 653.96), (658.40, 660.60)], None, 270, 1.0),  # "Betul lah. 25 freaking second. Mitya tak main DPS pun dia berguna"
-    ("s6", [(770.38, 776.82), (781.90, 784.90)], None, 270, 1.0),  # Mitya's theater line -> "Kenapa aku pula yang tinggi suara ni?"
-    ("s7", [(874.44, 876.10)], 880.7, 270, 1.0),        # "Sedap lah pula Mitya ni" (burst cut-in)
+    ("s5b", [(613.92, 619.62)], None, 248, 1.0),        # "Aku set timer phone aku. 3, 2, 1"
+    ("ff", [(619.70, 645.70)], None, 248, 20.0),        # fast-forward through the 25 s (muted, sfx instead)
+    ("s5c", [(646.26, 647.08), (651.50, 653.96), (658.40, 660.60)], None, 248, 1.0),  # "Betul lah. 25 freaking second. Mitya tak main DPS pun dia berguna"
+    ("s6", [(770.38, 776.82), (781.90, 784.90)], None, 248, 1.0),  # Mitya's theater line (clean) -> "Kenapa aku pula yang tinggi suara ni?"
+    ("s7", [(871.40, 873.62), (874.44, 876.10), (879.30, 885.80, "raw")], None, 248, 1.0),  # "Sedap tak pula Mitya ni? Sedap lah pula" + burst grin + shocked face
     # FEEDBACK
-    ("e1", [(953.06, 955.50), (958.86, 960.32)], 925.6, 270, 1.0),  # "Memang elok sangat lah... Mitya Mitya Mitya"
-    ("e2", [(981.66, 984.42), (990.46, 994.88)], 931.6, 270, 1.0),  # "Satisfying feeling when you charge attack... zap zap zap gitu"
-    ("e3", [(970.58, 972.86), (975.28, 976.24)], 940.0, 270, 1.0),  # "20k like aku terpaksa pull. Memang sedap guys"
+    ("e1", [(953.06, 955.50), (958.86, 960.32)], 925.6, 248, 1.0),  # "Memang elok sangat lah... Mitya Mitya Mitya"
+    ("e2", [(981.66, 984.42), (990.46, 994.88)], 931.6, 248, 1.0),  # "Satisfying feeling when you charge attack... zap zap zap gitu"
+    ("e3", [(970.58, 972.86), (975.28, 976.95), (977.75, 979.95, "raw")], 940.0, 248, 1.0),  # "20k like aku terpaksa pull. Memang sedap guys... Gosh, sedap je" (hands on head)
 ]
 
 FIX = {"idea": "idle", "Ideal": "Idle", "Tuk": "Teruk", "Minja": "Mitya", "siang": "sia", "Betullah": "Betul lah", "Media": "Mitya",
@@ -158,7 +160,7 @@ def job(seg):
     k = len(keep)
     fc.append(f"{''.join(v + a for v, a in zip(vparts, aparts))}concat=n={k}:v=1:a=1[vc][ac]")
     fc.append(f"[vc]setpts=PTS/{sp},fps=60,split[vf][vg]")
-    fc.append(f"[vf]{FACE_CROP},scale=1080:760:flags=lanczos,unsharp=5:5:0.6[face]")
+    fc.append(f"[vf]{FACE_CROP},scale=1080:840:flags=lanczos,unsharp=5:5:0.5[face]")
     tempo = sp
     atf = []
     while tempo > 2.0:
@@ -168,12 +170,12 @@ def job(seg):
               f"loudnorm=I=-15:TP=-1.5:LRA=8,aresample=48000[aout]")
     inputs = ["-ss", f"{t0:.3f}", "-t", f"{span:.3f}", "-i", SRC]
     if gsrc is None:
-        fc.append(f"[vg]{GAME_CROP.format(x=gx)},scale=1080:1166:flags=lanczos,unsharp=5:5:0.7,crop=1080:1160:0:3[game]")
+        fc.append(f"[vg]{GAME_CROP.format(x=gx)},scale=1080:1080:flags=lanczos,unsharp=5:5:0.7[game]")
     else:
         inputs += ["-ss", f"{gsrc:.3f}", "-t", f"{dur + 0.5:.3f}", "-i", SRC]
         fc.append("[vg]nullsink")
         fc.append(f"[1:v]fps=60,trim=duration={dur:.3f},setpts=PTS-STARTPTS,{GAME_CROP.format(x=gx)},"
-                  f"scale=1080:1166:flags=lanczos,unsharp=5:5:0.7,crop=1080:1160:0:3[game]")
+                  f"scale=1080:1080:flags=lanczos,unsharp=5:5:0.7[game]")
     enc = ["-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart"]
     face_out = os.path.join(ROOT, "assets", "face", f"{sid}.mp4")
     game_out = os.path.join(ROOT, "assets", "game", f"{sid}.mp4")

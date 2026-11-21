@@ -23,14 +23,21 @@
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
 
       /* split layout: facecam 0-760, gameplay 760-1920 */
-      .facewrap { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; overflow: hidden; transform-origin: 50% 42%; }
-      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; object-fit: cover; }
-      .gamewrap { position: absolute; left: 0; top: 760px; width: 1080px; height: 1160px; overflow: hidden; transform-origin: 50% 40%; }
-      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 1160px; object-fit: cover; }
-      #seam { position: absolute; left: 0; top: 754px; width: 1080px; height: 12px; z-index: 60;
+      .facewrap { position: absolute; left: 0; top: 0; width: 1080px; height: 840px; overflow: hidden; transform-origin: 50% 40%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 840px; object-fit: cover; }
+      .gamewrap { position: absolute; left: 0; top: 840px; width: 1080px; height: 1080px; overflow: hidden; transform-origin: 50% 40%; }
+      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; object-fit: cover; }
+      #seam { position: absolute; left: 0; top: 834px; width: 1080px; height: 12px; z-index: 60;
         background: linear-gradient(90deg, var(--violet), var(--cyan) 50%, var(--violet)); box-shadow: 0 0 26px rgba(155,107,255,0.9); }
-      #shade { position: absolute; left: 0; top: 1500px; width: 1080px; height: 420px; z-index: 58; pointer-events: none;
+      #shade { position: absolute; left: 0; top: 1560px; width: 1080px; height: 420px; z-index: 58; pointer-events: none;
         background: linear-gradient(180deg, rgba(7,6,26,0) 0%, rgba(7,6,26,0.85) 28%, #07061a 50%); }
+      #fshade { position: absolute; left: 0; top: 600px; width: 1080px; height: 240px; z-index: 59; pointer-events: none;
+        background: radial-gradient(ellipse 420px 300px at 0% 100%, rgba(7,6,26,0.97) 0%, rgba(7,6,26,0.85) 45%, rgba(7,6,26,0) 100%), linear-gradient(180deg, rgba(7,6,26,0) 0%, rgba(7,6,26,0.45) 60%, rgba(7,6,26,0.7) 100%); }
+      /* Lisa card + fake moustache */
+      #lisa { position: absolute; left: 0; top: 840px; width: 1080px; height: 1080px; overflow: hidden; z-index: 57; }
+      #lisa-in { position: absolute; left: 0; top: -360px; width: 1080px; height: 1920px; transform-origin: 585px 716px; }
+      #lisa-img { position: absolute; inset: 0; background: url(assets/img/lisa.webp) 0 0 / 1080px 1920px no-repeat; }
+      #stache { position: absolute; left: 500px; top: 690px; width: 170px; height: 58px; transform-origin: 50% 40%; }
       #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
 
       /* HUD chip */
@@ -43,10 +50,10 @@
 
       /* hook */
       .hook { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 80; }
-      .hk-badge { position: absolute; left: 0; right: 0; top: 800px; text-align: center; }
+      .hk-badge { position: absolute; left: 0; right: 0; top: 1020px; text-align: center; }
       .hk-badge span { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.1em;
         color: #120a2e; background: var(--yellow); padding: 8px 26px; border-radius: 12px; }
-      .hk-big { position: absolute; left: 40px; right: 120px; top: 876px; text-align: center; font-family: var(--font-display);
+      .hk-big { position: absolute; left: 40px; right: 120px; top: 1096px; text-align: center; font-family: var(--font-display);
         font-size: 118px; line-height: 0.98; color: #fff; -webkit-text-stroke: 7px #000; paint-order: stroke fill;
         text-shadow: 0 10px 0 #000, 0 0 50px rgba(255,59,78,0.7); }
       .hk-big .r { color: var(--red); }
@@ -58,8 +65,8 @@
         display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 46px; color: #fff; }
       .chat .nm { font-family: var(--font-cap); font-weight: 900; font-size: 34px; color: #e8304a; }
       .chat .tx { font-family: var(--font-cap); font-weight: 800; font-size: 48px; color: #111; line-height: 1.1; }
-      #hk1-chat { position: absolute; left: 0; right: 0; top: 1150px; }
-      #hk3-card { position: absolute; left: 70px; right: 160px; top: 950px; text-align: center; }
+      #hk1-chat { position: absolute; left: 0; right: 0; top: 880px; }
+      #hk3-card { position: absolute; left: 70px; right: 160px; top: 1040px; text-align: center; }
       #hk3-in { display: inline-flex; align-items: center; gap: 26px; padding: 22px 40px 22px 22px; border-radius: 30px;
         background: linear-gradient(120deg, rgba(40,20,110,0.92), rgba(110,60,220,0.92)); border: 5px solid var(--yellow);
         box-shadow: 0 0 60px rgba(155,107,255,0.8); }
@@ -68,7 +75,7 @@
       #hk3-t small { display: block; font-size: 38px; color: var(--yellow); margin-top: 8px; }
 
       /* captions on the seam */
-      #captions { position: absolute; left: 0; top: 770px; width: 1080px; height: 200px; z-index: 82; }
+      #captions { position: absolute; left: 0; top: 852px; width: 1080px; height: 200px; z-index: 82; }
       .cap { position: absolute; left: 0; top: 0; width: 1080px; height: 200px; }
       .cap-in { position: absolute; left: 110px; right: 230px; top: 24px; text-align: center; transform-origin: 50% 50%; }
       .w { font-family: var(--font-cap); font-weight: 900; font-size: 92px; line-height: 1.04; color: #fff;
@@ -78,33 +85,36 @@
 
       /* stickers */
       .stk { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 78; pointer-events: none; }
-      .stk-in { position: absolute; left: 80px; right: 170px; top: 1010px; text-align: center; font-family: var(--font-display);
+      .stk-in { position: absolute; left: 80px; right: 170px; top: 1080px; text-align: center; font-family: var(--font-display);
         font-size: 120px; line-height: 0.95; -webkit-text-stroke: 7px #000; paint-order: stroke fill; text-shadow: 0 10px 0 #000; transform-origin: 50% 50%; }
       .stk-in small { display: block; font-size: 60px; color: #fff; margin-top: 6px; }
       .stk-in.red { color: var(--red); }
       .stk-in.violet { color: var(--violet-2); text-shadow: 0 10px 0 #000, 0 0 60px rgba(155,107,255,0.9); }
       .stk-in.gold { color: var(--yellow); }
       .stk-in.green { color: var(--green); font-size: 104px; }
-      .stk-in.num { top: 940px; font-size: 330px; color: var(--yellow); -webkit-text-stroke: 10px #000; }
-      .stk-in.emoji { top: 1040px; font-size: 130px; -webkit-text-stroke: 0; }
+      .stk-in.num { top: 1000px; font-size: 330px; color: var(--yellow); -webkit-text-stroke: 10px #000; }
+      .stk-in.emoji { top: 1110px; font-size: 130px; -webkit-text-stroke: 0; }
       .stk-in.zap { right: auto; width: 440px; font-size: 128px; color: var(--cyan); text-shadow: 0 8px 0 #000, 0 0 50px rgba(88,225,255,0.95); }
-      .stk-in.z1 { left: 40px; top: 1000px; }
-      .stk-in.z2 { left: 470px; top: 1080px; }
-      .stk-in.z3 { left: 80px; top: 1170px; }
-      .stk-in.z4 { left: 440px; top: 1220px; font-size: 140px; }
+      .stk-in.z1 { left: 40px; top: 1060px; }
+      .stk-in.z2 { left: 470px; top: 1130px; }
+      .stk-in.z3 { left: 80px; top: 1200px; }
+      .stk-in.z4 { left: 440px; top: 1240px; font-size: 140px; }
+      .stk-in.tag { top: 1010px; font-family: var(--font-label); font-weight: 700; font-size: 50px; letter-spacing: 0.06em; color: #120a2e; -webkit-text-stroke: 0; text-shadow: none; }
+      .stk-in.tag .pill { display: inline-block; background: var(--yellow); padding: 10px 30px; border-radius: 999px; border: 4px solid #120a2e; box-shadow: 0 8px 0 #120a2e; }
+      .stk-in.rx { left: 70px; right: auto; top: 700px; font-family: var(--font-display); font-size: 54px; color: #fff; -webkit-text-stroke: 4px #000; text-align: left; }
 
       /* galaxy-brain PIP */
-      #gal-wrap { position: absolute; left: 560px; top: 1010px; width: 470px; height: 265px; z-index: 77; transform-origin: 50% 50%; }
+      #gal-wrap { position: absolute; left: 470px; top: 1080px; width: 470px; height: 265px; z-index: 77; transform-origin: 50% 50%; }
       #galaxy { position: absolute; left: 0; top: 0; width: 470px; height: 265px; object-fit: cover; border-radius: 22px;
         border: 5px solid #fff; box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
 
       /* live-chat bubble */
       #chat2 { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
-      #chat2 .chat { top: 1010px; }
+      #chat2 .chat { top: 1090px; }
 
       /* quote card for Mitya's voice lines */
       .quote { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
-      .q-in { position: absolute; left: 110px; right: 230px; top: 880px; padding: 22px 28px 26px; border-radius: 30px; text-align: center;
+      .q-in { position: absolute; left: 110px; right: 230px; top: 1000px; padding: 22px 28px 26px; border-radius: 30px; text-align: center;
         background: rgba(14,10,40,0.82); border: 4px solid var(--violet-2); box-shadow: 0 0 50px rgba(155,107,255,0.55); }
       .q-who { display: inline-flex; align-items: center; gap: 14px; font-family: var(--font-label); font-weight: 700; font-size: 38px;
         letter-spacing: 0.14em; color: #120a2e; background: var(--yellow); padding: 6px 20px 6px 8px; border-radius: 999px; }
@@ -114,14 +124,14 @@
 
       /* verdict stamp */
       #verdict { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 81; }
-      #vd-in { position: absolute; left: 325px; top: 1000px; width: 430px; padding: 14px 10px; text-align: center; border-radius: 22px;
+      #vd-in { position: absolute; left: 325px; top: 1080px; width: 430px; padding: 14px 10px; text-align: center; border-radius: 22px;
         border: 8px solid var(--green); color: var(--green); background: rgba(6,30,16,0.75); font-family: var(--font-display);
         font-size: 66px; line-height: 1; transform-origin: 50% 50%; box-shadow: 0 0 40px rgba(61,220,132,0.6); }
       #vd-in small { display: block; font-family: var(--font-label); font-weight: 700; font-size: 46px; letter-spacing: 0.18em; color: #fff; margin-bottom: 6px; }
 
       /* CTA */
       #cta { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 80; }
-      #cta-in { position: absolute; left: 110px; right: 230px; top: 1050px; text-align: center; }
+      #cta-in { position: absolute; left: 110px; right: 230px; top: 1110px; text-align: center; }
       #cta-pill { display: inline-flex; align-items: center; gap: 18px; padding: 22px 40px; border-radius: 999px;
         background: linear-gradient(90deg, #ff2f6d, #ff6a3d); border: 5px solid #fff; box-shadow: 0 12px 0 #8a1036, 0 0 50px rgba(255,47,109,0.7); }
       #cta-pill span { font-family: var(--font-display); font-size: 40px; color: #fff; }
@@ -141,45 +151,52 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="63.763" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="80.182" data-width="1080" data-height="1920">
       <div class="facewrap" id="fw-h1" style="z-index:10"><video id="face-h1" class="clip face" src="assets/face/h1.mp4" data-start="0" data-duration="1.477" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
       <div class="gamewrap" id="gw-h1" style="z-index:10"><video id="game-h1" class="clip game" src="assets/game/h1.mp4" data-start="0" data-duration="1.477" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
       <div class="facewrap" id="fw-h2" style="z-index:11"><video id="face-h2" class="clip face" src="assets/face/h2.mp4" data-start="1.477" data-duration="1.131" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
       <div class="gamewrap" id="gw-h2" style="z-index:11"><video id="game-h2" class="clip game" src="assets/game/h2.mp4" data-start="1.477" data-duration="1.131" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.3,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
       <div class="facewrap" id="fw-h3" style="z-index:12"><video id="face-h3" class="clip face" src="assets/face/h3.mp4" data-start="2.608" data-duration="3.551" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
       <div class="gamewrap" id="gw-h3" style="z-index:12"><video id="game-h3" class="clip game" src="assets/game/h3.mp4" data-start="2.608" data-duration="3.551" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.18,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s1" style="z-index:13"><video id="face-s1" class="clip face" src="assets/face/s1.mp4" data-start="6.159" data-duration="2.916" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s1" style="z-index:13"><video id="game-s1" class="clip game" src="assets/game/s1.mp4" data-start="6.159" data-duration="2.916" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.18,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s2" style="z-index:14"><video id="face-s2" class="clip face" src="assets/face/s2.mp4" data-start="9.075" data-duration="6.318" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s2" style="z-index:14"><video id="game-s2" class="clip game" src="assets/game/s2.mp4" data-start="9.075" data-duration="6.318" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.18,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-sm" style="z-index:15"><video id="face-sm" class="clip face" src="assets/face/sm.mp4" data-start="15.393" data-duration="5.364" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-sm" style="z-index:15"><video id="game-sm" class="clip game" src="assets/game/sm.mp4" data-start="15.393" data-duration="5.364" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s3" style="z-index:16"><video id="face-s3" class="clip face" src="assets/face/s3.mp4" data-start="20.757" data-duration="4.617" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s3" style="z-index:16"><video id="game-s3" class="clip game" src="assets/game/s3.mp4" data-start="20.757" data-duration="4.617" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s4" style="z-index:17"><video id="face-s4" class="clip face" src="assets/face/s4.mp4" data-start="25.374" data-duration="4.243" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s4" style="z-index:17"><video id="game-s4" class="clip game" src="assets/game/s4.mp4" data-start="25.374" data-duration="4.243" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s5a" style="z-index:18"><video id="face-s5a" class="clip face" src="assets/face/s5a.mp4" data-start="29.617" data-duration="1.486" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s5a" style="z-index:18"><video id="game-s5a" class="clip game" src="assets/game/s5a.mp4" data-start="29.617" data-duration="1.486" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.22,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s5b" style="z-index:19"><video id="face-s5b" class="clip face" src="assets/face/s5b.mp4" data-start="31.103" data-duration="4.243" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s5b" style="z-index:19"><video id="game-s5b" class="clip game" src="assets/game/s5b.mp4" data-start="31.103" data-duration="4.243" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-ff" style="z-index:20"><video id="face-ff" class="clip face" src="assets/face/ff.mp4" data-start="35.346" data-duration="1.3" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-ff" style="z-index:20"><video id="game-ff" class="clip game" src="assets/game/ff.mp4" data-start="35.346" data-duration="1.3" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s5c" style="z-index:21"><video id="face-s5c" class="clip face" src="assets/face/s5c.mp4" data-start="36.646" data-duration="3.43" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s5c" style="z-index:21"><video id="game-s5c" class="clip game" src="assets/game/s5c.mp4" data-start="36.646" data-duration="3.43" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s6" style="z-index:22"><video id="face-s6" class="clip face" src="assets/face/s6.mp4" data-start="40.076" data-duration="7.15" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s6" style="z-index:22"><video id="game-s6" class="clip game" src="assets/game/s6.mp4" data-start="40.076" data-duration="7.15" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-s7" style="z-index:23"><video id="face-s7" class="clip face" src="assets/face/s7.mp4" data-start="47.226" data-duration="1.308" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-s7" style="z-index:23"><video id="game-s7" class="clip game" src="assets/game/s7.mp4" data-start="47.226" data-duration="1.308" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-e1" style="z-index:24"><video id="face-e1" class="clip face" src="assets/face/e1.mp4" data-start="48.534" data-duration="3.645" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-e1" style="z-index:24"><video id="game-e1" class="clip game" src="assets/game/e1.mp4" data-start="48.534" data-duration="3.645" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-e2" style="z-index:25"><video id="face-e2" class="clip face" src="assets/face/e2.mp4" data-start="52.179" data-duration="6.336" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-e2" style="z-index:25"><video id="game-e2" class="clip game" src="assets/game/e2.mp4" data-start="52.179" data-duration="6.336" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
-      <div class="facewrap" id="fw-e3" style="z-index:26"><video id="face-e3" class="clip face" src="assets/face/e3.mp4" data-start="58.515" data-duration="2.748" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
-      <div class="gamewrap" id="gw-e3" style="z-index:26"><video id="game-e3" class="clip game" src="assets/game/e3.mp4" data-start="58.515" data-duration="2.748" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s2" style="z-index:13"><video id="face-s2" class="clip face" src="assets/face/s2.mp4" data-start="6.159" data-duration="6.318" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s2" style="z-index:13"><video id="game-s2" class="clip game" src="assets/game/s2.mp4" data-start="6.159" data-duration="6.318" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-i0" style="z-index:14"><video id="face-i0" class="clip face" src="assets/face/i0.mp4" data-start="12.477" data-duration="1.813" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-i0" style="z-index:14"><video id="game-i0" class="clip game" src="assets/game/i0.mp4" data-start="12.477" data-duration="1.813" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-i1" style="z-index:15"><video id="face-i1" class="clip face" src="assets/face/i1.mp4" data-start="14.29" data-duration="4.673" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-i1" style="z-index:15"><video id="game-i1" class="clip game" src="assets/game/i1.mp4" data-start="14.29" data-duration="4.673" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-i2" style="z-index:16"><video id="face-i2" class="clip face" src="assets/face/i2.mp4" data-start="18.963" data-duration="3.634" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-i2" style="z-index:16"><video id="game-i2" class="clip game" src="assets/game/i2.mp4" data-start="18.963" data-duration="3.634" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-i3" style="z-index:17"><video id="face-i3" class="clip face" src="assets/face/i3.mp4" data-start="22.597" data-duration="2.832" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-i3" style="z-index:17"><video id="game-i3" class="clip game" src="assets/game/i3.mp4" data-start="22.597" data-duration="2.832" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-sk" style="z-index:18"><video id="face-sk" class="clip face" src="assets/face/sk.mp4" data-start="25.429" data-duration="5.495" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-sk" style="z-index:18"><video id="game-sk" class="clip game" src="assets/game/sk.mp4" data-start="25.429" data-duration="5.495" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s4" style="z-index:19"><video id="face-s4" class="clip face" src="assets/face/s4.mp4" data-start="30.924" data-duration="4.243" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s4" style="z-index:19"><video id="game-s4" class="clip game" src="assets/game/s4.mp4" data-start="30.924" data-duration="4.243" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s5a" style="z-index:20"><video id="face-s5a" class="clip face" src="assets/face/s5a.mp4" data-start="35.167" data-duration="1.486" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s5a" style="z-index:20"><video id="game-s5a" class="clip game" src="assets/game/s5a.mp4" data-start="35.167" data-duration="1.486" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.22,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s5b" style="z-index:21"><video id="face-s5b" class="clip face" src="assets/face/s5b.mp4" data-start="36.653" data-duration="4.243" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s5b" style="z-index:21"><video id="game-s5b" class="clip game" src="assets/game/s5b.mp4" data-start="36.653" data-duration="4.243" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-ff" style="z-index:22"><video id="face-ff" class="clip face" src="assets/face/ff.mp4" data-start="40.896" data-duration="1.3" data-track-index="1" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-ff" style="z-index:22"><video id="game-ff" class="clip game" src="assets/game/ff.mp4" data-start="40.896" data-duration="1.3" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s5c" style="z-index:23"><video id="face-s5c" class="clip face" src="assets/face/s5c.mp4" data-start="42.196" data-duration="3.43" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s5c" style="z-index:23"><video id="game-s5c" class="clip game" src="assets/game/s5c.mp4" data-start="42.196" data-duration="3.43" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s6" style="z-index:24"><video id="face-s6" class="clip face" src="assets/face/s6.mp4" data-start="45.626" data-duration="7.15" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s6" style="z-index:24"><video id="game-s6" class="clip game" src="assets/game/s6.mp4" data-start="45.626" data-duration="7.15" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-s7" style="z-index:25"><video id="face-s7" class="clip face" src="assets/face/s7.mp4" data-start="52.776" data-duration="9.458" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-s7" style="z-index:25"><video id="game-s7" class="clip game" src="assets/game/s7.mp4" data-start="52.776" data-duration="9.458" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.18,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-e1" style="z-index:26"><video id="face-e1" class="clip face" src="assets/face/e1.mp4" data-start="62.234" data-duration="3.645" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-e1" style="z-index:26"><video id="game-e1" class="clip game" src="assets/game/e1.mp4" data-start="62.234" data-duration="3.645" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:-0.02,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.2,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-e2" style="z-index:27"><video id="face-e2" class="clip face" src="assets/face/e2.mp4" data-start="65.879" data-duration="6.336" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-e2" style="z-index:27"><video id="game-e2" class="clip game" src="assets/game/e2.mp4" data-start="65.879" data-duration="6.336" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div class="facewrap" id="fw-e3" style="z-index:28"><video id="face-e3" class="clip face" src="assets/face/e3.mp4" data-start="72.215" data-duration="5.467" data-track-index="1" data-has-audio="true" data-volume="1" playsinline data-color-grading="{&quot;preset&quot;:&quot;skin-soft&quot;,&quot;intensity&quot;:0.62,&quot;adjust&quot;:{&quot;exposure&quot;:0.06,&quot;contrast&quot;:0.08,&quot;highlights&quot;:-0.1,&quot;shadows&quot;:0.1,&quot;temperature&quot;:0.05,&quot;tint&quot;:-0.03,&quot;vibrance&quot;:0.04,&quot;saturation&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.05}}"></video></div>
+      <div class="gamewrap" id="gw-e3" style="z-index:28"><video id="game-e3" class="clip game" src="assets/game/e3.mp4" data-start="72.215" data-duration="5.467" data-track-index="2" muted playsinline data-color-grading="{&quot;preset&quot;:&quot;deep-contrast&quot;,&quot;intensity&quot;:0.5,&quot;adjust&quot;:{&quot;exposure&quot;:0.05,&quot;contrast&quot;:0.1,&quot;highlights&quot;:-0.12,&quot;shadows&quot;:0.12,&quot;vibrance&quot;:0.2,&quot;temperature&quot;:0.02},&quot;details&quot;:{&quot;vignette&quot;:0.12},&quot;effects&quot;:{&quot;bloom&quot;:0.18}}"></video></div>
+      <div id="fshade"></div>
       <div id="seam"></div>
+      <div id="lisa" class="clip" data-start="31.774" data-duration="3.393" data-track-index="5"><div id="lisa-in"><div id="lisa-img"></div>
+        <svg id="stache" viewBox="0 0 170 58"><path d="M85 14 C 70 2, 46 4, 34 18 C 24 30, 12 34, 2 28 C 6 44, 26 54, 46 46 C 60 40, 74 30, 85 26 C 96 30, 110 40, 124 46 C 144 54, 164 44, 168 28 C 158 34, 146 30, 136 18 C 124 4, 100 2, 85 14 Z" fill="#2a170c" stroke="#0e0703" stroke-width="3"/></svg></div></div>
       <div id="shade"></div>
 
-      <div id="hud" class="clip" data-start="6.159" data-duration="55.104" data-track-index="4">
+      <div id="hud" class="clip" data-start="6.159" data-duration="71.523" data-track-index="4">
         <div id="hud-in"><div id="hud-av"></div><div id="hud-t">TEST RUN <b>MITYA</b> · FIRST TIME</div></div>
       </div>
 
@@ -196,43 +213,47 @@
         <div id="hk3-card"><div id="hk3-in"><div id="hk3-av"></div><div id="hk3-t">WORTH IT<br />KE TAK? 🤔<small>AKU YANG DECIDE</small></div></div></div>
       </div>
 
-      <div id="gal-wrap"><video id="galaxy" class="clip" src="assets/vfx/galaxy.mp4" data-start="11.055" data-duration="2.62" data-track-index="5" muted playsinline></video></div>
+      <div id="gal-wrap"><video id="galaxy" class="clip" src="assets/vfx/galaxy.mp4" data-start="8.139" data-duration="2.62" data-track-index="5" muted playsinline></video></div>
 
-      <div id="chat2" class="clip" data-start="20.757" data-duration="1.9" data-track-index="5">
-        <div class="chat" id="chat2-bubble"><div class="av">💬</div><div><div class="nm">Live chat</div><div class="tx">Bang buat apa ni?</div></div></div>
+      <div id="chat2" class="clip" data-start="22.597" data-duration="2.832" data-track-index="5">
+        <div class="chat" id="chat2-bubble"><div class="av">💬</div><div><div class="nm">Live chat</div><div class="tx">Sis suka Mitya selalu gaduh dengan Scarf dia 🤣</div></div></div>
       </div>
 
-      <div id="q1" class="clip quote" data-start="17.193" data-duration="3.564" data-track-index="5">
-        <div class="q-in" id="q1-in"><div class="q-who"><i></i>MITYA</div>
-          <div class="q-en">“I'd love to tell you some funny stories from work, but Scarf won't let me.”</div>
-          <div class="q-bm">Aku nak cerita kisah lawak kat tempat kerja… tapi Scarf tak bagi 😭</div></div>
-      </div>
-      <div id="q2" class="clip quote" data-start="40.076" data-duration="4.95" data-track-index="5">
+      <div id="q2" class="clip quote" data-start="45.626" data-duration="4.95" data-track-index="5">
         <div class="q-in" id="q2-in"><div class="q-who"><i></i>MITYA</div>
           <div class="q-en">“Did you see the show at the theater yesterday? It was pretty good. It'd be even better if I could remember what it was about.”</div>
           <div class="q-bm">Show teater semalam best… kalau aku ingat cerita dia pasal apa 🤡</div></div>
       </div>
 
-      <div id="st-salah" class="clip stk red" data-start="14.345" data-duration="1.05" data-track-index="6"><div class="stk-in red tilt-l">SALAH SEBUT 💀</div></div>
-      <div id="st-lisa" class="clip stk violet" data-start="28.274" data-duration="1.343" data-track-index="6"><div class="stk-in violet tilt-r">LISA<br><small>VERSI LELAKI 💜</small></div></div>
-      <div id="st-25" class="clip stk gold" data-start="29.917" data-duration="1.186" data-track-index="6"><div class="stk-in gold tilt-l">25 SAAT?!</div></div>
-      <div id="st-3" class="clip stk num" data-start="33.823" data-duration="0.48" data-track-index="6"><div class="stk-in num">3</div></div>
-      <div id="st-2" class="clip stk num" data-start="34.303" data-duration="0.35" data-track-index="6"><div class="stk-in num">2</div></div>
-      <div id="st-1" class="clip stk num" data-start="34.653" data-duration="0.693" data-track-index="6"><div class="stk-in num">1</div></div>
-      <div id="st-ok" class="clip stk green" data-start="37.006" data-duration="1.59" data-track-index="6"><div class="stk-in green tilt-r">✅ 25 SAAT<br><small>CONFIRMED</small></div></div>
-      <div id="st-berguna" class="clip stk gold" data-start="39.506" data-duration="0.67" data-track-index="6"><div class="stk-in gold tilt-l">BERGUNA!</div></div>
-      <div id="st-tinggi" class="clip stk emoji" data-start="45.676" data-duration="1.55" data-track-index="6"><div class="stk-in emoji">😂😂😂</div></div>
-      <div id="st-sedap" class="clip stk gold" data-start="47.526" data-duration="1.008" data-track-index="6"><div class="stk-in gold tilt-r">SEDAP 🤤</div></div>
-      <div id="st-z1" class="clip stk zap" data-start="56.739" data-duration="1.24" data-track-index="6"><div class="stk-in zap z1">ZAP!</div></div>
-      <div id="st-z2" class="clip stk zap" data-start="57.059" data-duration="0.92" data-track-index="6"><div class="stk-in zap z2">ZAP!</div></div>
-      <div id="st-z3" class="clip stk zap" data-start="57.359" data-duration="0.62" data-track-index="6"><div class="stk-in zap z3">ZAP!</div></div>
-      <div id="st-z4" class="clip stk zap" data-start="57.659" data-duration="0.47" data-track-index="6"><div class="stk-in zap z4">ZAP!</div></div>
+      <div id="st-salah" class="clip stk red" data-start="11.429" data-duration="1.05" data-track-index="6"><div class="stk-in red tilt-l">SALAH SEBUT 💀</div></div>
+      <div id="st-idle1" class="clip stk tag" data-start="14.34" data-duration="4.623" data-track-index="6"><div class="stk-in tag"><span class="pill">IDLE ANIMATION #1 ✨</span></div></div>
+      <div id="st-idle2" class="clip stk tag" data-start="19.013" data-duration="3.584" data-track-index="6"><div class="stk-in tag"><span class="pill">IDLE ANIMATION #2 👋</span></div></div>
+      <div id="st-rx1" class="clip stk rx" data-start="14.59" data-duration="4.373" data-track-index="6"><div class="stk-in rx">REAKSI AKU 😂</div></div>
+      <div id="st-rx2" class="clip stk rx" data-start="19.163" data-duration="3.434" data-track-index="6"><div class="stk-in rx">🤔🤔</div></div>
+      <div id="st-awesome" class="clip stk gold" data-start="26.789" data-duration="1.64" data-track-index="6"><div class="stk-in gold tilt-r">AWESOME! 🔥</div></div>
+      <div id="st-rx3" class="clip stk rx" data-start="25.529" data-duration="5.395" data-track-index="6"><div class="stk-in rx">😂😂😂</div></div>
+      <div id="st-25" class="clip stk gold" data-start="35.467" data-duration="1.186" data-track-index="6"><div class="stk-in gold tilt-l">25 SAAT?!</div></div>
+      <div id="st-3" class="clip stk num" data-start="39.373" data-duration="0.48" data-track-index="6"><div class="stk-in num">3</div></div>
+      <div id="st-2" class="clip stk num" data-start="39.853" data-duration="0.35" data-track-index="6"><div class="stk-in num">2</div></div>
+      <div id="st-1" class="clip stk num" data-start="40.203" data-duration="0.693" data-track-index="6"><div class="stk-in num">1</div></div>
+      <div id="st-ok" class="clip stk green" data-start="42.556" data-duration="1.59" data-track-index="6"><div class="stk-in green tilt-r">✅ 25 SAAT<br><small>CONFIRMED</small></div></div>
+      <div id="st-berguna" class="clip stk gold" data-start="45.056" data-duration="0.67" data-track-index="6"><div class="stk-in gold tilt-l">BERGUNA!</div></div>
+      <div id="st-tinggi" class="clip stk emoji" data-start="51.226" data-duration="1.55" data-track-index="6"><div class="stk-in emoji">😂😂😂</div></div>
+      <div id="st-sedap" class="clip stk gold" data-start="54.836" data-duration="1.34" data-track-index="6"><div class="stk-in gold tilt-r">SEDAP 🤤</div></div>
+      <div id="st-burst" class="clip stk violet" data-start="56.726" data-duration="2.95" data-track-index="6"><div class="stk-in violet tilt-l">BURST MITYA 💥</div></div>
+      <div id="st-rx4" class="clip stk rx" data-start="56.726" data-duration="3.75" data-track-index="6"><div class="stk-in rx">😍</div></div>
+      <div id="st-rx5" class="clip stk rx" data-start="60.476" data-duration="1.758" data-track-index="6"><div class="stk-in rx">😱 WAIT WHAT</div></div>
+      <div id="st-z1" class="clip stk zap" data-start="70.439" data-duration="1.24" data-track-index="6"><div class="stk-in zap z1">ZAP!</div></div>
+      <div id="st-z2" class="clip stk zap" data-start="70.759" data-duration="0.92" data-track-index="6"><div class="stk-in zap z2">ZAP!</div></div>
+      <div id="st-z3" class="clip stk zap" data-start="71.059" data-duration="0.62" data-track-index="6"><div class="stk-in zap z3">ZAP!</div></div>
+      <div id="st-z4" class="clip stk zap" data-start="71.359" data-duration="0.47" data-track-index="6"><div class="stk-in zap z4">ZAP!</div></div>
+      <div id="st-rx6" class="clip stk rx" data-start="75.815" data-duration="1.867" data-track-index="6"><div class="stk-in rx">🤯🤯</div></div>
 
-      <div id="verdict" class="clip" data-start="50.114" data-duration="1.7" data-track-index="6">
+      <div id="verdict" class="clip" data-start="63.814" data-duration="1.7" data-track-index="6">
         <div id="vd-in"><small>VERDICT</small>WORTH IT ✅</div>
       </div>
 
-      <div id="cta" class="clip" data-start="58.515" data-duration="2.748" data-track-index="6">
+      <div id="cta" class="clip" data-start="72.215" data-duration="5.467" data-track-index="6">
         <div id="cta-in"><div id="cta-pill"><div id="cta-heart">❤️</div><span>20K LIKE = AKU PULL</span></div></div>
       </div>
 
@@ -241,54 +262,59 @@
         <div id="cap-1" class="clip cap" data-start="3.968" data-duration="0.71"><div class="cap-in"><span class="w">WHO</span><span class="w k">DECIDES</span></div></div>
         <div id="cap-2" class="clip cap" data-start="4.678" data-duration="0.91"><div class="cap-in"><span class="w">HE</span><span class="w">IS</span><span class="w k">WORTHY</span></div></div>
         <div id="cap-3" class="clip cap" data-start="5.588" data-duration="0.57"><div class="cap-in"><span class="w">OR</span><span class="w">NOT</span></div></div>
-        <div id="cap-4" class="clip cap" data-start="6.209" data-duration="0.81"><div class="cap-in"><span class="w">AKU</span><span class="w">DAH</span><span class="w">DENGAR</span></div></div>
-        <div id="cap-5" class="clip cap" data-start="7.019" data-duration="1.09"><div class="cap-in"><span class="w">TAPI</span><span class="w">APA?</span></div></div>
-        <div id="cap-6" class="clip cap" data-start="8.109" data-duration="0.67"><div class="cap-in"><span class="w k">TERUK</span><span class="w">SANGAT</span><span class="w">KE?</span></div></div>
-        <div id="cap-7" class="clip cap" data-start="8.779" data-duration="0.296"><div class="cap-in"><span class="w k">BUG</span><span class="w">TU.</span></div></div>
-        <div id="cap-8" class="clip cap" data-start="9.125" data-duration="1.16"><div class="cap-in"><span class="w">DIA</span><span class="w">TAK</span><span class="w k">NERF</span><span class="w">DAMAGE</span></div></div>
-        <div id="cap-9" class="clip cap" data-start="10.285" data-duration="0.77"><div class="cap-in"><span class="w">TAPI</span><span class="w">DIA</span><span class="w">ADA</span><span class="w k">BUG</span></div></div>
-        <div id="cap-10" class="clip cap" data-start="11.055" data-duration="0.8"><div class="cap-in"><span class="w">THERE&#x27;S</span><span class="w">A</span><span class="w">DIFFERENCE</span></div></div>
-        <div id="cap-11" class="clip cap" data-start="11.855" data-duration="0.38"><div class="cap-in"><span class="w">BETWEEN</span></div></div>
-        <div id="cap-12" class="clip cap" data-start="12.235" data-duration="0.74"><div class="cap-in"><span class="w k">DAMAGE</span><span class="w">NERF</span></div></div>
-        <div id="cap-13" class="clip cap" data-start="12.975" data-duration="1.37"><div class="cap-in"><span class="w">OR</span><span class="w k">GAMEPLAY</span><span class="w">NERF</span></div></div>
-        <div id="cap-14" class="clip cap" data-start="14.345" data-duration="0.27"><div class="cap-in"><span class="w">EH</span><span class="w">SORRY</span></div></div>
-        <div id="cap-15" class="clip cap" data-start="14.615" data-duration="0.778"><div class="cap-in"><span class="w">GAMEPLAY</span><span class="w k">BUG</span></div></div>
-        <div id="cap-16" class="clip cap" data-start="15.443" data-duration="0.81"><div class="cap-in"><span class="w">NOT</span><span class="w">BAD</span></div></div>
-        <div id="cap-17" class="clip cap" data-start="16.253" data-duration="0.94"><div class="cap-in"><span class="w">NOT</span><span class="w">BAD</span><span class="w k">IDLE</span><span class="w">DIA</span></div></div>
-        <div id="cap-18" class="clip cap" data-start="21.887" data-duration="0.87"><div class="cap-in"><span class="w">AKU</span><span class="w">BUAT</span><span class="w">APA</span><span class="w">NI?</span></div></div>
-        <div id="cap-19" class="clip cap" data-start="22.757" data-duration="1.12"><div class="cap-in"><span class="w">AKU</span><span class="w">TENGAH</span><span class="w k">TEST</span><span class="w">RUN</span></div></div>
-        <div id="cap-20" class="clip cap" data-start="23.877" data-duration="0.38"><div class="cap-in"><span class="w k">MITYA</span></div></div>
-        <div id="cap-21" class="clip cap" data-start="24.257" data-duration="0.6"><div class="cap-in"><span class="w">FOR</span><span class="w">THE</span><span class="w k">FIRST</span><span class="w">TIME</span></div></div>
-        <div id="cap-22" class="clip cap" data-start="24.857" data-duration="0.517"><div class="cap-in"><span class="w">IN</span><span class="w">LIFETIME!</span></div></div>
-        <div id="cap-23" class="clip cap" data-start="25.424" data-duration="1.43"><div class="cap-in"><span class="w">DIA</span><span class="w">MACAM</span><span class="w k">LISA</span></div></div>
-        <div id="cap-24" class="clip cap" data-start="26.854" data-duration="0.82"><div class="cap-in"><span class="w">BETUL,</span><span class="w">SERIUS</span><span class="w">NI</span></div></div>
-        <div id="cap-25" class="clip cap" data-start="27.674" data-duration="1.08"><div class="cap-in"><span class="w">DIA</span><span class="w">VERSION</span><span class="w k">LISA</span></div></div>
-        <div id="cap-26" class="clip cap" data-start="28.754" data-duration="0.86"><div class="cap-in"><span class="w">TAPI</span><span class="w k">BOY!</span></div></div>
-        <div id="cap-27" class="clip cap" data-start="29.637" data-duration="1.03"><div class="cap-in"><span class="w k">25</span><span class="w">SECOND?</span></div></div>
-        <div id="cap-28" class="clip cap" data-start="30.667" data-duration="0.436"><div class="cap-in"><span class="w">SERIUS</span><span class="w">LAH?!</span></div></div>
-        <div id="cap-29" class="clip cap" data-start="31.143" data-duration="1.84"><div class="cap-in"><span class="w">OKAY,</span><span class="w">AKU</span><span class="w">SET</span><span class="w k">TIMER</span></div></div>
-        <div id="cap-30" class="clip cap" data-start="32.983" data-duration="0.82"><div class="cap-in"><span class="w">PHONE</span><span class="w">AKU</span></div></div>
-        <div id="cap-31" class="clip cap" data-start="36.666" data-duration="0.34"><div class="cap-in"><span class="w">BETUL</span><span class="w">LAH!</span></div></div>
-        <div id="cap-32" class="clip cap" data-start="37.006" data-duration="1.59"><div class="cap-in"><span class="w k">25</span><span class="w">FREAKING</span><span class="w">SECOND!</span></div></div>
-        <div id="cap-33" class="clip cap" data-start="38.596" data-duration="0.91"><div class="cap-in"><span class="w">MITYA</span><span class="w">TAK</span><span class="w">MAIN</span><span class="w k">DPS</span><span class="w">PUN</span></div></div>
-        <div id="cap-34" class="clip cap" data-start="39.506" data-duration="0.57"><div class="cap-in"><span class="w">DIA</span><span class="w k">BERGUNA!</span></div></div>
-        <div id="cap-35" class="clip cap" data-start="45.056" data-duration="0.62"><div class="cap-in"><span class="w">KENAPA</span><span class="w">AKU</span><span class="w">PULA</span></div></div>
-        <div id="cap-36" class="clip cap" data-start="45.676" data-duration="1.55"><div class="cap-in"><span class="w">YANG</span><span class="w k">TINGGI</span><span class="w">SUARA</span><span class="w">NI?</span></div></div>
-        <div id="cap-37" class="clip cap" data-start="47.266" data-duration="0.56"><div class="cap-in"><span class="w k">SEDAP</span><span class="w">LAH</span><span class="w">PULA</span></div></div>
-        <div id="cap-38" class="clip cap" data-start="47.826" data-duration="0.708"><div class="cap-in"><span class="w k">MITYA</span><span class="w">NI</span></div></div>
-        <div id="cap-39" class="clip cap" data-start="48.584" data-duration="1.53"><div class="cap-in"><span class="w">MEMANG</span><span class="w k">ELOK</span></div></div>
-        <div id="cap-40" class="clip cap" data-start="50.114" data-duration="1.04"><div class="cap-in"><span class="w k">SANGAT</span><span class="w">LAH!</span></div></div>
-        <div id="cap-41" class="clip cap" data-start="51.154" data-duration="1.025"><div class="cap-in"><span class="w">MITYA</span><span class="w">MITYA</span><span class="w k">MITYA!</span></div></div>
-        <div id="cap-42" class="clip cap" data-start="52.229" data-duration="1.17"><div class="cap-in"><span class="w k">SATISFYING</span><span class="w">FEELING</span></div></div>
-        <div id="cap-43" class="clip cap" data-start="53.399" data-duration="1.38"><div class="cap-in"><span class="w">WHEN</span><span class="w">YOU</span><span class="w k">CHARGE</span><span class="w">ATTACK</span></div></div>
-        <div id="cap-44" class="clip cap" data-start="54.779" data-duration="1.9"><div class="cap-in"><span class="w">TAPI</span><span class="w">MEMANG</span><span class="w k">DAMAGE</span><span class="w">DIA</span></div></div>
-        <div id="cap-45" class="clip cap" data-start="57.979" data-duration="0.536"><div class="cap-in"><span class="w">GITU.</span></div></div>
-        <div id="cap-46" class="clip cap" data-start="58.535" data-duration="0.7"><div class="cap-in"><span class="w k">20K</span><span class="w">LIKE,</span></div></div>
-        <div id="cap-47" class="clip cap" data-start="59.235" data-duration="0.98"><div class="cap-in"><span class="w">AKU</span><span class="w">TERPAKSA</span><span class="w k">PULL!</span></div></div>
-        <div id="cap-48" class="clip cap" data-start="60.215" data-duration="1.048"><div class="cap-in"><span class="w">MEMANG</span><span class="w k">SEDAP</span><span class="w">GUYS</span></div></div>
+        <div id="cap-4" class="clip cap" data-start="6.209" data-duration="1.16"><div class="cap-in"><span class="w">DIA</span><span class="w">TAK</span><span class="w k">NERF</span><span class="w">DAMAGE</span></div></div>
+        <div id="cap-5" class="clip cap" data-start="7.369" data-duration="0.77"><div class="cap-in"><span class="w">TAPI</span><span class="w">DIA</span><span class="w">ADA</span><span class="w k">BUG</span></div></div>
+        <div id="cap-6" class="clip cap" data-start="8.139" data-duration="0.8"><div class="cap-in"><span class="w">THERE&#x27;S</span><span class="w">A</span><span class="w">DIFFERENCE</span></div></div>
+        <div id="cap-7" class="clip cap" data-start="8.939" data-duration="0.38"><div class="cap-in"><span class="w">BETWEEN</span></div></div>
+        <div id="cap-8" class="clip cap" data-start="9.319" data-duration="0.74"><div class="cap-in"><span class="w k">DAMAGE</span><span class="w">NERF</span></div></div>
+        <div id="cap-9" class="clip cap" data-start="10.059" data-duration="1.37"><div class="cap-in"><span class="w">OR</span><span class="w k">GAMEPLAY</span><span class="w">NERF</span></div></div>
+        <div id="cap-10" class="clip cap" data-start="11.429" data-duration="0.27"><div class="cap-in"><span class="w">EH</span><span class="w">SORRY</span></div></div>
+        <div id="cap-11" class="clip cap" data-start="11.699" data-duration="0.778"><div class="cap-in"><span class="w">GAMEPLAY</span><span class="w k">BUG</span></div></div>
+        <div id="cap-12" class="clip cap" data-start="12.527" data-duration="1.2"><div class="cap-in"><span class="w">NOT</span><span class="w">BAD,</span></div></div>
+        <div id="cap-13" class="clip cap" data-start="13.727" data-duration="0.56"><div class="cap-in"><span class="w">NOT</span><span class="w">BAD</span><span class="w">👌</span></div></div>
+        <div id="cap-14" class="clip cap" data-start="17.49" data-duration="1.47"><div class="cap-in"><span class="w">INI</span><span class="w k">IDLE</span><span class="w">SATU</span><span class="w">EH</span></div></div>
+        <div id="cap-15" class="clip cap" data-start="22.617" data-duration="1.4"><div class="cap-in"><span class="w">SIS</span><span class="w">SUKA</span><span class="w k">MITYA</span></div></div>
+        <div id="cap-16" class="clip cap" data-start="24.017" data-duration="0.72"><div class="cap-in"><span class="w">SELALU</span><span class="w k">GADUH</span></div></div>
+        <div id="cap-17" class="clip cap" data-start="24.737" data-duration="0.69"><div class="cap-in"><span class="w">DENGAN</span><span class="w k">SCARF</span><span class="w">DIA</span></div></div>
+        <div id="cap-18" class="clip cap" data-start="25.429" data-duration="1.12"><div class="cap-in"><span class="w">EH,</span><span class="w">DIA</span><span class="w">MAIN!</span></div></div>
+        <div id="cap-19" class="clip cap" data-start="26.549" data-duration="1.26"><div class="cap-in"><span class="w">DIA</span><span class="w">MAIN</span><span class="w k">AWESOME</span><span class="w">EH</span></div></div>
+        <div id="cap-20" class="clip cap" data-start="27.809" data-duration="0.67"><div class="cap-in"><span class="w">DENGAN</span><span class="w k">SCARF</span><span class="w">DIA</span></div></div>
+        <div id="cap-21" class="clip cap" data-start="28.479" data-duration="0.95"><div class="cap-in"><span class="w">ALRIGHT,</span><span class="w k">AWESOME</span></div></div>
+        <div id="cap-22" class="clip cap" data-start="29.429" data-duration="1.49"><div class="cap-in"><span class="w">OKAY,</span><span class="w">NICE,</span><span class="w">NICE!</span></div></div>
+        <div id="cap-23" class="clip cap" data-start="30.974" data-duration="1.43"><div class="cap-in"><span class="w">DIA</span><span class="w">MACAM</span><span class="w k">LISA</span></div></div>
+        <div id="cap-24" class="clip cap" data-start="32.404" data-duration="0.82"><div class="cap-in"><span class="w">BETUL,</span><span class="w">SERIUS</span><span class="w">NI</span></div></div>
+        <div id="cap-25" class="clip cap" data-start="33.224" data-duration="1.08"><div class="cap-in"><span class="w">DIA</span><span class="w">VERSION</span><span class="w k">LISA</span></div></div>
+        <div id="cap-26" class="clip cap" data-start="34.304" data-duration="0.86"><div class="cap-in"><span class="w">TAPI</span><span class="w k">BOY!</span></div></div>
+        <div id="cap-27" class="clip cap" data-start="35.187" data-duration="1.03"><div class="cap-in"><span class="w k">25</span><span class="w">SECOND?</span></div></div>
+        <div id="cap-28" class="clip cap" data-start="36.217" data-duration="0.436"><div class="cap-in"><span class="w">SERIUS</span><span class="w">LAH?!</span></div></div>
+        <div id="cap-29" class="clip cap" data-start="36.693" data-duration="1.84"><div class="cap-in"><span class="w">OKAY,</span><span class="w">AKU</span><span class="w">SET</span><span class="w k">TIMER</span></div></div>
+        <div id="cap-30" class="clip cap" data-start="38.533" data-duration="0.82"><div class="cap-in"><span class="w">PHONE</span><span class="w">AKU</span></div></div>
+        <div id="cap-31" class="clip cap" data-start="42.216" data-duration="0.34"><div class="cap-in"><span class="w">BETUL</span><span class="w">LAH!</span></div></div>
+        <div id="cap-32" class="clip cap" data-start="42.556" data-duration="1.59"><div class="cap-in"><span class="w k">25</span><span class="w">FREAKING</span><span class="w">SECOND!</span></div></div>
+        <div id="cap-33" class="clip cap" data-start="44.146" data-duration="0.91"><div class="cap-in"><span class="w">MITYA</span><span class="w">TAK</span><span class="w">MAIN</span><span class="w k">DPS</span><span class="w">PUN</span></div></div>
+        <div id="cap-34" class="clip cap" data-start="45.056" data-duration="0.57"><div class="cap-in"><span class="w">DIA</span><span class="w k">BERGUNA!</span></div></div>
+        <div id="cap-35" class="clip cap" data-start="50.606" data-duration="0.62"><div class="cap-in"><span class="w">KENAPA</span><span class="w">AKU</span><span class="w">PULA</span></div></div>
+        <div id="cap-36" class="clip cap" data-start="51.226" data-duration="1.55"><div class="cap-in"><span class="w">YANG</span><span class="w k">TINGGI</span><span class="w">SUARA</span><span class="w">NI?</span></div></div>
+        <div id="cap-37" class="clip cap" data-start="52.796" data-duration="1.03"><div class="cap-in"><span class="w">SEDAP</span><span class="w">TAK</span><span class="w">PULA</span></div></div>
+        <div id="cap-38" class="clip cap" data-start="53.826" data-duration="0.99"><div class="cap-in"><span class="w k">MITYA</span><span class="w">NI?</span></div></div>
+        <div id="cap-39" class="clip cap" data-start="54.816" data-duration="0.7"><div class="cap-in"><span class="w k">SEDAP</span><span class="w">LAH</span><span class="w">PULA</span></div></div>
+        <div id="cap-40" class="clip cap" data-start="55.516" data-duration="0.66"><div class="cap-in"><span class="w k">MITYA</span><span class="w">NI.</span></div></div>
+        <div id="cap-41" class="clip cap" data-start="62.284" data-duration="1.53"><div class="cap-in"><span class="w">MEMANG</span><span class="w k">ELOK</span></div></div>
+        <div id="cap-42" class="clip cap" data-start="63.814" data-duration="1.04"><div class="cap-in"><span class="w k">SANGAT</span><span class="w">LAH!</span></div></div>
+        <div id="cap-43" class="clip cap" data-start="64.854" data-duration="1.025"><div class="cap-in"><span class="w">MITYA</span><span class="w">MITYA</span><span class="w k">MITYA!</span></div></div>
+        <div id="cap-44" class="clip cap" data-start="65.929" data-duration="1.17"><div class="cap-in"><span class="w k">SATISFYING</span><span class="w">FEELING</span></div></div>
+        <div id="cap-45" class="clip cap" data-start="67.099" data-duration="1.38"><div class="cap-in"><span class="w">WHEN</span><span class="w">YOU</span><span class="w k">CHARGE</span><span class="w">ATTACK</span></div></div>
+        <div id="cap-46" class="clip cap" data-start="68.479" data-duration="1.9"><div class="cap-in"><span class="w">TAPI</span><span class="w">MEMANG</span><span class="w k">DAMAGE</span><span class="w">DIA</span></div></div>
+        <div id="cap-47" class="clip cap" data-start="71.679" data-duration="0.536"><div class="cap-in"><span class="w">GITU.</span></div></div>
+        <div id="cap-48" class="clip cap" data-start="72.215" data-duration="0.82"><div class="cap-in"><span class="w k">20K</span><span class="w">LIKE,</span></div></div>
+        <div id="cap-49" class="clip cap" data-start="73.035" data-duration="0.94"><div class="cap-in"><span class="w">AKU</span><span class="w">TERPAKSA</span><span class="w k">PULL!</span></div></div>
+        <div id="cap-50" class="clip cap" data-start="73.975" data-duration="0.94"><div class="cap-in"><span class="w">MEMANG</span><span class="w k">SEDAP</span><span class="w">GUYS</span></div></div>
+        <div id="cap-51" class="clip cap" data-start="74.915" data-duration="0.8"><div class="cap-in"><span class="w">MEMANG</span><span class="w">SEDAP</span></div></div>
+        <div id="cap-52" class="clip cap" data-start="75.815" data-duration="1"><div class="cap-in"><span class="w">GOSH…</span></div></div>
+        <div id="cap-53" class="clip cap" data-start="76.815" data-duration="0.867"><div class="cap-in"><span class="w k">SEDAP</span><span class="w">JE!</span></div></div>
       </div>
 
-      <div id="endcard" class="clip" data-start="61.263" data-duration="2.5" data-track-index="8">
+      <div id="endcard" class="clip" data-start="77.682" data-duration="2.5" data-track-index="8">
         <div id="ec-bg"></div><div id="ec-dim"></div>
         <div id="ec-in">
           <div class="ec-k" id="ec-k">TEST RUN MITYA · VERDICT</div>
@@ -300,9 +326,9 @@
 
       <div id="flash"></div>
 
-      <audio id="bgm1" class="clip" src="assets/music/carmen.mp3" data-start="2.608" data-duration="45.926" data-volume="0.13"
+      <audio id="bgm1" class="clip" src="assets/music/carmen.mp3" data-start="2.608" data-duration="59.626" data-volume="0.13"
         data-fade-in="0.3" data-fade-out="0.3" data-track-index="11"></audio>
-      <audio id="bgm2" class="clip" src="assets/music/win.mp3" data-start="48.534" data-duration="15.229" data-volume="0.16"
+      <audio id="bgm2" class="clip" src="assets/music/win.mp3" data-start="62.234" data-duration="17.948" data-volume="0.16"
         data-fade-in="0.15" data-fade-out="1.2" data-track-index="11"></audio>
       <audio id="sfx-0" class="clip" src="assets/sfx/vine.mp3" data-start="0" data-duration="1.2" data-volume="0.55" data-track-index="12"></audio>
       <audio id="sfx-1" class="clip" src="assets/sfx/whoosh.mp3" data-start="1.397" data-duration="0.575" data-volume="0.5" data-track-index="12"></audio>
@@ -310,39 +336,47 @@
       <audio id="sfx-3" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="2.548" data-duration="0.575" data-volume="0.4" data-track-index="12"></audio>
       <audio id="sfx-4" class="clip" src="assets/sfx/pop.mp3" data-start="4.708" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
       <audio id="sfx-5" class="clip" src="assets/sfx/whoosh.mp3" data-start="6.099" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-6" class="clip" src="assets/sfx/illuminati.mp3" data-start="11.055" data-duration="3.216" data-volume="0.38" data-track-index="12"></audio>
-      <audio id="sfx-7" class="clip" src="assets/sfx/awkward.mp3" data-start="14.345" data-duration="1.464" data-volume="0.7" data-track-index="12"></audio>
-      <audio id="sfx-8" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="15.333" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-9" class="clip" src="assets/sfx/sparkle.mp3" data-start="17.243" data-duration="1.802" data-volume="0.3" data-track-index="12"></audio>
-      <audio id="sfx-10" class="clip" src="assets/sfx/notification.mp3" data-start="20.757" data-duration="2.455" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-11" class="clip" src="assets/sfx/pop.mp3" data-start="22.757" data-duration="0.72" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-12" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="25.324" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-13" class="clip" src="assets/sfx/cutewow.mp3" data-start="29.154" data-duration="1.632" data-volume="0.6" data-track-index="12"></audio>
-      <audio id="sfx-14" class="clip" src="assets/sfx/vine.mp3" data-start="30.647" data-duration="1.2" data-volume="0.6" data-track-index="12"></audio>
-      <audio id="sfx-15" class="clip" src="assets/sfx/faaah.mp3" data-start="31.037" data-duration="1.776" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-16" class="clip" src="assets/sfx/pop.mp3" data-start="33.823" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-17" class="clip" src="assets/sfx/pop.mp3" data-start="34.303" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-18" class="clip" src="assets/sfx/pop.mp3" data-start="34.653" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-19" class="clip" src="assets/sfx/glitch-1.mp3" data-start="35.346" data-duration="2.638" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-20" class="clip" src="assets/sfx/whoosh.mp3" data-start="36.496" data-duration="0.575" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-21" class="clip" src="assets/sfx/yay.mp3" data-start="37.006" data-duration="1.824" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-22" class="clip" src="assets/sfx/sparkle.mp3" data-start="39.506" data-duration="1.802" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-23" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="40.026" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-24" class="clip" src="assets/sfx/laugh.mp3" data-start="46.976" data-duration="1.824" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-25" class="clip" src="assets/sfx/whoosh.mp3" data-start="47.146" data-duration="0.575" data-volume="0.45" data-track-index="12"></audio>
-      <audio id="sfx-26" class="clip" src="assets/sfx/sparkle.mp3" data-start="47.526" data-duration="1.802" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-27" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="50.094" data-duration="2.592" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-28" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="52.129" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
-      <audio id="sfx-29" class="clip" src="assets/sfx/pop.mp3" data-start="56.739" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-30" class="clip" src="assets/sfx/pop.mp3" data-start="57.059" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-31" class="clip" src="assets/sfx/pop.mp3" data-start="57.359" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
-      <audio id="sfx-32" class="clip" src="assets/sfx/pop.mp3" data-start="57.659" data-duration="0.72" data-volume="0.6" data-track-index="12"></audio>
-      <audio id="sfx-33" class="clip" src="assets/sfx/ping.mp3" data-start="58.565" data-duration="1.32" data-volume="0.4" data-track-index="12"></audio>
-      <audio id="sfx-34" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="61.263" data-duration="2.116" data-volume="0.5" data-track-index="12"></audio>
-      <audio id="sfx-35" class="clip" src="assets/sfx/notification.mp3" data-start="61.813" data-duration="1.95" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-6" class="clip" src="assets/sfx/illuminati.mp3" data-start="8.139" data-duration="3.216" data-volume="0.38" data-track-index="12"></audio>
+      <audio id="sfx-7" class="clip" src="assets/sfx/awkward.mp3" data-start="11.429" data-duration="1.464" data-volume="0.7" data-track-index="12"></audio>
+      <audio id="sfx-8" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="12.427" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-9" class="clip" src="assets/sfx/whoosh.mp3" data-start="14.23" data-duration="0.575" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-10" class="clip" src="assets/sfx/pop.mp3" data-start="14.34" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-11" class="clip" src="assets/sfx/cutewow.mp3" data-start="14.74" data-duration="1.632" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-12" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="18.913" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-13" class="clip" src="assets/sfx/pop.mp3" data-start="19.013" data-duration="0.72" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-14" class="clip" src="assets/sfx/notification.mp3" data-start="22.597" data-duration="2.455" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-15" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="25.379" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-16" class="clip" src="assets/sfx/sparkle.mp3" data-start="26.789" data-duration="1.802" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-17" class="clip" src="assets/sfx/whoosh.mp3" data-start="31.774" data-duration="0.575" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-18" class="clip" src="assets/sfx/vine.mp3" data-start="34.724" data-duration="1.2" data-volume="0.75" data-track-index="12"></audio>
+      <audio id="sfx-19" class="clip" src="assets/sfx/vine.mp3" data-start="36.197" data-duration="1.2" data-volume="0.6" data-track-index="12"></audio>
+      <audio id="sfx-20" class="clip" src="assets/sfx/faaah.mp3" data-start="36.587" data-duration="1.776" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-21" class="clip" src="assets/sfx/pop.mp3" data-start="39.373" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-22" class="clip" src="assets/sfx/pop.mp3" data-start="39.853" data-duration="0.72" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-23" class="clip" src="assets/sfx/pop.mp3" data-start="40.203" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-24" class="clip" src="assets/sfx/glitch-1.mp3" data-start="40.896" data-duration="2.638" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-25" class="clip" src="assets/sfx/whoosh.mp3" data-start="42.046" data-duration="0.575" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-26" class="clip" src="assets/sfx/yay.mp3" data-start="42.556" data-duration="1.824" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-27" class="clip" src="assets/sfx/sparkle.mp3" data-start="45.056" data-duration="1.802" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-28" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="45.576" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-29" class="clip" src="assets/sfx/laugh.mp3" data-start="52.526" data-duration="1.824" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-30" class="clip" src="assets/sfx/whoosh.mp3" data-start="52.696" data-duration="0.575" data-volume="0.45" data-track-index="12"></audio>
+      <audio id="sfx-31" class="clip" src="assets/sfx/sparkle.mp3" data-start="54.836" data-duration="1.802" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-32" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="56.726" data-duration="2.592" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-33" class="clip" src="assets/sfx/wth.mp3" data-start="60.496" data-duration="2.232" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-34" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="63.794" data-duration="2.592" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-35" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="65.829" data-duration="0.575" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-36" class="clip" src="assets/sfx/pop.mp3" data-start="70.439" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-37" class="clip" src="assets/sfx/pop.mp3" data-start="70.759" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-38" class="clip" src="assets/sfx/pop.mp3" data-start="71.059" data-duration="0.72" data-volume="0.55" data-track-index="12"></audio>
+      <audio id="sfx-39" class="clip" src="assets/sfx/pop.mp3" data-start="71.359" data-duration="0.72" data-volume="0.6" data-track-index="12"></audio>
+      <audio id="sfx-40" class="clip" src="assets/sfx/ping.mp3" data-start="72.265" data-duration="1.32" data-volume="0.4" data-track-index="12"></audio>
+      <audio id="sfx-41" class="clip" src="assets/sfx/faaah.mp3" data-start="75.835" data-duration="1.776" data-volume="0.35" data-track-index="12"></audio>
+      <audio id="sfx-42" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="77.682" data-duration="2.116" data-volume="0.5" data-track-index="12"></audio>
+      <audio id="sfx-43" class="clip" src="assets/sfx/notification.mp3" data-start="78.232" data-duration="1.95" data-volume="0.4" data-track-index="12"></audio>
     </div>
     <script>
-      const T = {"total": 63.763, "end": 61.263, "order": ["h1", "h2", "h3", "s1", "s2", "sm", "s3", "s4", "s5a", "s5b", "ff", "s5c", "s6", "s7", "e1", "e2", "e3"], "t0": {"h1": 0.0, "h2": 1.477, "h3": 2.608, "s1": 6.159, "s2": 9.075, "sm": 15.393, "s3": 20.757, "s4": 25.374, "s5a": 29.617, "s5b": 31.103, "ff": 35.346, "s5c": 36.646, "s6": 40.076, "s7": 47.226, "e1": 48.534, "e2": 52.179, "e3": 58.515}, "dur": {"h1": 1.477, "h2": 1.131, "h3": 3.551, "s1": 2.916, "s2": 6.318, "sm": 5.364, "s3": 4.617, "s4": 4.243, "s5a": 1.486, "s5b": 4.243, "ff": 1.3, "s5c": 3.43, "s6": 7.15, "s7": 1.308, "e1": 3.645, "e2": 6.336, "e3": 2.748}, "cuts": {"h1": [], "h2": [0.252], "h3": [0.262], "s1": [0.364, 2.084, 2.664], "s2": [0.57, 2.028, 3.206, 4.439, 5.346], "sm": [1.813, 4.626], "s3": [1.065, 2.794], "s4": [0.15, 1.505, 1.626, 2.336], "s5a": [], "s5b": [0.168, 3.037, 3.551], "ff": [], "s5c": [0.383, 0.664, 1.234, 2.009, 2.065], "s6": [2.019, 2.944, 5.075, 5.383, 6.364], "s7": [], "e1": [2.28], "e2": [2.579, 3.411], "e3": [1.85]}, "h2": 1.477, "h3": 2.608, "omg": 1.477, "serius": 30.667, "boy": 29.174, "salah": 14.345, "tinggi": 45.676, "elok": 50.114, "e1": 48.534, "ff": 35.346, "galaxy": [11.055, 13.675], "chat": [20.757, 22.657], "q1": [17.193, 20.757], "q2": [40.076, 45.026], "zaps": [56.739, 57.059, 57.359, 57.659], "e3": 58.515};
+      const T = {"total": 80.182, "end": 77.682, "order": ["h1", "h2", "h3", "s2", "i0", "i1", "i2", "i3", "sk", "s4", "s5a", "s5b", "ff", "s5c", "s6", "s7", "e1", "e2", "e3"], "t0": {"h1": 0.0, "h2": 1.477, "h3": 2.608, "s2": 6.159, "i0": 12.477, "i1": 14.29, "i2": 18.963, "i3": 22.597, "sk": 25.429, "s4": 30.924, "s5a": 35.167, "s5b": 36.653, "ff": 40.896, "s5c": 42.196, "s6": 45.626, "s7": 52.776, "e1": 62.234, "e2": 65.879, "e3": 72.215}, "dur": {"h1": 1.477, "h2": 1.131, "h3": 3.551, "s2": 6.318, "i0": 1.813, "i1": 4.673, "i2": 3.634, "i3": 2.832, "sk": 5.495, "s4": 4.243, "s5a": 1.486, "s5b": 4.243, "ff": 1.3, "s5c": 3.43, "s6": 7.15, "s7": 9.458, "e1": 3.645, "e2": 6.336, "e3": 5.467}, "cuts": {"h1": [], "h2": [0.252], "h3": [0.262], "s2": [0.57, 2.028, 3.206, 4.439, 5.346], "i0": [], "i1": [], "i2": [], "i3": [0.439, 0.57], "sk": [1.364, 2.421, 3.065, 3.29], "s4": [0.15, 1.505, 1.626, 2.336], "s5a": [], "s5b": [0.168, 3.037, 3.551], "ff": [], "s5c": [0.383, 0.664, 1.234, 2.009, 2.065], "s6": [2.019, 2.944, 5.075, 5.383, 6.364], "s7": [2.075, 3.383], "e1": [2.28], "e2": [2.579, 3.411], "e3": [1.85, 3.411]}, "h2": 1.477, "h3": 2.608, "omg": 1.477, "serius": 36.217, "boy": 34.724, "lisa": [31.774, 35.167], "rx": [14.74, 25.529, 56.726, 60.496, 75.835], "salah": 11.429, "tinggi": 51.226, "elok": 63.814, "e1": 62.234, "ff": 40.896, "galaxy": [8.139, 10.759], "chat": [22.597, 25.429], "q2": [45.626, 50.576], "zaps": [70.439, 70.759, 71.059, 71.359], "e3": 72.215};
       const tl = gsap.timeline({ paused: true });
 
       // --- facecam: jump-cut punch-ins (1.0 <-> 1.12), game: slow push-in
@@ -365,6 +399,13 @@
       punch("s2", T.salah, 1.32);
       punch("s6", T.tinggi, 1.3);
       punch("e1", T.elok, 1.34);
+      ["i1", "sk", "s7", "s7", "e3"].forEach((sid, i) => punch(sid, T.rx[i], 1.3));
+      // --- Lisa card: slide in, then "boy" -> moustache + zoom to her face
+      tl.fromTo("#lisa-in", { y: 1080, rotation: 4 }, { y: 0, rotation: 0, duration: 0.3, ease: "power3.out" }, T.lisa[0]);
+      tl.fromTo("#stache", { scale: 0, rotation: -25, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.22, ease: "back.out(3)" }, T.boy);
+      tl.fromTo("#lisa-in", { scale: 1 }, { scale: 1.75, duration: 0.25, ease: "power3.out" }, T.boy);
+      [14, -12, 9, -6, 3, 0].forEach((x, i) => tl.to("#lisa-in", { x: x, duration: 0.035, ease: "none" }, T.boy + 0.25 + i * 0.035));
+      tl.to("#stache", { rotation: 6, duration: 0.12, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.boy + 0.3);
       tl.fromTo("#gw-h2", { scale: 1.3 }, { scale: 1.05, duration: 0.45, ease: "power3.out" }, T.h2);
       tl.fromTo("#gw-ff", { x: 0 }, { x: -14, duration: 0.05, yoyo: true, repeat: 25, ease: "none" }, T.ff);
 
@@ -389,8 +430,8 @@
       tl.to("#hk3-in", { opacity: 0, scale: 0.9, duration: 0.15, ease: "power2.in" }, T.h3 + T.dur.h3 - 0.17);
 
       // --- HUD
-      tl.fromTo("#hud-in", { x: -500 }, { x: 0, duration: 0.35, ease: "power3.out" }, T.t0.s1);
-      tl.fromTo("#hud-av", { rotation: 0 }, { rotation: 360, duration: 0.6, ease: "power2.out" }, T.t0.s1 + 0.1);
+      tl.fromTo("#hud-in", { x: -500 }, { x: 0, duration: 0.35, ease: "power3.out" }, T.t0.s2);
+      tl.fromTo("#hud-av", { rotation: 0 }, { rotation: 360, duration: 0.6, ease: "power2.out" }, T.t0.s2 + 0.1);
 
       // --- galaxy brain PIP
       tl.fromTo("#gal-wrap", { scale: 0, rotation: 12 }, { scale: 1, rotation: 4, duration: 0.3, ease: "back.out(2)" }, T.galaxy[0]);
@@ -401,7 +442,7 @@
       tl.to("#chat2-bubble", { x: 760, duration: 0.18, ease: "power2.in" }, T.chat[1] - 0.2);
 
       // --- quote cards
-      [["#q1-in", T.q1], ["#q2-in", T.q2]].forEach(([el, [s, e]]) => {
+      [["#q2-in", T.q2]].forEach(([el, [s, e]]) => {
         tl.fromTo(el, { y: 60, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.25, ease: "back.out(1.8)" }, s);
         tl.to(el, { opacity: 0, y: -30, duration: 0.14, ease: "power2.in" }, e - 0.16);
       });
