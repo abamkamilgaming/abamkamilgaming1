@@ -23,25 +23,43 @@
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
 
       /* face cam: top 780px — game: 780..1920 */
-      .fw { position: absolute; left: 0; top: 0; width: 1080px; height: 860px; overflow: hidden; }
+      .fw { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; overflow: hidden; }
       .fz { position: absolute; inset: 0; transform-origin: 50% 40%; }
-      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 860px; object-fit: cover; }
-      .gw { position: absolute; left: 0; top: 860px; width: 1080px; height: 1060px; overflow: hidden; }
-      .gz { position: absolute; inset: 0; transform-origin: 50% 30%; }
-      .game { position: absolute; left: -54px; top: 0; width: 1188px; height: 1254px; object-fit: cover; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
+      .gw { position: absolute; left: 0; top: 960px; width: 1080px; height: 960px; overflow: hidden; }
+      .gz { position: absolute; inset: 0; transform-origin: 50% 50%; }
+      .game { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
 
       /* seam between face and game */
-      #seam { position: absolute; left: 0; top: 854px; width: 1080px; height: 12px; z-index: 120; pointer-events: none;
+      #seam { position: absolute; left: 0; top: 954px; width: 1080px; height: 12px; z-index: 120; pointer-events: none;
         background: linear-gradient(90deg, var(--violet) 0%, var(--gold) 50%, var(--violet) 100%);
         box-shadow: 0 0 24px rgba(157, 107, 255, 0.85), 0 0 6px rgba(255, 213, 74, 0.9); }
       #flash { position: absolute; inset: 0; z-index: 200; background: #fff; opacity: 0; pointer-events: none; }
       #fz-dim { position: absolute; inset: 0; z-index: 110; pointer-events: none; }
       #fz-dim .dim-in { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(7,6,15,0.15) 0%, rgba(7,6,15,0.7) 100%); }
 
+
+      /* lower-third on the face cam: covers the stream's own overlay (bottom-left), never the face */
+      #lt { position: absolute; left: 0; top: 640px; width: 540px; height: 314px; z-index: 125; pointer-events: none;
+        background: linear-gradient(135deg, rgba(14, 9, 34, 0.94), rgba(30, 16, 64, 0.9)); border-radius: 0 28px 0 0;
+        border-top: 4px solid var(--violet); border-right: 4px solid var(--violet); box-shadow: 0 0 30px rgba(157, 107, 255, 0.45); }
+      #lt .lt-top { position: absolute; left: 30px; top: 26px; display: flex; align-items: center; gap: 16px; }
+      #lt .live { font-family: var(--font-label); font-weight: 700; font-size: 30px; letter-spacing: 0.12em; color: #fff;
+        background: var(--red); padding: 2px 14px; border-radius: 8px; }
+      #lt .chan { font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.06em; color: var(--violet-2); }
+      #lt .misi { position: absolute; left: 30px; top: 92px; font-family: var(--font-label); font-weight: 700; font-size: 30px;
+        letter-spacing: 0.16em; color: rgba(255, 255, 255, 0.6); }
+      #lt .row { position: absolute; left: 30px; display: flex; align-items: center; gap: 18px; }
+      #lt .r1 { top: 140px; } #lt .r2 { top: 214px; }
+      #lt .box { position: relative; width: 52px; height: 52px; border-radius: 10px; border: 4px solid rgba(255, 255, 255, 0.7); }
+      #lt .tick { position: absolute; inset: -4px; border-radius: 10px; background: var(--gold); opacity: 0; }
+      #lt .tick::after { content: ""; position: absolute; left: 16px; top: 6px; width: 14px; height: 26px;
+        border-right: 7px solid #1a1030; border-bottom: 7px solid #1a1030; transform: rotate(45deg); }
+      #lt .item { font-family: var(--font-display); font-size: 44px; color: #fff; }
       /* captions on the seam (never over the face) */
-      #captions { position: absolute; left: 0; right: 0; top: 720px; height: 280px; z-index: 150; }
-      .cap { position: absolute; left: 0; right: 0; top: 0; height: 280px; text-align: center; }
-      .cap-in { position: absolute; left: 110px; right: 110px; top: 66px; text-align: center; transform-origin: 50% 60%; line-height: 1.02; }
+      #captions { position: absolute; left: 0; right: 0; top: 966px; height: 154px; z-index: 150; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 154px; text-align: center; }
+      .cap-in { position: absolute; left: 110px; right: 110px; top: 22px; text-align: center; transform-origin: 50% 60%; line-height: 1.02; }
       .w { display: inline-block; margin: 0 0.13em; font-family: var(--font-cap); font-weight: 900; font-size: 92px; color: #fff;
         -webkit-text-stroke: 14px #000; paint-order: stroke fill; letter-spacing: -0.01em;
         text-shadow: 0 8px 0 #000, 0 12px 28px rgba(0, 0, 0, 0.6); }
@@ -51,27 +69,27 @@
       /* stickers */
       .stk { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 140; pointer-events: none; }
       .stk-in { position: absolute; }
-      .hook .stk-in { left: 60px; right: 60px; top: 990px; text-align: center; transform-origin: 50% 50%; }
+      .hook .stk-in { left: 60px; right: 60px; top: 1190px; text-align: center; transform-origin: 50% 50%; }
       .hook span { display: block; font-family: var(--font-display); line-height: 1; -webkit-text-stroke: 10px #000; paint-order: stroke fill;
         text-shadow: 0 8px 0 #000; }
       .hook .k1 { font-size: 70px; color: #fff; }
       .hook .k2 { font-size: 140px; color: var(--gold); margin-top: 6px; }
       .hook .k3 { font-size: 76px; color: #fff; margin-top: 8px; }
-      .rewind .stk-in { left: 0; right: 0; top: 1470px; text-align: center; }
+      .rewind .stk-in { left: 0; right: 0; top: 1660px; text-align: center; }
       .rw { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 64px; letter-spacing: 0.1em; color: #fff;
         background: var(--red); padding: 8px 34px; border-radius: 14px; box-shadow: 0 8px 0 #000; }
-      .pop .stk-in { top: 950px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
+      .pop .stk-in { top: 1140px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
         border: 4px solid var(--gold); box-shadow: 0 14px 40px rgba(0,0,0,0.6); text-align: center; }
       .pop img { display: block; width: 100%; height: 470px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
       .pop.wide .stk-in { width: 560px; }
       .pop.wide img { height: 316px; object-position: 50% 50%; }
       .pop-r .stk-in { right: 44px; }
       .pop-l .stk-in { left: 44px; }
-      .pop-c .stk-in { left: 300px; top: 950px; width: 480px; }
+      .pop-c .stk-in { left: 300px; top: 1140px; width: 480px; }
       .pop-c img { height: 520px; }
       .lbl { display: block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.06em; color: var(--gold-2);
         padding: 10px 0 14px; line-height: 1.1; }
-      .badge .stk-in { left: 60px; top: 1010px; padding: 14px 30px 16px; border-radius: 18px; background: var(--panel);
+      .badge .stk-in { left: 50px; top: 1150px; padding: 14px 30px 16px; border-radius: 18px; background: var(--panel);
         border: 4px solid var(--gold); box-shadow: 0 10px 0 #000; transform-origin: 0 50%; }
       .badge.red .stk-in { border-color: var(--red); }
       .badge.violet .stk-in { border-color: var(--violet); }
@@ -81,7 +99,7 @@
       .badge .t2 { font-family: var(--font-display); font-size: 62px; line-height: 1.05; color: var(--gold); }
       .badge.red .t2 { color: var(--red); }
       .badge.violet .t2 { color: #fff; font-size: 52px; line-height: 1.2; margin-top: 6px; }
-      .ffbar .stk-in { left: 0; right: 0; top: 1300px; text-align: center; }
+      .ffbar .stk-in { left: 0; right: 0; top: 1650px; text-align: center; }
       .ff { display: inline-block; font-family: var(--font-display); font-size: 70px; color: #fff; -webkit-text-stroke: 8px #000;
         paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
     </style>
@@ -90,6 +108,12 @@
     <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920"
       data-layout-allow-overflow data-layout-allow-overlap>
 {{MEDIA}}
+      <div id="lt">
+        <div class="lt-top"><span class="live">&#9679; LIVE</span><span class="chan">ABAMKAMIL GAMING</span></div>
+        <div class="misi">MISI HARI NI:</div>
+        <div class="row r1"><div class="box"><div class="tick" id="tick1"></div></div><span class="item" id="item1">MITYA</span></div>
+        <div class="row r2"><div class="box"><div class="tick" id="tick2"></div></div><span class="item" id="item2">SIGNATURE</span></div>
+      </div>
       <div id="seam"></div>
       <div id="flash"></div>
 {{STICKERS}}
@@ -181,6 +205,12 @@
         if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
         tl.fromTo(inner, { scale: 0.5, opacity: 0, y: 18 }, { scale: 1, opacity: 1, y: 0, duration: 0.12, ease: "back.out(2.6)" }, s);
         tl.to(inner, { opacity: 0, duration: 0.04, ease: "power2.in" }, s + Math.max(0.12, d - 0.04));
+      });
+
+      // mission ticks
+      [[TL.T.m4[0], "#tick1", "#item1"], [TL.T.w8[0], "#tick2", "#item2"]].forEach(([s, tk, it]) => {
+        tl.fromTo(tk, { opacity: 0, scale: 2.2 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.4)", immediateRender: false }, s + 0.15);
+        tl.to(it, { color: "#ffd54a", duration: 0.2, ease: "none" }, s + 0.15);
       });
 
       window.__timelines = window.__timelines || {};

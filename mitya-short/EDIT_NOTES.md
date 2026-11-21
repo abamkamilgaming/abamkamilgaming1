@@ -1,6 +1,6 @@
 # Mitya Pull Short — PREVIEW (belum render)
 
-**Format:** 1080×1920 (TikTok portrait), **88.0 s**, layout Doro44/TheJonathon: muka atas (0–860 px), game bawah, caption besar di sempadan (tak tutup muka).
+**Format:** 1080×1920 (TikTok portrait), **88.0 s**, layout seimbang 50/50: **muka atas 0–960 px**, **game bawah 960–1920 px** (game zoom 1.12× di tengah panel). Caption di jalur antara sempadan dan game (960–1120 px) — tak tutup muka, tak tutup game. Lower-third "LIVE · MISI HARI NI: MITYA / SIGNATURE" (bawah kiri panel muka, atas dada) tutup overlay stream asal; checkbox jadi ✅ bila dapat Mitya (0:46) & signature (1:07).
 Sumber: `Pulling Mitya and Signature Weapon.mp4` (14:21). Storyboard: `preview-frames/storyboard.jpg`.
 
 | Masa | Babak | Footage (sumber) | Muzik / SFX |

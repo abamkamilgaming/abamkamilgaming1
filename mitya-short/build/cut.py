@@ -1,6 +1,6 @@
 """Cut every EDL piece into two synced files:
-  assets/clips/<id>_f.mp4  face cam 1080x780 (with the stream audio)
-  assets/clips/<id>_g.mp4  game 1080x1140: sharp game 1080x585 on top, blurred fill below (muted)
+  assets/clips/<id>_f.mp4  face cam 1080x960 (with the stream audio)
+  assets/clips/<id>_g.mp4  game 1080x960: blurred fill, sharp game 1080x656 at y=160 (muted)
 Run: python3 build/cut.py <source.mp4>"""
 import json, os, subprocess, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -10,9 +10,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "clips")
 FPS = 60
 # stream overlay text "live yang penting" sits over the chest: delogo before crop
-FACE = "delogo=x=141:y=436:w=392:h=104,crop=640:462:230:0,scale=1080:780:flags=lanczos"
-GAME = ("crop=1080:585:0:680,split[a][b];[b]scale=1080:-1,crop=1080:555:0:0,boxblur=28:2,eq=brightness=-0.12:saturation=1.2[bl];"
-        "[a][bl]vstack")
+FACE = "delogo=x=141:y=436:w=392:h=104,crop=640:569:230:0,scale=1080:960:flags=lanczos"
+# game panel 1080x960: blurred fill + sharp game (x1.12 zoom, 1080x656) at y=160; 0-160 = caption band
+GAME = ("crop=1080:585:0:680,split[a][b];[b]scale=-2:960,crop=1080:960,boxblur=30:2,eq=brightness=-0.16:saturation=1.2[bg];"
+        "[a]scale=1210:656:flags=lanczos,crop=1080:656[fg];[bg][fg]overlay=0:160")
 AUD = "highpass=f=70,volume=8dB,acompressor=threshold=-18dB:ratio=3:attack=5:release=120:makeup=1,alimiter=limit=0.89"
 info = {}
 ONLY = sys.argv[2].split(",") if len(sys.argv) > 2 else None
