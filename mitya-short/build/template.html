@@ -41,8 +41,8 @@
       #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
 
       /* HUD chip */
-      #hud { position: absolute; left: 0; top: 0; width: 1080px; height: 300px; z-index: 70; }
-      #hud-in { position: absolute; left: 60px; top: 226px; display: flex; align-items: center; gap: 14px;
+      #hud { position: absolute; left: 0; top: 0; width: 1080px; height: 900px; z-index: 70; }
+      #hud-in { position: absolute; left: 150px; top: 806px; display: flex; align-items: center; gap: 14px;
         padding: 8px 24px 8px 8px; border-radius: 999px; background: rgba(12,8,36,0.78); border: 3px solid var(--violet-2); }
       #hud-av { width: 64px; height: 64px; border-radius: 50%; background: url(assets/img/mitya.jpg) 72% 22% / 260% auto no-repeat; border: 3px solid var(--yellow); }
       #hud-t { font-family: var(--font-display); font-size: 32px; color: #fff; letter-spacing: 0.02em; }
@@ -75,7 +75,7 @@
       #hk3-t small { display: block; font-size: 38px; color: var(--yellow); margin-top: 8px; }
 
       /* captions on the seam */
-      #captions { position: absolute; left: 0; top: 852px; width: 1080px; height: 200px; z-index: 82; }
+      #captions { position: absolute; left: 0; top: 886px; width: 1080px; height: 200px; z-index: 82; }
       .cap { position: absolute; left: 0; top: 0; width: 1080px; height: 200px; }
       .cap-in { position: absolute; left: 110px; right: 230px; top: 24px; text-align: center; transform-origin: 50% 50%; }
       .w { font-family: var(--font-cap); font-weight: 900; font-size: 92px; line-height: 1.04; color: #fff;
@@ -99,7 +99,7 @@
       .stk-in.z2 { left: 470px; top: 1130px; }
       .stk-in.z3 { left: 80px; top: 1200px; }
       .stk-in.z4 { left: 440px; top: 1240px; font-size: 140px; }
-      .stk-in.tag { top: 1010px; font-family: var(--font-label); font-weight: 700; font-size: 50px; letter-spacing: 0.06em; color: #120a2e; -webkit-text-stroke: 0; text-shadow: none; }
+      .stk-in.tag { top: 1040px; font-family: var(--font-label); font-weight: 700; font-size: 50px; letter-spacing: 0.06em; color: #120a2e; -webkit-text-stroke: 0; text-shadow: none; }
       .stk-in.tag .pill { display: inline-block; background: var(--yellow); padding: 10px 30px; border-radius: 999px; border: 4px solid #120a2e; box-shadow: 0 8px 0 #120a2e; }
       .stk-in.rx { left: 70px; right: auto; top: 700px; font-family: var(--font-display); font-size: 54px; color: #fff; -webkit-text-stroke: 4px #000; text-align: left; }
 
@@ -110,7 +110,7 @@
 
       /* live-chat bubble */
       #chat2 { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
-      #chat2 .chat { top: 1090px; }
+      #chat2 .chat { top: 1110px; }
 
       /* quote card for Mitya's voice lines */
       .quote { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 79; }
@@ -180,12 +180,6 @@
 
       <div id="chat2" class="clip" data-start="{{CHAT_START}}" data-duration="{{CHAT_DUR}}" data-track-index="5">
         <div class="chat" id="chat2-bubble"><div class="av">💬</div><div><div class="nm">Live chat</div><div class="tx">Sis suka Mitya selalu gaduh dengan Scarf dia 🤣</div></div></div>
-      </div>
-
-      <div id="q2" class="clip quote" data-start="{{Q2_START}}" data-duration="{{Q2_DUR}}" data-track-index="5">
-        <div class="q-in" id="q2-in"><div class="q-who"><i></i>MITYA</div>
-          <div class="q-en">“Did you see the show at the theater yesterday? It was pretty good. It'd be even better if I could remember what it was about.”</div>
-          <div class="q-bm">Show teater semalam best… kalau aku ingat cerita dia pasal apa 🤡</div></div>
       </div>
 
 {{STICKERS}}
@@ -285,12 +279,6 @@
       // --- chat bubble
       tl.fromTo("#chat2-bubble", { x: -760, rotation: -5 }, { x: 0, rotation: -2, duration: 0.3, ease: "back.out(1.6)" }, T.chat[0] + 0.02);
       tl.to("#chat2-bubble", { x: 760, duration: 0.18, ease: "power2.in" }, T.chat[1] - 0.2);
-
-      // --- quote cards
-      [["#q2-in", T.q2]].forEach(([el, [s, e]]) => {
-        tl.fromTo(el, { y: 60, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.25, ease: "back.out(1.8)" }, s);
-        tl.to(el, { opacity: 0, y: -30, duration: 0.14, ease: "power2.in" }, e - 0.16);
-      });
 
       // --- stickers
       document.querySelectorAll(".stk").forEach((el, i) => {

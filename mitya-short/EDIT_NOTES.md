@@ -1,6 +1,13 @@
-# Test Run Mitya — TikTok short (PREVIEW v2, belum render final)
+# Test Run Mitya — TikTok short (PREVIEW v3, belum render final)
 
-**Format:** 1080×1920 (9:16), 60 fps, **80.2 s (1:20)** · gaya Doro44 / thejonathon
+## v3 — pembetulan
+1. Headline "TEST RUN MITYA · FIRST TIME" dipindah ke garis seam (antara muka & gameplay) — tak halang muka lagi.
+2. Scene voice line teater dibuang (bertindih dengan suara). Diganti: "Oh dude, yang tu charge attack! Eh, asal aku tak tekan charge attack pun?" (6:57) + VFX Loading spinner + 🤨❓ + awkward SFX.
+3. Ejaan: "OSOM" (bukan awesome).
+Durasi baru: **77.4 s (1:17)**.
+
+
+**Format:** 1080×1920 (9:16), 60 fps, **77.4 s (1:17)** · gaya Doro44 / thejonathon
 **Status:** PREVIEW — draft v2 untuk semakan, belum render final.
 
 ## v2 — pembetulan ikut teguran

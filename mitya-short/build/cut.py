@@ -36,12 +36,12 @@ SEGS = [
     ("i2", [(112.40, 119.40, "raw")], None, 248, 1.8),  # IDLE #2: Scarf waves (face hand on chin)
     ("i3", [(119.60, 123.16)], None, 248, 1.0),         # reads chat: "Sis suka Mitya selalu gaduh dengan Scarf dia"
     ("sk", [(375.26, 376.72), (378.00, 381.40), (386.05, 388.80)], None, 248, 1.0),  # laughing: "Eh dia main. Dia main awesome eh, dengan Scarf dia... nice nice nice"
+    ("ca", [(416.90, 422.50)], None, 248, 1.0),         # "Oh dude, yang tu charge attack! Eh, asal aku tak tekan charge attack pun masalahnya?"
     ("s4", [(427.36, 432.98)], None, 248, 1.0),         # "Dia macam Lisa... version Lisa tapi boy"
     ("s5a", [(567.36, 569.22)], None, 0, 1.0),          # "25 second? Serius lah?"  (skill screen)
     ("s5b", [(613.92, 619.62)], None, 248, 1.0),        # "Aku set timer phone aku. 3, 2, 1"
     ("ff", [(619.70, 645.70)], None, 248, 20.0),        # fast-forward through the 25 s (muted, sfx instead)
     ("s5c", [(646.26, 647.08), (651.50, 653.96), (658.40, 660.60)], None, 248, 1.0),  # "Betul lah. 25 freaking second. Mitya tak main DPS pun dia berguna"
-    ("s6", [(770.38, 776.82), (781.90, 784.90)], None, 248, 1.0),  # Mitya's theater line (clean) -> "Kenapa aku pula yang tinggi suara ni?"
     ("s7", [(871.40, 873.62), (874.44, 876.10), (879.30, 885.80, "raw")], None, 248, 1.0),  # "Sedap tak pula Mitya ni? Sedap lah pula" + burst grin + shocked face
     # FEEDBACK
     ("e1", [(953.06, 955.50), (958.86, 960.32)], 925.6, 248, 1.0),  # "Memang elok sangat lah... Mitya Mitya Mitya"

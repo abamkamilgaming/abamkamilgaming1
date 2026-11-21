@@ -6,7 +6,7 @@ import html, json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEG = json.load(open(os.path.join(ROOT, "build", "segs.json")))
-ORDER = ["h1", "h2", "h3", "s2", "i0", "i1", "i2", "i3", "sk", "s4", "s5a", "s5b", "ff", "s5c", "s6", "s7", "e1", "e2", "e3"]
+ORDER = ["h1", "h2", "h3", "s2", "i0", "i1", "i2", "i3", "sk", "ca", "s4", "s5a", "s5b", "ff", "s5c", "s7", "e1", "e2", "e3"]
 END_HOLD = 2.5
 
 T0 = {}
@@ -36,13 +36,13 @@ CAPS = {
     "i0": [("NOT BAD,", 0.05, 1.25), ("NOT BAD 👌", 1.25, 1.81)],
     "i1": [("INI *IDLE SATU EH", 3.2, 4.67)],
     "i3": [("SIS SUKA *MITYA", 0.02, 1.42), ("SELALU *GADUH", 1.42, 2.14), ("DENGAN *SCARF DIA", 2.14, 2.83)],
-    "sk": [("EH, DIA MAIN!", 0.0, 1.12), ("DIA MAIN *AWESOME EH", 1.12, 2.38), ("DENGAN *SCARF DIA", 2.38, 3.05),
-           ("ALRIGHT, *AWESOME", 3.05, 4.0), ("OKAY, NICE, NICE!", 4.0, 5.49)],
+    "sk": [("EH, DIA MAIN!", 0.0, 1.12), ("DIA MAIN *OSOM EH", 1.12, 2.38), ("DENGAN *SCARF DIA", 2.38, 3.05),
+           ("ALRIGHT, *OSOM", 3.05, 4.0), ("OKAY, NICE, NICE!", 4.0, 5.49)],
     "s4": [("DIA MACAM *LISA", 0.05, 1.48), ("BETUL, SERIUS NI", 1.48, 2.3), ("DIA VERSION *LISA", 2.3, 3.38), ("TAPI *BOY!", 3.38, 4.24)],
     "s5a": [("*25 SECOND?", 0.02, 1.05), ("SERIUS LAH?!", 1.05, 1.49)],
     "s5b": [("OKAY, AKU SET *TIMER", 0.04, 1.88), ("PHONE AKU", 1.88, 2.7)],
     "s5c": [("BETUL LAH!", 0.02, 0.36), ("*25 FREAKING SECOND!", 0.36, 1.95), ("MITYA TAK MAIN *DPS PUN", 1.95, 2.86), ("DIA *BERGUNA!", 2.86, 3.43)],
-    "s6": [("KENAPA AKU PULA", 4.98, 5.6), ("YANG *TINGGI SUARA NI?", 5.6, 7.15)],
+    "ca": [("OH DUDE,", 0.4, 1.1), ("YANG TU *CHARGE ATTACK!", 1.1, 2.3), ("EH, ASAL AKU TAK TEKAN", 2.3, 3.4), ("*CHARGE ATTACK PUN?", 3.4, 4.39)],
     "s7": [("SEDAP TAK PULA", 0.02, 1.05), ("*MITYA NI?", 1.05, 2.04), ("*SEDAP LAH PULA", 2.04, 2.74), ("*MITYA NI.", 2.74, 3.4)],
     "e1": [("MEMANG *ELOK", 0.05, 1.58), ("*SANGAT LAH!", 1.58, 2.62), ("MITYA MITYA *MITYA!", 2.62, 3.645)],
     "e2": [("*SATISFYING FEELING", 0.05, 1.22), ("WHEN YOU *CHARGE ATTACK", 1.22, 2.6), ("TAPI MEMANG *DAMAGE DIA", 2.6, 4.5),
@@ -64,7 +64,7 @@ STK = [
     ("st-idle2", at("i2", 0.05), at("i2", D("i2")), "IDLE ANIMATION #2 👋", "tag"),
     ("st-rx1", at("i1", 0.3), at("i1", D("i1")), "REAKSI AKU 😂", "rx"),
     ("st-rx2", at("i2", 0.2), at("i2", D("i2")), "🤔🤔", "rx"),
-    ("st-awesome", at("sk", 1.36), at("sk", 3.0), "AWESOME! 🔥", "gold tilt-r"),
+    ("st-awesome", at("sk", 1.36), at("sk", 3.0), "OSOM! 🔥", "gold tilt-r"),
     ("st-rx3", at("sk", 0.1), at("sk", D("sk")), "😂😂😂", "rx"),
     ("st-25", at("s5a", 0.3), at("s5a", 1.486), "25 SAAT?!", "gold tilt-l"),
     ("st-3", at("s5b", 2.72), at("s5b", 3.2), "3", "num"),
@@ -72,7 +72,7 @@ STK = [
     ("st-1", at("s5b", 3.55), at("s5b", 4.243), "1", "num"),
     ("st-ok", at("s5c", 0.36), at("s5c", 1.95), "✅ 25 SAAT<br><small>CONFIRMED</small>", "green tilt-r"),
     ("st-berguna", at("s5c", 2.86), at("s5c", 3.43) + 0.1, "BERGUNA!", "gold tilt-l"),
-    ("st-tinggi", at("s6", 5.6), at("s6", 7.15), "😂😂😂", "emoji"),
+    ("st-huh", at("ca", 2.4), at("ca", D("ca")), "🤨❓", "emoji"),
     ("st-sedap", at("s7", 2.06), at("s7", 3.4), "SEDAP 🤤", "gold tilt-r"),
     ("st-burst", at("s7", 3.95), at("s7", 6.9), "BURST MITYA 💥", "violet tilt-l"),
     ("st-rx4", at("s7", 3.95), at("s7", 7.7), "😍", "rx"),
@@ -99,7 +99,7 @@ SFX = [
     ("pop", at("s5b", 2.72), 0.5), ("pop", at("s5b", 3.2), 0.5), ("pop", at("s5b", 3.55), 0.55),
     ("glitch-1", at("ff", 0.0), 0.35), ("whoosh", at("ff", 1.15), 0.4),
     ("yay", at("s5c", 0.36), 0.45), ("sparkle", at("s5c", 2.86), 0.4),
-    ("whoosh-short", at("s6", -0.05), 0.35), ("laugh", at("s6", 6.9), 0.5),
+    ("whoosh-short", at("ca", -0.05), 0.35), ("impact-bass-2", at("ca", 0.0), 0.4), ("awkward", at("ca", 3.98), 0.55),
     ("whoosh", at("s7", -0.08), 0.45), ("sparkle", at("s7", 2.06), 0.35), ("impact-bass-2", at("s7", 3.95), 0.5),
     ("wth", at("s7", 7.72), 0.5),
     ("impact-bass-2", at("e1", 1.56), 0.55),
@@ -168,8 +168,8 @@ TL = {"total": TOTAL, "end": END_START, "order": ORDER, "t0": T0,
       "dur": {k: SEG[k]["dur"] for k in ORDER}, "cuts": {k: SEG[k]["cuts"] for k in ORDER},
       "h2": T0["h2"], "h3": T0["h3"], "omg": at("h2", 0.0), "serius": at("s5a", 1.05), "boy": at("s4", 3.8), "lisa": [at("s4", 0.85), T0["s5a"]],
       "rx": [at("i1", 0.45), at("sk", 0.1), at("s7", 3.95), at("s7", 7.72), at("e3", 3.62)],
-      "salah": at("s2", 5.27), "tinggi": at("s6", 5.6), "elok": at("e1", 1.58), "e1": T0["e1"], "ff": T0["ff"],
-      "galaxy": [at("s2", 1.98), at("s2", 4.6)], "chat": [T0["i3"], at("i3", D("i3"))], "q2": [T0["s6"], at("s6", 4.95)],
+      "salah": at("s2", 5.27), "tinggi": at("ca", 2.5), "elok": at("e1", 1.58), "e1": T0["e1"], "ff": T0["ff"],
+      "galaxy": [at("s2", 1.98), at("s2", 4.6)], "chat": [T0["i3"], at("i3", D("i3"))],
       "zaps": [at("e2", x) for x in (4.56, 4.88, 5.18, 5.48)], "e3": T0["e3"]}
 
 R = {
@@ -180,7 +180,6 @@ R = {
     "{{LISA_START}}": f(TL["lisa"][0]), "{{LISA_DUR}}": f(TL["lisa"][1] - TL["lisa"][0]),
     "{{GAL_START}}": f(TL["galaxy"][0]), "{{GAL_DUR}}": f(TL["galaxy"][1] - TL["galaxy"][0]),
     "{{CHAT_START}}": f(TL["chat"][0]), "{{CHAT_DUR}}": f(TL["chat"][1] - TL["chat"][0]),
-    "{{Q2_START}}": f(TL["q2"][0]), "{{Q2_DUR}}": f(TL["q2"][1] - TL["q2"][0]),
     "{{VERDICT_START}}": f(at("e1", 1.58)), "{{VERDICT_DUR}}": f(1.7),
     "{{CTA_START}}": f(T0["e3"]), "{{CTA_DUR}}": f(END_START - T0["e3"]),
     "{{END_START}}": f(END_START), "{{END_DUR}}": f(END_HOLD),
