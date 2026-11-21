@@ -56,6 +56,20 @@
       #lt .tick::after { content: ""; position: absolute; left: 16px; top: 6px; width: 14px; height: 26px;
         border-right: 7px solid #1a1030; border-bottom: 7px solid #1a1030; transform: rotate(45deg); }
       #lt .item { font-family: var(--font-display); font-size: 44px; color: #fff; }
+
+      /* viewer chat bubbles (cover the stream's burned-in chat) */
+      .chat { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 130; pointer-events: none; }
+      .ch-in { position: absolute; left: 196px; top: 1562px; width: 870px; height: 204px; border-radius: 40px; background: #fff;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); display: flex; align-items: center; gap: 30px; padding: 0 40px 0 34px;
+        transform-origin: 30% 50%; }
+      .ch-av { flex: 0 0 116px; width: 116px; height: 116px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(145deg, #e85d0c 0%, #cf1f47 100%); font-family: var(--font-cap); font-weight: 900; font-size: 56px;
+        color: #fff; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.12); }
+      .ch-txt { flex: 1 1 auto; min-width: 0; }
+      .ch-name { font-family: "Poppins", var(--font-cap); font-weight: 800; font-size: 36px; color: #e5304f; line-height: 1.15;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .ch-msg { font-family: "Poppins", var(--font-cap); font-weight: 800; font-size: 48px; color: #111; line-height: 1.1; margin-top: 2px; max-height: 2.25em; overflow: hidden; }
+      .ch-in.solo .ch-name { font-size: 56px; }
       /* captions on the seam (never over the face) */
       #captions { position: absolute; left: 0; right: 0; top: 966px; height: 154px; z-index: 150; }
       .cap { position: absolute; left: 0; right: 0; top: 0; height: 154px; text-align: center; }
@@ -69,24 +83,24 @@
       /* stickers */
       .stk { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 140; pointer-events: none; }
       .stk-in { position: absolute; }
-      .hook .stk-in { left: 60px; right: 60px; top: 1190px; text-align: center; transform-origin: 50% 50%; }
+      .hook .stk-in { left: 60px; right: 60px; top: 1150px; text-align: center; transform-origin: 50% 50%; }
       .hook span { display: block; font-family: var(--font-display); line-height: 1; -webkit-text-stroke: 10px #000; paint-order: stroke fill;
         text-shadow: 0 8px 0 #000; }
       .hook .k1 { font-size: 70px; color: #fff; }
       .hook .k2 { font-size: 140px; color: var(--gold); margin-top: 6px; }
       .hook .k3 { font-size: 76px; color: #fff; margin-top: 8px; }
-      .rewind .stk-in { left: 0; right: 0; top: 1660px; text-align: center; }
+      .rewind .stk-in { left: 0; right: 0; top: 980px; text-align: center; }
       .rw { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 64px; letter-spacing: 0.1em; color: #fff;
         background: var(--red); padding: 8px 34px; border-radius: 14px; box-shadow: 0 8px 0 #000; }
-      .pop .stk-in { top: 1140px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
+      .pop .stk-in { top: 1130px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
         border: 4px solid var(--gold); box-shadow: 0 14px 40px rgba(0,0,0,0.6); text-align: center; }
-      .pop img { display: block; width: 100%; height: 470px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
+      .pop img { display: block; width: 100%; height: 350px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
       .pop.wide .stk-in { width: 560px; }
-      .pop.wide img { height: 316px; object-position: 50% 50%; }
+      .pop.wide img { height: 300px; object-position: 50% 50%; }
       .pop-r .stk-in { right: 44px; }
       .pop-l .stk-in { left: 44px; }
-      .pop-c .stk-in { left: 300px; top: 1140px; width: 480px; }
-      .pop-c img { height: 520px; }
+      .pop-c .stk-in { left: 300px; top: 1110px; width: 480px; }
+      .pop-c img { height: 250px; }
       .lbl { display: block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.06em; color: var(--gold-2);
         padding: 10px 0 14px; line-height: 1.1; }
       .badge .stk-in { left: 50px; top: 1150px; padding: 14px 30px 16px; border-radius: 18px; background: var(--panel);
@@ -117,6 +131,7 @@
       <div id="seam"></div>
       <div id="flash"></div>
 {{STICKERS}}
+{{CHATS}}
       <div id="captions" data-track-kind="captions">
 {{CAPTIONS}}
       </div>
@@ -167,6 +182,14 @@
         tl.fromTo("#gw-fz", { scale: 1.0 }, { scale: 1.06, duration: d, ease: "power1.in" }, s);
         tl.to("#fw-fz, #gw-fz", { x: -60, duration: 0.3, ease: "power2.in" }, s + d - 0.3);
       }
+
+      // chat bubbles: snap in (covering the old overlay at once), small pop, quick out
+      document.querySelectorAll(".chat").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".ch-in");
+        tl.fromTo(inner, { scale: 0.96, y: 10 }, { scale: 1, y: 0, duration: 0.2, ease: "back.out(2.4)", immediateRender: false }, s);
+        if (d > 0.5) tl.to(inner, { opacity: 0, duration: 0.06, ease: "none" }, s + d - 0.06);
+      });
 
       // stickers
       document.querySelectorAll(".stk").forEach((el, i) => {

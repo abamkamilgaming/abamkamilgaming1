@@ -56,6 +56,20 @@
       #lt .tick::after { content: ""; position: absolute; left: 16px; top: 6px; width: 14px; height: 26px;
         border-right: 7px solid #1a1030; border-bottom: 7px solid #1a1030; transform: rotate(45deg); }
       #lt .item { font-family: var(--font-display); font-size: 44px; color: #fff; }
+
+      /* viewer chat bubbles (cover the stream's burned-in chat) */
+      .chat { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 130; pointer-events: none; }
+      .ch-in { position: absolute; left: 196px; top: 1562px; width: 870px; height: 204px; border-radius: 40px; background: #fff;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); display: flex; align-items: center; gap: 30px; padding: 0 40px 0 34px;
+        transform-origin: 30% 50%; }
+      .ch-av { flex: 0 0 116px; width: 116px; height: 116px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(145deg, #e85d0c 0%, #cf1f47 100%); font-family: var(--font-cap); font-weight: 900; font-size: 56px;
+        color: #fff; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.12); }
+      .ch-txt { flex: 1 1 auto; min-width: 0; }
+      .ch-name { font-family: "Poppins", var(--font-cap); font-weight: 800; font-size: 36px; color: #e5304f; line-height: 1.15;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .ch-msg { font-family: "Poppins", var(--font-cap); font-weight: 800; font-size: 48px; color: #111; line-height: 1.1; margin-top: 2px; max-height: 2.25em; overflow: hidden; }
+      .ch-in.solo .ch-name { font-size: 56px; }
       /* captions on the seam (never over the face) */
       #captions { position: absolute; left: 0; right: 0; top: 966px; height: 154px; z-index: 150; }
       .cap { position: absolute; left: 0; right: 0; top: 0; height: 154px; text-align: center; }
@@ -69,24 +83,24 @@
       /* stickers */
       .stk { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 140; pointer-events: none; }
       .stk-in { position: absolute; }
-      .hook .stk-in { left: 60px; right: 60px; top: 1190px; text-align: center; transform-origin: 50% 50%; }
+      .hook .stk-in { left: 60px; right: 60px; top: 1150px; text-align: center; transform-origin: 50% 50%; }
       .hook span { display: block; font-family: var(--font-display); line-height: 1; -webkit-text-stroke: 10px #000; paint-order: stroke fill;
         text-shadow: 0 8px 0 #000; }
       .hook .k1 { font-size: 70px; color: #fff; }
       .hook .k2 { font-size: 140px; color: var(--gold); margin-top: 6px; }
       .hook .k3 { font-size: 76px; color: #fff; margin-top: 8px; }
-      .rewind .stk-in { left: 0; right: 0; top: 1660px; text-align: center; }
+      .rewind .stk-in { left: 0; right: 0; top: 980px; text-align: center; }
       .rw { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 64px; letter-spacing: 0.1em; color: #fff;
         background: var(--red); padding: 8px 34px; border-radius: 14px; box-shadow: 0 8px 0 #000; }
-      .pop .stk-in { top: 1140px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
+      .pop .stk-in { top: 1130px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
         border: 4px solid var(--gold); box-shadow: 0 14px 40px rgba(0,0,0,0.6); text-align: center; }
-      .pop img { display: block; width: 100%; height: 470px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
+      .pop img { display: block; width: 100%; height: 350px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
       .pop.wide .stk-in { width: 560px; }
-      .pop.wide img { height: 316px; object-position: 50% 50%; }
+      .pop.wide img { height: 300px; object-position: 50% 50%; }
       .pop-r .stk-in { right: 44px; }
       .pop-l .stk-in { left: 44px; }
-      .pop-c .stk-in { left: 300px; top: 1140px; width: 480px; }
-      .pop-c img { height: 520px; }
+      .pop-c .stk-in { left: 300px; top: 1110px; width: 480px; }
+      .pop-c img { height: 250px; }
       .lbl { display: block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.06em; color: var(--gold-2);
         padding: 10px 0 14px; line-height: 1.1; }
       .badge .stk-in { left: 50px; top: 1150px; padding: 14px 30px 16px; border-radius: 18px; background: var(--panel);
@@ -189,8 +203,28 @@
       <div id="st-ff" class="clip stk ffbar" data-start="41.346" data-duration="2" data-track-index="5"><div class="stk-in"><span class="ff">SKIP 4-STAR &#9193;&#9193;</span></div></div>
       <div id="st-sec2" class="clip stk badge violet" data-start="54.046" data-duration="1.709" data-track-index="5"><div class="stk-in"><span class="t1">ROUND 2</span><span class="t2">SIGNATURE WEAPON</span></div></div>
       <div id="st-p46" class="clip stk badge" data-start="60.055" data-duration="2.65" data-track-index="5"><div class="stk-in"><span class="t1">PITY</span><span class="t2">46</span></div></div>
-      <div id="st-night" class="clip stk badge violet" data-start="78.155" data-duration="2.4" data-track-index="5"><div class="stk-in"><span class="t1">CHAT:</span><span class="t2">THIS IS YOUR NIGHT BAM</span></div></div>
       <div id="st-sorry" class="clip stk pop pop-c" data-start="83.205" data-duration="4.8" data-track-index="5"><div class="stk-in"><img src="assets/img/tsaritsa.jpg" alt="Tsaritsa"><span class="lbl">MAAF TUANKU...<br>PRIMO HABIS KAT MITYA</span></div></div>
+      <div id="chat-0" class="clip chat" data-start="0" data-duration="8.4" data-track-index="6"><div class="ch-in"><div class="ch-av">A</div><div class="ch-txt"><div class="ch-name">Amzarishere</div><div class="ch-msg" style="font-size:62px">swipe je kad</div></div></div></div>
+      <div id="chat-1" class="clip chat" data-start="8.4" data-duration="9.109" data-track-index="6"><div class="ch-in"><div class="ch-av">K</div><div class="ch-txt"><div class="ch-name">Kaze Shohkan</div><div class="ch-msg" style="font-size:42px">hope you get double gold + early 😌</div></div></div></div>
+      <div id="chat-2" class="clip chat" data-start="17.509" data-duration="5.409" data-track-index="6"><div class="ch-in"><div class="ch-av">K</div><div class="ch-txt"><div class="ch-name">Kaze Shohkan</div><div class="ch-msg" style="font-size:62px">😂🤣</div></div></div></div>
+      <div id="chat-3" class="clip chat" data-start="22.918" data-duration="5.805" data-track-index="6"><div class="ch-in"><div class="ch-av">O</div><div class="ch-txt"><div class="ch-name">OCAK ★Farahin</div><div class="ch-msg" style="font-size:42px">Pasti Mitya dgn Vesna merebut Odette</div></div></div></div>
+      <div id="chat-4" class="clip chat" data-start="28.723" data-duration="1.136" data-track-index="6"><div class="ch-in"><div class="ch-av">&#128172;</div><div class="ch-txt"><div class="ch-name">⛓🖤🍖</div><div class="ch-msg" style="font-size:62px">dh 20</div></div></div></div>
+      <div id="chat-5" class="clip chat" data-start="30.541" data-duration="2.637" data-track-index="6"><div class="ch-in"><div class="ch-av">B</div><div class="ch-txt"><div class="ch-name">bukan eiz</div><div class="ch-msg" style="font-size:62px">letsgo</div></div></div></div>
+      <div id="chat-6" class="clip chat" data-start="33.178" data-duration="3.318" data-track-index="6"><div class="ch-in"><div class="ch-av">&#128172;</div><div class="ch-txt"><div class="ch-name">⛓🖤🍖</div><div class="ch-msg" style="font-size:62px">75</div></div></div></div>
+      <div id="chat-7" class="clip chat" data-start="36.496" data-duration="4.85" data-track-index="6"><div class="ch-in"><div class="ch-av">&#128172;</div><div class="ch-txt"><div class="ch-name">⛓🖤🍖</div><div class="ch-msg" style="font-size:62px">Nk Mr door</div></div></div></div>
+      <div id="chat-8" class="clip chat" data-start="43.346" data-duration="10.7" data-track-index="6"><div class="ch-in solo"><div class="ch-av">O</div><div class="ch-txt"><div class="ch-name">OCAK ★Farahin</div></div></div></div>
+      <div id="chat-9" class="clip chat" data-start="54.046" data-duration="1.409" data-track-index="6"><div class="ch-in"><div class="ch-av">F</div><div class="ch-txt"><div class="ch-name">fanfaley1</div><div class="ch-msg" style="font-size:46px">shared the live stream!</div></div></div></div>
+      <div id="chat-10" class="clip chat" data-start="55.455" data-duration="2.6" data-track-index="6"><div class="ch-in"><div class="ch-av">M</div><div class="ch-txt"><div class="ch-name">Mer</div><div class="ch-msg" style="font-size:42px">Boleh cuba dapat r5 kalau dapat</div></div></div></div>
+      <div id="chat-11" class="clip chat" data-start="58.055" data-duration="1.1" data-track-index="6"><div class="ch-in"><div class="ch-av">Q</div><div class="ch-txt"><div class="ch-name">Qilah Nak Illuga</div><div class="ch-msg" style="font-size:62px">ALA LAMBAT</div></div></div></div>
+      <div id="chat-12" class="clip chat" data-start="59.155" data-duration="12.2" data-track-index="6"><div class="ch-in"><div class="ch-av">A</div><div class="ch-txt"><div class="ch-name">Amzarishere</div><div class="ch-msg" style="font-size:62px">swipe je kad</div></div></div></div>
+      <div id="chat-13" class="clip chat" data-start="71.405" data-duration="2.4" data-track-index="6"><div class="ch-in"><div class="ch-av">K</div><div class="ch-txt"><div class="ch-name">Kaze Shohkan</div><div class="ch-msg" style="font-size:62px">NICEEE!!!</div></div></div></div>
+      <div id="chat-14" class="clip chat" data-start="74.005" data-duration="1.1" data-track-index="6"><div class="ch-in"><div class="ch-av">D</div><div class="ch-txt"><div class="ch-name">Dyluna</div><div class="ch-msg" style="font-size:62px">gelo</div></div></div></div>
+      <div id="chat-15" class="clip chat" data-start="75.805" data-duration="1.45" data-track-index="6"><div class="ch-in"><div class="ch-av">B</div><div class="ch-txt"><div class="ch-name">Butterscotch</div><div class="ch-msg" style="font-size:62px">jj</div></div></div></div>
+      <div id="chat-16" class="clip chat" data-start="77.955" data-duration="0.2" data-track-index="6"><div class="ch-in"><div class="ch-av">M</div><div class="ch-txt"><div class="ch-name">Mer</div><div class="ch-msg" style="font-size:62px">Yeyy</div></div></div></div>
+      <div id="chat-17" class="clip chat" data-start="78.155" data-duration="2.4" data-track-index="6"><div class="ch-in"><div class="ch-av">M</div><div class="ch-txt"><div class="ch-name">Mer</div><div class="ch-msg" style="font-size:52px">This is your night bam</div></div></div></div>
+      <div id="chat-18" class="clip chat" data-start="80.555" data-duration="0.65" data-track-index="6"><div class="ch-in"><div class="ch-av">&#128172;</div><div class="ch-txt"><div class="ch-name">⛓🖤🍖</div><div class="ch-msg" style="font-size:62px">weapon LAK</div></div></div></div>
+      <div id="chat-19" class="clip chat" data-start="81.205" data-duration="1.65" data-track-index="6"><div class="ch-in"><div class="ch-av">&#128172;</div><div class="ch-txt"><div class="ch-name">⛓🖤🍖</div><div class="ch-msg" style="font-size:62px">🥰</div></div></div></div>
+      <div id="chat-20" class="clip chat" data-start="83.205" data-duration="4.8" data-track-index="6"><div class="ch-in"><div class="ch-av">B</div><div class="ch-txt"><div class="ch-name">Butterscotch</div><div class="ch-msg" style="font-size:52px">misi tercapai</div></div></div></div>
       <div id="captions" data-track-kind="captions">
         <div id="cap-0" class="clip cap" data-start="1.85" data-duration="3.2"><div class="cap-in"><span class="w">AAAAAAA!!!</span></div></div>
         <div id="cap-1" class="clip cap" data-start="5.05" data-duration="1.55"><div class="cap-in"><span class="w g">JATUH</span> <span class="w g">KERUSI</span></div></div>
@@ -330,6 +364,14 @@
         tl.fromTo("#gw-fz", { scale: 1.0 }, { scale: 1.06, duration: d, ease: "power1.in" }, s);
         tl.to("#fw-fz, #gw-fz", { x: -60, duration: 0.3, ease: "power2.in" }, s + d - 0.3);
       }
+
+      // chat bubbles: snap in (covering the old overlay at once), small pop, quick out
+      document.querySelectorAll(".chat").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".ch-in");
+        tl.fromTo(inner, { scale: 0.96, y: 10 }, { scale: 1, y: 0, duration: 0.2, ease: "back.out(2.4)", immediateRender: false }, s);
+        if (d > 0.5) tl.to(inner, { opacity: 0, duration: 0.06, ease: "none" }, s + d - 0.06);
+      });
 
       // stickers
       document.querySelectorAll(".stk").forEach((el, i) => {

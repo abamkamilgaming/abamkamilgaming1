@@ -126,9 +126,43 @@ STK = [
     stk("ff", T["m2"][0], E("m2"), '<span class="ff">SKIP 4-STAR &#9193;&#9193;</span>', "ffbar"),
     stk("sec2", T["w1"][0], E("w1") + 0.3, '<span class="t1">ROUND 2</span><span class="t2">SIGNATURE WEAPON</span>', "badge violet"),
     stk("p46", T["w5"][0] + 0.9, E("w5"), '<span class="t1">PITY</span><span class="t2">46</span>', "badge"),
-    stk("night", T["w11"][0], E("w12"), '<span class="t1">CHAT:</span><span class="t2">THIS IS YOUR NIGHT BAM</span>', "badge violet"),
     stk("sorry", T["e2"][0] + 0.35, TOTAL, '<img src="assets/img/tsaritsa.jpg" alt="Tsaritsa"><span class="lbl">MAAF TUANKU...<br>PRIMO HABIS KAT MITYA</span>', "pop pop-c"),
 ]
+
+
+# ---------------------------------------------------------------- viewer chat bubbles
+# Re-typed from the stream's own chat overlay (covers it). (piece_a, src_a, piece_b, src_b, name, text|None)
+# Voice-aligned: Kaze "NICEEE!!!" lands as AbamKamil spells N-I-C-E-E; Mer "This is your night bam" as he answers.
+CHAT = [
+    ("h1", 770.55, "h2", 778.40, "Amzarishere", "swipe je kad"),
+    ("i1", 10.00, "i3", 35.40, "Kaze Shohkan", "hope you get double gold + early \U0001F60C"),
+    ("i4", 50.00, "i4", 55.95, "Kaze Shohkan", "\U0001F602\U0001F923"),
+    ("i5", 169.55, "i7", 177.55, "OCAK ★Farahin", "Pasti Mitya dgn Vesna merebut Odette"),
+    ("i8", 296.70, "i8", 297.95, "⛓\U0001F5A4\U0001F356", "dh 20"),
+    ("i8", 298.70, "i8", 301.60, "bukan eiz", "letsgo"),
+    ("i9", 410.90, "i9", 414.55, "⛓\U0001F5A4\U0001F356", "75"),
+    ("m1", 431.40, "m1", 436.25, "⛓\U0001F5A4\U0001F356", "Nk Mr door"),
+    ("m3", 507.80, "m5", 519.85, "OCAK ★Farahin", None),
+    ("w1", 657.75, "w1", 659.30, "fanfaley1", "shared the live stream!"),
+    ("w2", 696.55, "w3", 701.35, "Mer", "Boleh cuba dapat r5 kalau dapat"),
+    ("w4", 732.85, "w4", 733.95, "Qilah Nak Illuga", "ALA LAMBAT"),
+    ("w5", 765.45, "w8", 778.85, "Amzarishere", "swipe je kad"),
+    ("w9", 783.35, "w9", 785.75, "Kaze Shohkan", "NICEEE!!!"),
+    ("w9", 785.95, "w9", 787.05, "Dyluna", "gelo"),
+    ("w10", 789.30, "w10", 790.75, "Butterscotch", "jj"),
+    ("w10", 791.45, "w10", 791.65, "Mer", "Yeyy"),
+    ("w11", 809.55, "w12", 814.45, "Mer", "This is your night bam"),
+    ("e1", 574.35, "e1", 575.00, "⛓\U0001F5A4\U0001F356", "weapon LAK"),
+    ("e1", 575.00, "e1", 576.65, "⛓\U0001F5A4\U0001F356", "\U0001F970"),
+    ("e2", 855.60, "e2", 860.40, "Butterscotch", "misi tercapai"),
+]
+chats = []
+for pa, sa, pb, sb, name, text in CHAT:
+    s0 = at(pa, sa) if sa > SRC[pa][1] + 0.01 else T[pa][0]
+    s1 = at(pb, sb) if sb < SRC[pb][2] - 0.01 else E(pb)
+    if pa == "h1":
+        s1 = E("freeze")          # the freeze frame carries the same burned-in bubble
+    chats.append((round(s0, 3), round(s1 - s0, 3), name, text))
 
 # ---------------------------------------------------------------- audio
 MUSIC = [  # (id, file, start, dur, volume, media_start, fade_in, fade_out)
@@ -211,6 +245,17 @@ for sid, s, d, inner, cls in STK:
              f'<div class="stk-in">{inner}</div></div>')
 STICK = "\n".join(P); P.clear()
 
+for i, (cs, cd, name, text) in enumerate(chats):
+    first = name.strip()[0]
+    ini = html.escape(first.upper()) if first.isalpha() else "&#128172;"
+    n = len(text) if text else 0
+    fs = 62 if n <= 12 else 52 if n <= 22 else 46 if n <= 30 else 42
+    body = f'<div class="ch-msg" style="font-size:{fs}px">{html.escape(text)}</div>' if text else ''
+    P.append(f'      <div id="chat-{i}" class="clip chat" data-start="{f(cs)}" data-duration="{f(cd)}" data-track-index="6">'
+             f'<div class="ch-in{"" if text else " solo"}"><div class="ch-av">{ini}</div><div class="ch-txt"><div class="ch-name">{html.escape(name)}</div>{body}</div></div></div>')
+CHATS = "\n".join(P); P.clear()
+
+
 for i, (s, d, txt) in enumerate(caps):
     P.append(f'        <div id="cap-{i}" class="clip cap" data-start="{f(s)}" data-duration="{f(d)}"><div class="cap-in">{mark(txt)}</div></div>')
 CAPS = "\n".join(P); P.clear()
@@ -230,7 +275,7 @@ TL = {"total": TOTAL, "T": T, "flash": [T["m4"][0], T["w8"][0]],
       "gamezoom": ["m4", "m5", "w8"], "freeze": T["freeze"]}
 
 page = open(os.path.join(ROOT, "build", "template.html")).read()
-for k, v in {"{{TOTAL}}": f(TOTAL), "{{MEDIA}}": MEDIA, "{{STICKERS}}": STICK, "{{CAPTIONS}}": CAPS,
+for k, v in {"{{TOTAL}}": f(TOTAL), "{{MEDIA}}": MEDIA, "{{STICKERS}}": STICK, "{{CHATS}}": CHATS, "{{CAPTIONS}}": CAPS,
              "{{AUDIO}}": AUDIO, "{{TL}}": json.dumps(TL)}.items():
     page = page.replace(k, v)
 open(os.path.join(ROOT, "index.html"), "w").write(page)
