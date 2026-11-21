@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #07060f;
+        --ink: #ffffff;
+        --gold: #ffd54a;
+        --gold-2: #fff1b8;
+        --violet: #9d6bff;
+        --violet-2: #d7c2ff;
+        --red: #ff4458;
+        --panel: rgba(12, 8, 30, 0.82);
+        --font-cap: "Montserrat", sans-serif;
+        --font-display: "Archivo Black", "Montserrat", sans-serif;
+        --font-label: "Oswald", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+
+      /* face cam: top 780px — game: 780..1920 */
+      .fw { position: absolute; left: 0; top: 0; width: 1080px; height: 860px; overflow: hidden; }
+      .fz { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .face { position: absolute; left: 0; top: 0; width: 1080px; height: 860px; object-fit: cover; }
+      .gw { position: absolute; left: 0; top: 860px; width: 1080px; height: 1060px; overflow: hidden; }
+      .gz { position: absolute; inset: 0; transform-origin: 50% 30%; }
+      .game { position: absolute; left: -54px; top: 0; width: 1188px; height: 1254px; object-fit: cover; }
+
+      /* seam between face and game */
+      #seam { position: absolute; left: 0; top: 854px; width: 1080px; height: 12px; z-index: 120; pointer-events: none;
+        background: linear-gradient(90deg, var(--violet) 0%, var(--gold) 50%, var(--violet) 100%);
+        box-shadow: 0 0 24px rgba(157, 107, 255, 0.85), 0 0 6px rgba(255, 213, 74, 0.9); }
+      #flash { position: absolute; inset: 0; z-index: 200; background: #fff; opacity: 0; pointer-events: none; }
+      #fz-dim { position: absolute; inset: 0; z-index: 110; pointer-events: none; }
+      #fz-dim .dim-in { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, rgba(7,6,15,0.15) 0%, rgba(7,6,15,0.7) 100%); }
+
+      /* captions on the seam (never over the face) */
+      #captions { position: absolute; left: 0; right: 0; top: 720px; height: 280px; z-index: 150; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; height: 280px; text-align: center; }
+      .cap-in { position: absolute; left: 110px; right: 110px; top: 66px; text-align: center; transform-origin: 50% 60%; line-height: 1.02; }
+      .w { display: inline-block; margin: 0 0.13em; font-family: var(--font-cap); font-weight: 900; font-size: 92px; color: #fff;
+        -webkit-text-stroke: 14px #000; paint-order: stroke fill; letter-spacing: -0.01em;
+        text-shadow: 0 8px 0 #000, 0 12px 28px rgba(0, 0, 0, 0.6); }
+      .w.g { color: var(--gold); }
+      .w.r { color: var(--red); }
+
+      /* stickers */
+      .stk { position: absolute; left: 0; right: 0; top: 0; height: 1920px; z-index: 140; pointer-events: none; }
+      .stk-in { position: absolute; }
+      .hook .stk-in { left: 60px; right: 60px; top: 990px; text-align: center; transform-origin: 50% 50%; }
+      .hook span { display: block; font-family: var(--font-display); line-height: 1; -webkit-text-stroke: 10px #000; paint-order: stroke fill;
+        text-shadow: 0 8px 0 #000; }
+      .hook .k1 { font-size: 70px; color: #fff; }
+      .hook .k2 { font-size: 140px; color: var(--gold); margin-top: 6px; }
+      .hook .k3 { font-size: 76px; color: #fff; margin-top: 8px; }
+      .rewind .stk-in { left: 0; right: 0; top: 1470px; text-align: center; }
+      .rw { display: inline-block; font-family: var(--font-label); font-weight: 700; font-size: 64px; letter-spacing: 0.1em; color: #fff;
+        background: var(--red); padding: 8px 34px; border-radius: 14px; box-shadow: 0 8px 0 #000; }
+      .pop .stk-in { top: 950px; width: 400px; padding: 12px 12px 0; border-radius: 22px; background: var(--panel);
+        border: 4px solid var(--gold); box-shadow: 0 14px 40px rgba(0,0,0,0.6); text-align: center; }
+      .pop img { display: block; width: 100%; height: 470px; object-fit: cover; object-position: 50% 20%; border-radius: 14px; }
+      .pop.wide .stk-in { width: 560px; }
+      .pop.wide img { height: 316px; object-position: 50% 50%; }
+      .pop-r .stk-in { right: 44px; }
+      .pop-l .stk-in { left: 44px; }
+      .pop-c .stk-in { left: 300px; top: 950px; width: 480px; }
+      .pop-c img { height: 520px; }
+      .lbl { display: block; font-family: var(--font-label); font-weight: 700; font-size: 40px; letter-spacing: 0.06em; color: var(--gold-2);
+        padding: 10px 0 14px; line-height: 1.1; }
+      .badge .stk-in { left: 60px; top: 1010px; padding: 14px 30px 16px; border-radius: 18px; background: var(--panel);
+        border: 4px solid var(--gold); box-shadow: 0 10px 0 #000; transform-origin: 0 50%; }
+      .badge.red .stk-in { border-color: var(--red); }
+      .badge.violet .stk-in { border-color: var(--violet); }
+      .badge.tilt .stk-in { left: auto; right: 50px; transform-origin: 100% 50%; }
+      .badge span { display: block; }
+      .badge .t1 { font-family: var(--font-label); font-weight: 700; font-size: 34px; letter-spacing: 0.14em; color: var(--violet-2); }
+      .badge .t2 { font-family: var(--font-display); font-size: 62px; line-height: 1.05; color: var(--gold); }
+      .badge.red .t2 { color: var(--red); }
+      .badge.violet .t2 { color: #fff; font-size: 52px; line-height: 1.2; margin-top: 6px; }
+      .ffbar .stk-in { left: 0; right: 0; top: 1300px; text-align: center; }
+      .ff { display: inline-block; font-family: var(--font-display); font-size: 70px; color: #fff; -webkit-text-stroke: 8px #000;
+        paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="{{TOTAL}}" data-width="1080" data-height="1920"
+      data-layout-allow-overflow data-layout-allow-overlap>
+{{MEDIA}}
+      <div id="seam"></div>
+      <div id="flash"></div>
+{{STICKERS}}
+      <div id="captions" data-track-kind="captions">
+{{CAPTIONS}}
+      </div>
+{{AUDIO}}
+    </div>
+    <script>
+      const TL = {{TL}};
+      const tl = gsap.timeline({ paused: true });
+      const T = TL.T;
+
+      // punch-ins: alternate framing on every cut, slow push on big reactions
+      Object.keys(T).forEach((pid, i) => {
+        if (pid === "freeze") return;
+        const [s, d] = T[pid];
+        const fw = "#fw-" + pid, gw = "#gw-" + pid;
+        const base = i % 2 ? 1.1 : 1.0;
+        if (TL.push.includes(pid)) {
+          tl.fromTo(fw, { scale: base }, { scale: base + 0.14, duration: d, ease: "sine.inOut" }, s);
+        } else {
+          tl.set(fw, { scale: base }, s);
+        }
+        if (TL.gamezoom.includes(pid)) {
+          tl.fromTo(gw, { scale: 1.0 }, { scale: 1.1, duration: d, ease: "sine.out" }, s);
+        }
+      });
+
+      // shakes (deterministic jitter)
+      TL.shake.forEach(([s, d]) => {
+        const n = Math.max(4, Math.round(d / 0.05));
+        const pts = [[14, -9], [-12, 7], [9, 12], [-15, -6], [7, -13], [-8, 10], [12, 4], [-6, -11]];
+        for (let k = 0; k < n; k++) {
+          const [x, y] = pts[k % pts.length];
+          const amp = 1 - k / n;
+          tl.to("#root", { x: x * amp, y: y * amp, duration: d / n, ease: "none" }, s + (k * d) / n);
+        }
+        tl.set("#root", { x: 0, y: 0 }, s + d);
+      });
+
+      // white flashes on reveals
+      TL.flash.forEach((s) => {
+        tl.fromTo("#flash", { opacity: 0.85 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, s);
+      });
+
+      // freeze frame: slow zoom + rewind blur-out
+      {
+        const [s, d] = TL.freeze;
+        tl.fromTo("#fw-fz", { scale: 1.0 }, { scale: 1.12, duration: d, ease: "power1.in" }, s);
+        tl.fromTo("#gw-fz", { scale: 1.0 }, { scale: 1.06, duration: d, ease: "power1.in" }, s);
+        tl.to("#fw-fz, #gw-fz", { x: -60, duration: 0.3, ease: "power2.in" }, s + d - 0.3);
+      }
+
+      // stickers
+      document.querySelectorAll(".stk").forEach((el, i) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".stk-in");
+        if (el.classList.contains("hook")) {
+          const spans = inner.querySelectorAll("span");
+          spans.forEach((sp, k) => {
+            if (s === 0) return;  // frame 0 = thumbnail: the hook is already on screen
+            tl.fromTo(sp, { scale: 2.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.16, ease: "back.out(2.2)" }, s + k * 0.22);
+          });
+          if (s === 0) tl.to(inner, { scale: 1.07, duration: d - 0.1, ease: "sine.inOut" }, 0);
+          tl.to(inner, { opacity: 0, duration: 0.08 }, s + d - 0.09);
+          return;
+        }
+        if (el.classList.contains("pop")) {
+          const r = el.classList.contains("pop-l") ? -5 : el.classList.contains("pop-c") ? 0 : 5;
+          tl.fromTo(inner, { y: 260, opacity: 0, rotation: r * 3, scale: 0.7 }, { y: 0, opacity: 1, rotation: r, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, s);
+          tl.to(inner, { y: -10, duration: Math.max(0.1, d - 0.45), ease: "sine.inOut" }, s + 0.3);
+          tl.to(inner, { opacity: 0, scale: 0.85, duration: 0.12, ease: "power2.in" }, s + d - 0.13);
+          return;
+        }
+        const r = el.classList.contains("tilt") ? 6 : el.classList.contains("badge") ? -3 : 0;
+        tl.fromTo(inner, { scale: 0.2, opacity: 0, rotation: r * 3 }, { scale: 1, opacity: 1, rotation: r, duration: 0.2, ease: "back.out(2)" }, s);
+        tl.to(inner, { scale: 1.05, duration: Math.max(0.1, d - 0.34), ease: "none" }, s + 0.2);
+        tl.to(inner, { opacity: 0, duration: 0.1, ease: "power2.in" }, s + d - 0.11);
+      });
+
+      // captions: pop in, hard kill at end
+      document.querySelectorAll(".cap").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration);
+        const inner = el.querySelector(".cap-in");
+        const fit = window.__hyperframes && window.__hyperframes.fitTextFontSize
+          ? window.__hyperframes.fitTextFontSize(inner.textContent, { fontFamily: "Montserrat", fontWeight: 900, maxWidth: 780, baseSize: 96, minSize: 60 })
+          : null;
+        if (fit && fit.fontSize) inner.querySelectorAll(".w").forEach((w) => (w.style.fontSize = fit.fontSize + "px"));
+        tl.fromTo(inner, { scale: 0.5, opacity: 0, y: 18 }, { scale: 1, opacity: 1, y: 0, duration: 0.12, ease: "back.out(2.6)" }, s);
+        tl.to(inner, { opacity: 0, duration: 0.04, ease: "power2.in" }, s + Math.max(0.12, d - 0.04));
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
