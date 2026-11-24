@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Montserrat"; src: url("assets/fonts/Montserrat.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Luckiest Guy"; src: url("assets/fonts/LuckiestGuy.ttf") format("truetype"); }
+      @font-face { font-family: "Noto Color Emoji"; src: url("assets/fonts/NotoColorEmoji.ttf") format("truetype"); }
+      @font-face { font-family: "Lilita One"; src: url("assets/fonts/LilitaOne-Regular.ttf") format("truetype"); }
+      :root {
+        --ground: #000;
+        --teal: #1ee6d2;
+        --red: #ff2d3d;
+        --yellow: #ffd60a;
+        --green: #3ff03a;
+        --font-word: "Montserrat", sans-serif;
+        --font-comic: "Luckiest Guy", "Montserrat", sans-serif;
+        --font-say: "Lilita One", "Montserrat", sans-serif;
+        --emoji: "Noto Color Emoji";
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      .vw { position: absolute; inset: 0; overflow: hidden; transform-origin: 50% 40%; }
+      #vw-bw { transform-origin: 470px 560px; }
+      .vid { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #flash { position: absolute; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+      .bar { position: absolute; left: 0; right: 0; height: 150px; background: #000; z-index: 60; }
+      #bar-t { top: 0; }
+      #bar-b { bottom: 0; }
+
+      /* ---------- hook / title card (Sir Asai style) ---------- */
+      #title { position: absolute; left: 0; right: 0; top: 190px; height: 420px; z-index: 80; text-align: center; }
+      #t-eng { display: inline-block; font-family: var(--font-word); font-weight: 800; font-size: 46px; letter-spacing: 0.04em;
+        color: #111; background: #fff; padding: 4px 20px 2px; border-radius: 8px; box-shadow: 0 5px 0 #000; }
+      .t-big { display: block; font-family: var(--font-word); font-weight: 900; font-size: 112px; line-height: 0.98;
+        color: var(--red); -webkit-text-stroke: 14px #fff; paint-order: stroke fill;
+        filter: drop-shadow(0 8px 0 #000) drop-shadow(0 0 18px rgba(0,0,0,0.45)); }
+      #t-1 { margin-top: 14px; }
+      #hook { position: absolute; left: 0; right: 0; top: 1080px; height: 300px; z-index: 82; text-align: center; }
+      #h-line { display: inline-block; font-family: var(--font-comic); font-size: 100px; line-height: 1; color: var(--yellow);
+        -webkit-text-stroke: 12px #000; paint-order: stroke fill; filter: drop-shadow(0 8px 0 #000); }
+      #h-pill { display: inline-block; margin-top: 26px; font-family: var(--font-word); font-weight: 800; font-size: 44px;
+        color: #fff; background: rgba(0,0,0,0.78); border: 3px solid var(--yellow); padding: 14px 30px; border-radius: 999px; }
+      .emo { font-family: var(--emoji) !important; -webkit-text-stroke: 0 !important; filter: none !important; }
+
+      /* ---------- the word card ---------- */
+      #word { position: absolute; left: 0; right: 0; top: 200px; height: 460px; z-index: 70; text-align: center; }
+      #w-stack { position: relative; display: inline-block; }
+      .w-txt { font-family: var(--font-word); font-weight: 900; font-size: 168px; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
+      #w-back { position: absolute; left: 0; top: 0; color: var(--teal); -webkit-text-stroke: 34px var(--teal);
+        filter: drop-shadow(0 0 22px rgba(30,230,210,0.7)); }
+      #w-front { position: relative; color: #fff; -webkit-text-stroke: 14px #000; paint-order: stroke fill; }
+      #w-front .L { display: inline-block; }
+      #L-s { position: relative; }
+      #s-strike { position: absolute; left: -10px; right: -10px; top: 46%; height: 18px; border-radius: 9px;
+        background: var(--red); border: 4px solid #000; transform-origin: 0 50%; }
+      #say { display: block; margin-top: 4px; font-family: var(--font-say); font-size: 120px; line-height: 1; color: var(--green);
+        -webkit-text-stroke: 12px #000; paint-order: stroke fill; filter: drop-shadow(0 7px 0 #000); }
+      #ipa { position: absolute; right: 150px; top: 330px; font-family: "DejaVu Sans", sans-serif; font-size: 50px; color: #fff;
+        text-shadow: 0 3px 0 #000, 0 0 12px rgba(0,0,0,0.9); }
+      #silent { position: absolute; left: 92px; top: 390px; font-family: var(--font-word); font-weight: 800; font-size: 38px;
+        color: #fff; background: var(--red); padding: 8px 18px; border-radius: 10px; border: 3px solid #000; transform: rotate(-6deg); }
+
+      /* ---------- attempts ---------- */
+      .att { position: absolute; left: 0; right: 0; top: 1120px; height: 130px; z-index: 75; text-align: center; }
+      .att-in { position: absolute; left: 60px; right: 140px; top: 0; display: flex; align-items: center; justify-content: center; gap: 26px; }
+      .att-q { font-family: var(--font-comic); font-size: 92px; line-height: 1; color: var(--yellow); white-space: nowrap;
+        -webkit-text-stroke: 12px #000; paint-order: stroke fill; filter: drop-shadow(0 8px 0 #000); }
+      .xmark { position: relative; flex: 0 0 auto; width: 110px; height: 110px; border-radius: 50%; background: var(--red);
+        border: 7px solid #fff; box-shadow: 0 6px 0 #000; }
+      .xmark i { position: absolute; left: 22px; right: 22px; top: 41px; height: 14px; border-radius: 7px; background: #fff; }
+      .xmark i:first-child { transform: rotate(45deg); }
+      .xmark i:last-child { transform: rotate(-45deg); }
+
+      /* ---------- answer stickers ---------- */
+      #ansTag { position: absolute; left: 0; right: 0; top: 1130px; height: 140px; z-index: 76; text-align: center; }
+      #ansTag span { display: inline-block; font-family: var(--font-word); font-weight: 900; font-size: 58px; color: #111;
+        background: var(--green); padding: 12px 34px; border-radius: 14px; border: 5px solid #000; box-shadow: 0 8px 0 #000; }
+      #capish { position: absolute; left: 40px; top: 760px; width: 470px; height: 300px; z-index: 86; }
+      #cap-burst { position: absolute; inset: 0; background: #fff; border: 0;
+        clip-path: polygon(50% 0, 60% 22%, 84% 8%, 78% 34%, 100% 40%, 80% 56%, 96% 80%, 70% 74%, 60% 100%, 48% 78%, 26% 96%, 26% 70%, 0 72%, 16% 52%, 2% 30%, 26% 30%, 22% 6%, 42% 22%); }
+      #cap-txt { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-family: var(--font-comic);
+        font-size: 92px; line-height: 1; color: var(--yellow); -webkit-text-stroke: 11px #000; paint-order: stroke fill; }
+
+      /* ---------- ending ---------- */
+      .name { position: absolute; z-index: 74; font-family: var(--font-word); font-weight: 700; font-size: 44px; color: #fff;
+        text-shadow: 0 3px 0 rgba(0,0,0,0.85), 0 0 14px rgba(0,0,0,0.7); }
+      #n-ust { left: 70px; top: 1000px; }
+      #n-zha { left: 590px; top: 1000px; }
+      .cap { position: absolute; left: 0; right: 0; top: 1150px; height: 200px; z-index: 78; text-align: center; }
+      .cap-in { position: absolute; left: 110px; right: 130px; top: 0; text-align: center; }
+      .cw { font-family: var(--font-word); font-weight: 900; font-size: 74px; line-height: 1.1; color: #fff;
+        -webkit-text-stroke: 10px #000; paint-order: stroke fill; filter: drop-shadow(0 6px 0 #000); }
+      .cw.y { color: var(--yellow); }
+      #twist { position: absolute; left: 0; right: 0; top: 1130px; height: 220px; z-index: 88; text-align: center; }
+      #twist-in { display: inline-block; font-family: var(--font-comic); font-size: 124px; line-height: 1; color: #fff;
+        -webkit-text-stroke: 14px #000; paint-order: stroke fill; filter: drop-shadow(0 10px 0 #000); }
+      #score { position: absolute; left: 0; right: 0; top: 1310px; height: 140px; z-index: 88; text-align: center; }
+      #score-in { display: inline-block; font-family: var(--font-word); font-weight: 900; font-size: 54px; color: #111;
+        background: #fff; padding: 14px 34px; border-radius: 14px; border: 5px solid #000; box-shadow: 0 8px 0 #000; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="%TOTAL%" data-width="1080" data-height="1920">
+%VIDEOS%
+
+      <div id="bar-t" class="bar"></div>
+      <div id="bar-b" class="bar"></div>
+
+      <!-- word card (stays up through the attempts and the answer) -->
+      <div id="word" class="clip" data-start="%wordIn%" data-duration="%wordDur%" data-track-index="3">
+        <div id="w-stack">
+          <div id="w-back" class="w-txt" data-layout-ignore aria-hidden="true">ISLAND</div>
+          <div id="w-front" class="w-txt"><span class="L">I</span><span class="L" id="L-s">S<i id="s-strike"></i></span><span class="L">LAND</span></div>
+        </div>
+        <span id="say">“AI-LEN”</span>
+        <div id="ipa">/ˈaɪ.lənd/</div>
+        <div id="silent">“S” senyap! <span class="emo">🤫</span></div>
+      </div>
+
+%ATTEMPTS%
+
+      <div id="ansTag" class="clip" data-start="%ansTagIn%" data-duration="%ansTagDur%" data-track-index="4"><span>JAWAPAN BETUL <span class="emo">👇</span></span></div>
+      <div id="capish" class="clip" data-start="%ansCapish%" data-duration="%capDur%" data-track-index="5">
+        <div id="cap-burst"></div><div id="cap-txt">CAPISH?</div>
+      </div>
+
+      <!-- hook: title + bait (frame 0 = thumbnail) -->
+      <div id="title" class="clip" data-start="0" data-duration="%hookOut%" data-track-index="6">
+        <span id="t-eng">ENGLISH</span>
+        <span id="t-1" class="t-big">PRONUNCIATION</span>
+        <span id="t-2" class="t-big">CHALLENGE</span>
+      </div>
+      <div id="hook" class="clip" data-start="0" data-duration="%hookOut%" data-track-index="6">
+        <div id="h-line">6 BUDAK, 6 JAWAPAN SALAH <span class="emo">😭</span></div>
+        <div id="h-pill">Jawapan Ustazah last sekali… <span class="emo">💀</span></div>
+      </div>
+
+      <!-- ending -->
+      <div id="n-ust" class="clip name" data-start="%endIn%" data-duration="%namesDur%" data-track-index="7">Ustazah</div>
+      <div id="n-zha" class="clip name" data-start="%endIn%" data-duration="%namesDur%" data-track-index="7">Zhafira</div>
+      <div id="c1" class="clip cap" data-start="%wUstazah%" data-duration="%c1Dur%" data-track-index="8"><div class="cap-in"><span class="cw">Ustazah, ingin pergi ke </span><span class="cw y">pulau</span></div></div>
+      <div id="c2" class="clip cap" data-start="%wBersama%" data-duration="%c2Dur%" data-track-index="8"><div class="cap-in"><span class="cw">bersama saya? </span><span class="cw emo">🏝️</span></div></div>
+      <div id="c3" class="clip cap" data-start="%wBoleh%" data-duration="%c3Dur%" data-track-index="8"><div class="cap-in"><span class="cw">Boleh… awak </span><span class="cw y">belanja</span><span class="cw"> saya? </span><span class="cw emo">💸</span></div></div>
+      <div id="twist" class="clip" data-start="%twistIn%" data-duration="%twistDur%" data-track-index="8"><div id="twist-in">PLOT TWIST <span class="emo">😭</span></div></div>
+      <div id="score" class="clip" data-start="%scoreIn%" data-duration="%scoreDur%" data-track-index="8"><div id="score-in">USTAZAH 1 – 0 ZHAFIRA <span class="emo">😂</span></div></div>
+
+      <div id="flash"></div>
+
+%AUDIO%
+    </div>
+
+    <script>
+      const K = %K%;
+      const T = K.T;
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- footage motion
+      // intro: slow push
+      tl.fromTo("#vw-intro", { scale: 1.0 }, { scale: 1.07, duration: T.intro[1], ease: "none" }, 0);
+      // attempts: punch-in on every cut, then settle while they speak
+      K.attempts.forEach((id, i) => {
+        const [s, e] = T[id];
+        tl.fromTo("#vw-" + id, { scale: 1.2 }, { scale: 1.06, duration: 0.28, ease: "power3.out" }, s);
+        tl.to("#vw-" + id, { scale: 1.0, duration: Math.max(0.1, e - s - 0.28), ease: "none" }, s + 0.28);
+      });
+      // answer: jump cuts alternate framing
+      tl.fromTo("#vw-ans", { scale: 1.0 }, { scale: 1.05, duration: K.ansIsland - T.ans[0], ease: "none" }, T.ans[0]);
+      tl.fromTo("#vw-ans", { scale: 1.16 }, { scale: 1.12, duration: K.ansCapish - K.ansIsland, ease: "none", immediateRender: false }, K.ansIsland);
+      tl.fromTo("#vw-ans", { scale: 1.0 }, { scale: 1.06, duration: T.ans[1] - K.ansCapish, ease: "none", immediateRender: false }, K.ansCapish);
+      // ending (colour): gentle push
+      tl.fromTo("#vw-end", { scale: 1.0 }, { scale: 1.06, duration: K.endSeg2 - T.end[0], ease: "none" }, T.end[0]);
+      // ending (B&W): creep toward both faces, SNAP on the ack, then slow drift on the freeze
+      tl.fromTo("#vw-bw", { scale: 1.04 }, { scale: 1.18, duration: K.ack - K.endSeg2, ease: "sine.in" }, K.endSeg2);
+      tl.to("#vw-bw", { scale: 1.45, duration: 0.14, ease: "power4.out" }, K.ack);
+      [22, -18, 14, -10, 7, -4, 0].forEach((x, i) => tl.to("#vw-bw", { x: x, y: -x * 0.5, duration: 0.045, ease: "none" }, K.ack + 0.14 + i * 0.045));
+      tl.to("#vw-bw", { scale: 1.56, duration: K.total - K.ack - 0.5, ease: "none" }, K.ack + 0.5);
+      tl.fromTo("#bar-t", { yPercent: -100 }, { yPercent: 0, duration: 0.18, ease: "power3.out" }, K.ack);
+      tl.fromTo("#bar-b", { yPercent: 100 }, { yPercent: 0, duration: 0.18, ease: "power3.out" }, K.ack);
+
+      // flashes
+      [[T.s1[0], 0.7], [K.ansIsland, 0.45], [K.ack, 0.85]].forEach(([t, a]) => {
+        tl.fromTo("#flash", { opacity: 0 }, { opacity: a, duration: 0.03, ease: "none" }, Math.max(0, t - 0.03));
+        tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, t);
+      });
+
+      // ---------- hook
+      tl.fromTo("#t-eng", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(2)" }, 0);
+      tl.fromTo("#t-1", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)" }, 0.05);
+      tl.fromTo("#t-2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)" }, 0.18);
+      tl.fromTo("#h-line", { scale: 0.4, rotation: -6 }, { scale: 1, rotation: -2, duration: 0.3, ease: "back.out(2.5)" }, 0);
+      tl.to("#h-line", { scale: 1.06, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.35);
+      tl.fromTo("#h-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, 0.45);
+      tl.to(["#title", "#hook"], { opacity: 0, y: -50, duration: 0.14, ease: "power2.in" }, %hookOut% - 0.15);
+
+      // ---------- word card
+      tl.fromTo("#w-stack", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.24, ease: "back.out(1.8)" }, %wordIn%);
+      tl.set(["#say", "#ipa", "#silent"], { opacity: 0 }, %wordIn%);
+      tl.fromTo("#w-stack", { y: 0 }, { y: -8, duration: 0.5, yoyo: true, repeat: 9, ease: "sine.inOut" }, %wordIn% + 0.3);
+      // answer reveal on "Island"
+      tl.to("#L-s", { color: "#ff2d3d", duration: 0.05 }, K.ansIsland);
+      tl.fromTo("#s-strike", { rotation: -14, scaleX: 0 }, { rotation: -14, scaleX: 1, duration: 0.18, ease: "power3.out" }, K.ansIsland + 0.05);
+      tl.fromTo("#say", { opacity: 0, scale: 0.3, rotation: -8 }, { opacity: 1, scale: 1, rotation: -2, duration: 0.25, ease: "back.out(2.6)" }, K.ansIsland);
+      tl.fromTo("#ipa", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.22, ease: "power3.out" }, K.ansIsland + 0.2);
+      tl.fromTo("#silent", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2.5)" }, K.ansIsland + 0.35);
+      tl.to("#word", { opacity: 0, scale: 0.85, duration: 0.14, ease: "power2.in" }, T.end[0] - 0.15);
+
+      // ---------- attempts
+      K.attempts.forEach((id) => {
+        const [s, e] = T[id];
+        const q = "#at-" + id + " .att-q", x = "#at-" + id + " .xmark";
+        tl.fromTo(q, { scale: 0.4, opacity: 0, rotation: -5 }, { scale: 1, opacity: 1, rotation: -2, duration: 0.18, ease: "back.out(2.6)" }, s + 0.03);
+        tl.fromTo(x, { scale: 2.4, opacity: 0, rotation: -60 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.16, ease: "back.out(2)" }, Math.max(s + 0.35, e - 0.36));
+        tl.to("#at-" + id + " .att-in", { x: 0, keyframes: [{ x: 10, duration: 0.03 }, { x: -10, duration: 0.03 }, { x: 6, duration: 0.03 }, { x: 0, duration: 0.03 }] }, Math.max(s + 0.35, e - 0.36) + 0.05);
+      });
+      tl.fromTo("#ansTag span", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(2)" }, %ansTagIn% + 0.05);
+      tl.fromTo("#capish", { scale: 0, rotation: -40 }, { scale: 1, rotation: -12, duration: 0.24, ease: "back.out(2.4)" }, K.ansCapish);
+      tl.to("#capish", { rotation: -6, duration: 0.25, yoyo: true, repeat: 2, ease: "sine.inOut" }, K.ansCapish + 0.26);
+
+      // ---------- ending
+      tl.fromTo(["#n-ust", "#n-zha"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.1 }, T.end[0] + 0.1);
+      ["#c1", "#c2", "#c3"].forEach((c) => {
+        const el = document.querySelector(c);
+        const s = parseFloat(el.dataset.start);
+        tl.fromTo(c + " .cap-in", { scale: 0.6, opacity: 0, y: 14 }, { scale: 1, opacity: 1, y: 0, duration: 0.14, ease: "back.out(2.6)" }, s);
+      });
+      tl.fromTo("#twist-in", { scale: 3, opacity: 0, rotation: 8 }, { scale: 1, opacity: 1, rotation: -3, duration: 0.2, ease: "back.out(1.8)" }, %twistIn%);
+      tl.to("#twist-in", { rotation: 3, duration: 0.09, yoyo: true, repeat: 7, ease: "none" }, %twistIn% + 0.25);
+      tl.fromTo("#score-in", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2)" }, %scoreIn%);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
