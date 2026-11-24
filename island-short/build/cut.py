@@ -20,8 +20,9 @@ CLIPS = {
     "s4": ("Scene 4", [(0.58, 1.42)], 0),
     "s5": ("Scene 5", [(1.32, 2.52)], 0),
     "s6": ("Scene 6", [(0.47, 1.66)], 0),
-    # "The pronunciation is" | "Island" | (2nd Island cut) | "Capish?"
-    "ans": ("The right answer is ...", [(0.45, 2.50), (3.04, 3.86), (5.84, 6.80)], 0),
+    # "The pronunciation is" | "Island" | "Island" | "Capish?"
+    # both "Island"s kept (only the dead air between them is tightened), "Capish?" kept to the end of the take
+    "ans": ("The right answer is ...", [(0.45, 2.50), (3.00, 3.92), (4.50, 5.48), (5.74, 7.00)], 0),
     # "Ustazah, ingin pergi ke pulau bersama saya?" | "Boleh, awak belanja saya?" + reaction, then freeze
     "end": ("End scene", [(0.86, 3.98), (4.10, 6.86)], 2.6),
 }

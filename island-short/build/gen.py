@@ -14,7 +14,8 @@ TOTAL = round(t, 3)
 A0, A1 = T["ans"]
 E0, E1 = T["end"]
 ANS_ISLAND = round(A0 + C["ans"]["segs"][1], 3)          # "Island"
-ANS_CAPISH = round(A0 + C["ans"]["segs"][2] + 0.06, 3)   # "Capish?"
+ANS_ISLAND2 = round(A0 + C["ans"]["segs"][2], 3)         # 2nd "Island"
+ANS_CAPISH = round(A0 + C["ans"]["segs"][3] + 0.05, 3)   # "Capish?"
 END_SEG2 = round(E0 + C["end"]["segs"][1], 3)            # answer half starts (B&W from here)
 src2end = lambda s, seg: round(E0 + C["end"]["segs"][seg] + (s - C["end"]["wins"][seg][0]), 3)
 W_USTAZAH = src2end(1.00, 0)
@@ -82,7 +83,7 @@ for cid in ATTEMPTS:
     s, e = T[cid]
     SFX.append(("pop.mp3", s + 0.03, 0.32))
     SFX.append(("wrong.wav", max(s + 0.35, e - 0.36), 0.42))
-SFX += [("whoosh.mp3", A0 - 0.12, 0.45), ("sparkle.mp3", ANS_ISLAND, 0.45), ("ping.mp3", ANS_ISLAND + 0.05, 0.3),
+SFX += [("whoosh.mp3", A0 - 0.12, 0.45), ("sparkle.mp3", ANS_ISLAND, 0.45), ("ping.mp3", ANS_ISLAND + 0.05, 0.3), ("pop.mp3", ANS_ISLAND2, 0.35),
         ("pop.mp3", ANS_CAPISH, 0.5), ("whoosh-short.mp3", E0 - 0.15, 0.4),
         ("ack.wav", ACK_START, 0.95), ("impact-bass-1.mp3", ACK_HIT, 0.35)]
 A = []
@@ -92,7 +93,7 @@ for i, (fn, s, vol) in enumerate(SFX):
     A.append(f'      <audio id="sfx-{i}" class="clip" src="assets/sfx/{fn}" data-start="{f(s)}" data-duration="{f(d)}" '
              f'data-volume="{vol}"{fade} data-track-index="9"></audio>')
 
-K = {"total": TOTAL, "T": T, "ansIsland": ANS_ISLAND, "ansCapish": ANS_CAPISH, "endSeg2": END_SEG2,
+K = {"total": TOTAL, "T": T, "ansIsland": ANS_ISLAND, "ansIsland2": ANS_ISLAND2, "ansCapish": ANS_CAPISH, "endSeg2": END_SEG2,
      "wUstazah": W_USTAZAH, "wPulau": W_PULAU, "wBersama": W_BERSAMA, "wBoleh": W_BOLEH, "wAwak": W_AWAK,
      "ansEnd": W_ANS_END, "ack": ACK_HIT, "freeze": FREEZE, "attempts": list(ATTEMPTS)}
 D = {"wordIn": T["s1"][0], "wordDur": E0 - T["s1"][0], "ansTagIn": A0, "ansTagDur": ANS_ISLAND - A0,

@@ -39,15 +39,15 @@
         color: var(--red); -webkit-text-stroke: 14px #fff; paint-order: stroke fill;
         filter: drop-shadow(0 8px 0 #000) drop-shadow(0 0 18px rgba(0,0,0,0.45)); }
       #t-1 { margin-top: 14px; }
-      #hook { position: absolute; left: 0; right: 0; top: 1080px; height: 300px; z-index: 82; text-align: center; }
-      #h-line { display: inline-block; font-family: var(--font-comic); font-size: 100px; line-height: 1; color: var(--yellow);
-        -webkit-text-stroke: 12px #000; paint-order: stroke fill; filter: drop-shadow(0 8px 0 #000); }
-      #h-pill { display: inline-block; margin-top: 26px; font-family: var(--font-word); font-weight: 800; font-size: 44px;
-        color: #fff; background: rgba(0,0,0,0.78); border: 3px solid var(--yellow); padding: 14px 30px; border-radius: 999px; }
+      #hook { position: absolute; left: 0; right: 0; top: 1180px; height: 200px; z-index: 82; text-align: center; }
+      #h-in { display: inline-flex; align-items: center; gap: 18px; }
+      .isl-ic { width: 190px; height: 152px; filter: drop-shadow(0 7px 0 #000); }
+      #h-word { font-family: var(--font-comic); font-size: 150px; line-height: 1; color: var(--yellow); padding-top: 18px;
+        -webkit-text-stroke: 14px #000; paint-order: stroke fill; filter: drop-shadow(0 9px 0 #000); }
       .emo { font-family: var(--emoji) !important; -webkit-text-stroke: 0 !important; filter: none !important; }
 
       /* ---------- the word card ---------- */
-      #word { position: absolute; left: 0; right: 0; top: 200px; height: 460px; z-index: 70; text-align: center; }
+      #word { position: absolute; left: 0; right: 0; top: 200px; height: 460px; z-index: 70; text-align: center; transform-origin: 50% 0%; }
       #w-stack { position: relative; display: inline-block; }
       .w-txt { font-family: var(--font-word); font-weight: 900; font-size: 168px; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
       #w-back { position: absolute; left: 0; top: 0; color: var(--teal); -webkit-text-stroke: 34px var(--teal);
@@ -76,13 +76,13 @@
       .xmark i:last-child { transform: rotate(-45deg); }
 
       /* ---------- answer stickers ---------- */
-      #ansTag { position: absolute; left: 0; right: 0; top: 1130px; height: 140px; z-index: 76; text-align: center; }
+      #ansTag { position: absolute; left: 0; right: 0; top: 925px; height: 140px; z-index: 76; text-align: center; }
       #ansTag span { display: inline-block; font-family: var(--font-word); font-weight: 900; font-size: 58px; color: #111;
         background: var(--green); padding: 12px 34px; border-radius: 14px; border: 5px solid #000; box-shadow: 0 8px 0 #000; }
-      #capish { position: absolute; left: 40px; top: 760px; width: 470px; height: 300px; z-index: 86; }
+      #capish { position: absolute; left: 560px; top: 1440px; width: 440px; height: 280px; z-index: 86; }
       #cap-burst { position: absolute; inset: 0; background: #fff; border: 0;
         clip-path: polygon(50% 0, 60% 22%, 84% 8%, 78% 34%, 100% 40%, 80% 56%, 96% 80%, 70% 74%, 60% 100%, 48% 78%, 26% 96%, 26% 70%, 0 72%, 16% 52%, 2% 30%, 26% 30%, 22% 6%, 42% 22%); }
-      #cap-txt { position: absolute; left: 0; right: 0; top: 104px; text-align: center; font-family: var(--font-comic);
+      #cap-txt { position: absolute; left: 0; right: 0; top: 96px; text-align: center; font-family: var(--font-comic);
         font-size: 92px; line-height: 1; color: var(--yellow); -webkit-text-stroke: 11px #000; paint-order: stroke fill; }
 
       /* ---------- ending ---------- */
@@ -114,7 +114,7 @@
       <div id="word" class="clip" data-start="%wordIn%" data-duration="%wordDur%" data-track-index="3">
         <div id="w-stack">
           <div id="w-back" class="w-txt" data-layout-ignore aria-hidden="true">ISLAND</div>
-          <div id="w-front" class="w-txt"><span class="L">I</span><span class="L" id="L-s">S<i id="s-strike"></i></span><span class="L">LAND</span></div>
+          <div id="w-front" class="w-txt"><span class="L">I</span><span class="L" id="L-s">S<i id="s-strike" data-layout-ignore></i></span><span class="L">LAND</span></div>
         </div>
         <span id="say">“AI-LEN”</span>
         <div id="ipa">/ˈaɪ.lənd/</div>
@@ -135,8 +135,17 @@
         <span id="t-2" class="t-big">CHALLENGE</span>
       </div>
       <div id="hook" class="clip" data-start="0" data-duration="%hookOut%" data-track-index="6">
-        <div id="h-line">6 BUDAK, 6 JAWAPAN SALAH <span class="emo">😭</span></div>
-        <div id="h-pill">Jawapan Ustazah last sekali… <span class="emo">💀</span></div>
+        <div id="h-in">
+          <svg class="isl-ic" viewBox="0 0 200 160" aria-hidden="true">
+            <circle cx="150" cy="42" r="24" fill="#ffd60a" stroke="#000" stroke-width="6"/>
+            <path d="M8 128 Q100 70 192 128 Z" fill="#ffcf6e" stroke="#000" stroke-width="7" stroke-linejoin="round"/>
+            <path d="M96 110 Q90 70 108 34" fill="none" stroke="#000" stroke-width="16" stroke-linecap="round"/>
+            <path d="M96 110 Q90 70 108 34" fill="none" stroke="#a0612b" stroke-width="8" stroke-linecap="round"/>
+            <path d="M108 34 Q78 14 50 40 Q80 30 108 34 Z M108 34 Q138 10 168 36 Q136 28 108 34 Z M108 34 Q84 44 70 76 Q94 50 108 34 Z M108 34 Q132 46 140 80 Q120 52 108 34 Z" fill="#2fd24a" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M0 136 Q25 124 50 136 T100 136 T150 136 T200 136 V160 H0 Z" fill="#1ec8ff" stroke="#000" stroke-width="6" stroke-linejoin="round"/>
+          </svg>
+          <span id="h-word">ISLAND</span>
+        </div>
       </div>
 
       <!-- ending -->
@@ -168,9 +177,10 @@
         tl.to("#vw-" + id, { scale: 1.0, duration: Math.max(0.1, e - s - 0.28), ease: "none" }, s + 0.28);
       });
       // answer: jump cuts alternate framing
-      tl.fromTo("#vw-ans", { scale: 1.0 }, { scale: 1.05, duration: K.ansIsland - T.ans[0], ease: "none" }, T.ans[0]);
-      tl.fromTo("#vw-ans", { scale: 1.16 }, { scale: 1.12, duration: K.ansCapish - K.ansIsland, ease: "none", immediateRender: false }, K.ansIsland);
-      tl.fromTo("#vw-ans", { scale: 1.0 }, { scale: 1.06, duration: T.ans[1] - K.ansCapish, ease: "none", immediateRender: false }, K.ansCapish);
+      tl.fromTo("#vw-ans", { scale: 1.0 }, { scale: 1.04, duration: K.ansIsland - T.ans[0], ease: "none" }, T.ans[0]);
+      tl.fromTo("#vw-ans", { scale: 1.12 }, { scale: 1.1, duration: K.ansIsland2 - K.ansIsland, ease: "none", immediateRender: false }, K.ansIsland);
+      tl.fromTo("#vw-ans", { scale: 1.02 }, { scale: 1.0, duration: K.ansCapish - 0.05 - K.ansIsland2, ease: "none", immediateRender: false }, K.ansIsland2);
+      tl.fromTo("#vw-ans", { scale: 1.12 }, { scale: 1.06, duration: T.ans[1] - K.ansCapish + 0.05, ease: "none", immediateRender: false }, K.ansCapish - 0.05);
       // ending (colour): gentle push
       tl.fromTo("#vw-end", { scale: 1.0 }, { scale: 1.06, duration: K.endSeg2 - T.end[0], ease: "none" }, T.end[0]);
       // ending (B&W): creep toward both faces, SNAP on the ack, then slow drift on the freeze
@@ -191,9 +201,10 @@
       tl.fromTo("#t-eng", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(2)" }, 0);
       tl.fromTo("#t-1", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)" }, 0.05);
       tl.fromTo("#t-2", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)" }, 0.18);
-      tl.fromTo("#h-line", { scale: 0.4, rotation: -6 }, { scale: 1, rotation: -2, duration: 0.3, ease: "back.out(2.5)" }, 0);
-      tl.to("#h-line", { scale: 1.06, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.35);
-      tl.fromTo("#h-pill", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25, ease: "power3.out" }, 0.45);
+      tl.fromTo("#h-word", { scale: 0.4, rotation: -6 }, { scale: 1, rotation: -3, duration: 0.3, ease: "back.out(2.5)" }, 0);
+      tl.to("#h-word", { scale: 1.07, duration: 0.35, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.35);
+      tl.fromTo(".isl-ic", { y: 60, scale: 0.3, rotation: -20 }, { y: 0, scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2.2)" }, 0.08);
+      tl.to(".isl-ic", { rotation: 6, duration: 0.4, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.45);
       tl.to(["#title", "#hook"], { opacity: 0, y: -50, duration: 0.14, ease: "power2.in" }, %hookOut% - 0.15);
 
       // ---------- word card
@@ -206,7 +217,9 @@
       tl.fromTo("#say", { opacity: 0, scale: 0.3, rotation: -8 }, { opacity: 1, scale: 1, rotation: -2, duration: 0.25, ease: "back.out(2.6)" }, K.ansIsland);
       tl.fromTo("#ipa", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 0.22, ease: "power3.out" }, K.ansIsland + 0.2);
       tl.fromTo("#silent", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2.5)" }, K.ansIsland + 0.35);
-      tl.to("#word", { opacity: 0, scale: 0.85, duration: 0.14, ease: "power2.in" }, T.end[0] - 0.15);
+      tl.to("#word", { y: 880, scale: 0.86, duration: 0.3, ease: "power3.inOut" }, T.ans[0] - 0.05);
+      tl.to("#say", { scale: 1.18, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out" }, K.ansIsland2);
+      tl.to("#word", { opacity: 0, duration: 0.14, ease: "power2.in" }, T.end[0] - 0.15);
 
       // ---------- attempts
       K.attempts.forEach((id) => {
@@ -217,8 +230,8 @@
         tl.to("#at-" + id + " .att-in", { x: 0, keyframes: [{ x: 10, duration: 0.03 }, { x: -10, duration: 0.03 }, { x: 6, duration: 0.03 }, { x: 0, duration: 0.03 }] }, Math.max(s + 0.35, e - 0.36) + 0.05);
       });
       tl.fromTo("#ansTag span", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(2)" }, %ansTagIn% + 0.05);
-      tl.fromTo("#capish", { scale: 0, rotation: -40 }, { scale: 1, rotation: -12, duration: 0.24, ease: "back.out(2.4)" }, K.ansCapish);
-      tl.to("#capish", { rotation: -6, duration: 0.25, yoyo: true, repeat: 2, ease: "sine.inOut" }, K.ansCapish + 0.26);
+      tl.fromTo("#capish", { scale: 0, rotation: -40 }, { scale: 1, rotation: 8, duration: 0.24, ease: "back.out(2.4)" }, K.ansCapish);
+      tl.to("#capish", { rotation: 3, duration: 0.25, yoyo: true, repeat: 2, ease: "sine.inOut" }, K.ansCapish + 0.26);
 
       // ---------- ending
       tl.fromTo(["#n-ust", "#n-zha"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.1 }, T.end[0] + 0.1);
