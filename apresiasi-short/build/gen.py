@@ -10,11 +10,11 @@ SHOTS = [
  ("h1", 0, 2, -0.10), ("h2", 2, 2, -0.06), ("h3", 4, 2, -0.10),
  ("t1", 6, 4, -0.22), ("p3", 10, 2, -0.16), ("tk", 12, 4, -0.12), ("tr", 16, 2, -0.06),
  ("pk", 18, 4, -0.10), ("pd", 22, 5, -0.10),
- ("g1", 27, 3, -0.08), ("g2", 30, 4, -0.08),
- ("c1", 34, 2, -0.10), ("c2", 36, 2, -0.10), ("c3", 38, 2, -0.10), ("c4", 40, 2, -0.10),
+ ("g1", 27, 3, -0.08), ("g2", 30, 3, -0.08),
+ ("c1", 33, 4, -0.12), ("c2", 37, 3, -0.12), ("c3", 40, 4, -0.12),
 ]
-END0 = bt(42)          # 31.21 end card
-TOTAL = 35.5
+END0 = bt(44)          # 32.69 end card, lands on the song's final hit
+TOTAL = 35.6
 REVEAL = bt(30) + 1.0  # box lifts ~0.5 s of source into the 0.5x slow-mo shot
 
 def grade(exp):
@@ -34,8 +34,9 @@ CAPS = [
  ("cap-tr",  bt(16) + 0.08, bt(18) - 0.08, 'Bakat yang bersinar', ""),
  ("cap-pk",  bt(18) + 0.15, bt(22) - 0.1, '“…salam dan ingatan<br/>daripada Guru Besar.”', "quote"),
  ("cap-g1",  bt(27) + 0.1, bt(30) - 0.08, 'Saat yang dinanti…', ""),
- ("cap-c1",  bt(34) + 0.08, bt(38) - 0.08, 'Suara yang bersatu', ""),
- ("cap-c3",  bt(38) + 0.08, bt(42) - 0.1, 'Terus bersinar, selamanya', ""),
+ ("cap-c1",  bt(33) + 0.15, bt(37) - 0.08, '<span class="kick">CHORAL SPEAKING</span><br/>Suara yang bersatu', ""),
+ ("cap-c2",  bt(37) + 0.1, bt(40) - 0.08, 'Satu hati, satu irama', ""),
+ ("cap-c3",  bt(40) + 0.1, bt(44) - 0.1, 'Terus bersinar, selamanya', ""),
 ]
 
 SFX = [  # id, file, start, dur, vol
@@ -48,7 +49,7 @@ SFX = [  # id, file, start, dur, vol
  ("sfx-hit", "impact-bass-1.mp3", REVEAL, 2.1, 0.42),
  ("sfx-spark", "sparkle.mp3", REVEAL + 0.05, 1.8, 0.32),
  ("sfx-w4", "whoosh-short.mp3", END0 - 0.2, 0.57, 0.22),
- ("sfx-chime", "chime.mp3", END0 + 0.55, 2.5, 0.22),
+ ("sfx-chime", "chime.mp3", END0 + 0.3, 2.5, 0.22),
 ]
 
 # deterministic sparkle burst for the reveal
@@ -81,6 +82,6 @@ out = (tpl.replace("{{TOTAL}}", str(TOTAL)).replace("{{VIDEOS}}", "\n".join(vids
           .replace("{{T}}", json.dumps(T)).replace("{{END0}}", str(END0)).replace("{{ENDDUR}}", str(round(TOTAL - END0, 3)))
           .replace("{{TITLE0}}", str(bt(6))).replace("{{TITLED}}", str(round(bt(10) - bt(6) - 0.06, 3)))
           .replace("{{PD0}}", str(round(bt(22) + 0.2, 3))).replace("{{PDD}}", str(round(bt(27) - bt(22) - 0.3, 3)))
-          .replace("{{REV0}}", str(round(REVEAL - 0.05, 3))).replace("{{REVD}}", str(round(bt(34) - REVEAL - 0.03, 3))))
+          .replace("{{REV0}}", str(round(REVEAL - 0.05, 3))).replace("{{REVD}}", str(round(bt(33) - REVEAL - 0.03, 3))))
 open(os.path.join(os.path.dirname(__file__), "..", "index.html"), "w", encoding="utf-8").write(out)
 print("ok", TOTAL, "end0", END0, "reveal", REVEAL)

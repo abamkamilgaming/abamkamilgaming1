@@ -1,6 +1,6 @@
 # Majlis Apresiasi Kecemerlangan Murid 2026 — TikTok Short
 
-**Format:** 1080×1920 (9:16), 30 fps, **35.5 s** (had 40 s)
+**Format:** 1080×1920 (9:16), 30 fps, **35.6 s** (had 40 s)
 **Status:** PREVIEW sahaja — belum render final.
 **Gaya:** ikut "Video rujukan / TVPSS Five One" — caption serif italic di tengah bawah, grade lembut hangat (film memory), push-in perlahan, kad polaroid di hujung.
 
@@ -11,9 +11,9 @@
 ## Timeline
 | Masa | Shot | Sumber (masa dalam fail asal) | Teks |
 |---|---|---|---|
-| 0.00 | HOOK | CS 11:59 (slow-mo 0.8×) | "Setahun berusaha…" |
+| 0.00 | HOOK | CS 11:57 — pose "sayap" (slow-mo 0.8×) | "Setahun berusaha…" |
 | 1.49 | HOOK | tarian.mov 2:56 | "…hari ini, mereka diraikan." |
-| 2.97 | HOOK | CS 8:48 | |
+| 2.97 | HOOK | CS 6:02 | |
 | 4.46 | TITLE | Perarakan masuk 0:00.5 | MAJLIS APRESIASI / Kecemerlangan Murid / 2026 / SK BUNUT PAYONG · 25.11.2026 |
 | 7.43 | | Perarakan masuk 0:09.5 | "Melangkah penuh bangga" |
 | 8.92 | | Tokoh Murid Lelaki 0:02.5 | "Setiap usaha, ada harganya" |
@@ -22,8 +22,12 @@
 | 16.34 | Ucapan PPD | Ucapan Tuan PPD 0:05.6 | DIRASMIKAN OLEH / Dr. Mohd Nazri bin Hassan / Pegawai Pendidikan Daerah Kota Bharu |
 | 20.07 | Gimik | Gimik pelancaran 0:37 | "Saat yang dinanti…" |
 | 22.30 | Gimik (slow-mo 0.5×) | Gimik pelancaran 0:39.9 | kotak diangkat 23.29 s → flash + sparkle + "Dirasmikan." |
-| 25.27–31.2 | Choral speaking | CS 5:52, 8:04, 11:48, 8:14.5 | "Suara yang bersatu" / "Terus bersinar, selamanya" |
-| 31.21 | END | polaroid (CS 6:16) | "Tahun 2026" · "Tahniah, kalian kebanggaan kami." |
+| 24.52 | **Choral Speaking — finale** | CS 11:44.6 (slow-mo 0.6×, pan kiri→kanan) | CHORAL SPEAKING / "Suara yang bersatu" |
+| 27.49 | | CS 11:54.8 (slow-mo 0.6×, pan kanan→kiri) | "Satu hati, satu irama" |
+| 29.72 | | CS 11:59.6 — klimaks sayap (slow-mo 0.6×) | "Terus bersinar, selamanya" |
+| 32.69 | END | polaroid (CS 6:16), masuk tepat atas hit akhir lagu | "Tahun 2026" · "Tahniah, kalian kebanggaan kami." |
+
+Choral Speaking: guna bahagian paling best = finale formasi "sayap" (11:44–12:04), crop potret 9:16 dengan pan perlahan + slow-mo supaya ikut mood balada di hujung lagu ("Membasuh perih di hatimu" → ending).
 
 Ucapan PKP & PPD: suara asal **dimute**, lagu terus jalan (ikut mood lagu); petikan ucapan jadi caption gaya rujukan.
 
