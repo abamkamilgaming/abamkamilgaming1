@@ -32,7 +32,6 @@ CAPS = [
  ("cap-p3",  bt(10) + 0.08, bt(12) - 0.08, 'Melangkah penuh bangga', ""),
  ("cap-tk",  bt(12) + 0.1, bt(16) - 0.08, 'Setiap usaha, ada harganya', ""),
  ("cap-tr",  bt(16) + 0.08, bt(18) - 0.08, 'Bakat yang bersinar', ""),
- ("cap-pk",  bt(18) + 0.15, bt(22) - 0.1, '“…salam dan ingatan<br/>daripada Guru Besar.”', "quote"),
  ("cap-g1",  bt(27) + 0.1, bt(30) - 0.08, 'Saat yang dinanti…', ""),
  ("cap-c1",  bt(33) + 0.15, bt(37) - 0.08, '<span class="kick">CHORAL SPEAKING</span><br/>Suara yang bersatu', ""),
  ("cap-c2",  bt(37) + 0.1, bt(40) - 0.08, 'Satu hati, satu irama', ""),
@@ -74,13 +73,14 @@ sparks = "".join(f'<i id="spk-{i}" class="spk" style="width:{s}px;height:{s}px">
 
 T = dict(total=TOTAL, shots=[dict(id=s, start=bt(a), end=bt(a + n)) for s, a, n, _ in SHOTS],
          caps=[dict(id=c, start=round(s,3), end=round(e,3)) for c, s, e, _, _ in CAPS],
-         sparks=[[x, y] for x, y, _ in SPARKS], end0=END0, reveal=round(REVEAL,3), title=[bt(6), bt(10)], pd=[bt(22), bt(27)], cuts=[bt(6), bt(27), END0])
+         sparks=[[x, y] for x, y, _ in SPARKS], end0=END0, reveal=round(REVEAL,3), title=[bt(6), bt(10)], pk=[bt(18), bt(22)], pd=[bt(22), bt(27)], cuts=[bt(6), bt(27), END0])
 
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
 out = (tpl.replace("{{TOTAL}}", str(TOTAL)).replace("{{VIDEOS}}", "\n".join(vids))
           .replace("{{CAPS}}", "\n".join(caps)).replace("{{SFX}}", sfx).replace("{{SPARKS}}", sparks)
           .replace("{{T}}", json.dumps(T)).replace("{{END0}}", str(END0)).replace("{{ENDDUR}}", str(round(TOTAL - END0, 3)))
           .replace("{{TITLE0}}", str(bt(6))).replace("{{TITLED}}", str(round(bt(10) - bt(6) - 0.06, 3)))
+          .replace("{{PK0}}", str(round(bt(18) + 0.15, 3))).replace("{{PKD}}", str(round(bt(22) - bt(18) - 0.3, 3)))
           .replace("{{PD0}}", str(round(bt(22) + 0.2, 3))).replace("{{PDD}}", str(round(bt(27) - bt(22) - 0.3, 3)))
           .replace("{{REV0}}", str(round(REVEAL - 0.05, 3))).replace("{{REVD}}", str(round(bt(33) - REVEAL - 0.03, 3))))
 open(os.path.join(os.path.dirname(__file__), "..", "index.html"), "w", encoding="utf-8").write(out)

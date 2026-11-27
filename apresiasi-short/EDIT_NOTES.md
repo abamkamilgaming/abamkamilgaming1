@@ -18,7 +18,7 @@
 | 7.43 | | Perarakan masuk 0:09.5 | "Melangkah penuh bangga" |
 | 8.92 | | Tokoh Murid Lelaki 0:02.5 | "Setiap usaha, ada harganya" |
 | 11.89 | | tarian.mov 1:00.5 | "Bakat yang bersinar" |
-| 13.37 | Ucapan PKP | Ucapan PKP 0:00.3 (zoom ke podium) | “…salam dan ingatan daripada Guru Besar.” |
+| 13.37 | Ucapan PKP | Ucapan PKP 0:00.3 (zoom ke podium) | UCAPAN / Pn. Julaiha binti Dollah / Penolong Kanan Pentadbiran |
 | 16.34 | Ucapan PPD | Ucapan Tuan PPD 0:05.6 | DIRASMIKAN OLEH / Dr. Mohd Nazri bin Hassan / Pegawai Pendidikan Daerah Kota Bharu |
 | 20.07 | Gimik | Gimik pelancaran 0:37 | "Saat yang dinanti…" |
 | 22.30 | Gimik (slow-mo 0.5×) | Gimik pelancaran 0:39.9 | kotak diangkat 23.29 s → flash + sparkle + "Dirasmikan." |
@@ -29,7 +29,7 @@
 
 Choral Speaking: guna bahagian paling best = finale formasi "sayap" (11:44–12:04), crop potret 9:16 dengan pan perlahan + slow-mo supaya ikut mood balada di hujung lagu ("Membasuh perih di hatimu" → ending).
 
-Ucapan PKP & PPD: suara asal **dimute**, lagu terus jalan (ikut mood lagu); petikan ucapan jadi caption gaya rujukan.
+Ucapan PKP & PPD: suara asal **dimute**, lagu terus jalan (ikut mood lagu); nama & jawatan penceramah sebagai lower-third.
 
 ## Transkrip (Whisper large-v3, BM)
 - Ucapan PKP: "Terlebih dahulu saya ingin menyampaikan salam dan ingatan daripada Guru Besar…"

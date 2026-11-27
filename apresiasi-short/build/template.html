@@ -54,7 +54,7 @@
         margin-top: 24px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); padding-left: 0.24em; }
 
       /* lower third — Tuan PPD */
-      #lt { position: absolute; left: 80px; right: 300px; top: 900px; height: 240px; z-index: 82; text-align: center; }
+      #lt, #lt2 { position: absolute; left: 80px; right: 300px; top: 900px; height: 240px; z-index: 82; text-align: center; }
       .lt-role0 { font-family: var(--font-cap); font-weight: 600; font-size: 28px; letter-spacing: 0.32em; color: var(--color-accent);
         text-shadow: 0 2px 10px rgba(0,0,0,0.8); padding-left: 0.32em; }
       .lt-name { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 50px; color: var(--color-ink);
@@ -102,6 +102,13 @@
         <div class="t-year" id="t-year">2026</div>
         <div class="t-rule" id="t-rule"></div>
         <div class="t-sub" id="t-sub">SK BUNUT PAYONG · 25.11.2026</div>
+      </div>
+
+      <div id="lt2" class="clip" data-start="{{PK0}}" data-duration="{{PKD}}" data-track-index="5" data-track-kind="graphics">
+        <div class="lt-role0" id="lt2-r0">UCAPAN</div>
+        <div class="lt-name" id="lt2-name">Pn. Julaiha<br/>binti Dollah</div>
+        <div class="lt-rule" id="lt2-rule"></div>
+        <div class="lt-role" id="lt2-role">Penolong Kanan<br/>Pentadbiran</div>
       </div>
 
       <div id="lt" class="clip" data-start="{{PD0}}" data-duration="{{PDD}}" data-track-index="5" data-track-kind="graphics">
@@ -177,7 +184,15 @@
       tl.fromTo("#t-sub", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, t0 + 0.9);
       tl.to(["#t-kick", "#t-main", "#t-year", "#t-rule", "#t-sub"], { opacity: 0, duration: 0.3, ease: "power1.in" }, t1 - 0.4);
 
-      // lower third
+      // lower third — PK Pentadbiran
+      const k0 = T.pk[0] + 0.15, k1 = T.pk[1] - 0.15;
+      tl.fromTo("#lt2-r0", { opacity: 0 }, { opacity: 1, duration: 0.5 }, k0 + 0.1);
+      tl.fromTo("#lt2-name", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, k0 + 0.25);
+      tl.fromTo("#lt2-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.inOut" }, k0 + 0.45);
+      tl.fromTo("#lt2-role", { opacity: 0 }, { opacity: 1, duration: 0.5 }, k0 + 0.6);
+      tl.to(["#lt2-r0", "#lt2-name", "#lt2-rule", "#lt2-role"], { opacity: 0, duration: 0.3 }, k1 - 0.35);
+
+      // lower third — Tuan PPD
       const p0 = T.pd[0] + 0.2, p1 = T.pd[1] - 0.1;
       tl.fromTo("#lt-r0", { opacity: 0 }, { opacity: 1, duration: 0.5 }, p0 + 0.1);
       tl.fromTo("#lt-name", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, p0 + 0.25);
