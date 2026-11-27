@@ -41,9 +41,9 @@ for sid,f,ss,dur,sp,cx,cy,hf,*rest in SHOTS:
     xe=str(x)
     if rest:
         x2=min(max(0,int(rest[0]*W-cw/2)),W-cw); xe=f"'{x}+({x2-x})*min(t/{dur*sp:.3f}\\,1)'"
-    vf=f"crop={cw}:{ch}:{xe}:{y},scale=1080:1920:flags=lanczos,setpts=PTS/{sp},fps=30,format=yuv420p"
+    vf=f"crop={cw}:{ch}:{xe}:{y},scale=1080:1920:flags=lanczos,setpts=PTS/{sp},fps=60,format=yuv420p"
     cmd=["ffmpeg","-v","error","-y","-ss",str(ss),"-t",f"{srcdur:.3f}","-i",src,"-vf",vf,"-an","-t",f"{dur:.3f}",
-         "-c:v","libx264","-preset","medium","-crf","16","-g","15","-movflags","+faststart",os.path.join(OUT,sid+".mp4")]
+         "-c:v","libx264","-preset","medium","-crf","16","-g","30","-movflags","+faststart",os.path.join(OUT,sid+".mp4")]
     subprocess.run(cmd,check=True); meta[sid]=dict(file=f,src_start=ss,dur=dur,speed=sp,crop=[cw,ch,x,y], pan_to=(rest[0] if rest else None))
     print(sid, meta[sid], flush=True)
 json.dump(meta, open(os.path.join(OUT,"shots.json"),"w"), indent=1)
