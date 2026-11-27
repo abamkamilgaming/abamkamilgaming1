@@ -24,8 +24,8 @@
 | 22.30 | Gimik (slow-mo 0.5×) | Gimik pelancaran 0:39.9 | kotak diangkat 23.29 s → flash + sparkle + "Dirasmikan." |
 | 24.52 | **Choral Speaking — finale** | CS 11:44.6 (slow-mo 0.6×, pan kiri→kanan) | CHORAL SPEAKING / "Suara yang bersatu" |
 | 27.49 | | CS 11:54.8 (slow-mo 0.6×, pan kanan→kiri) | "Satu hati, satu irama" |
-| 29.72 | | CS 11:59.6 — klimaks sayap (slow-mo 0.6×) | "Terus bersinar, selamanya" |
-| 32.69 | END | polaroid = poster digital majlis (crop atas, tanpa senarai jualan), masuk tepat atas hit akhir lagu | "Tahun 2026" · "Tahniah, kalian kebanggaan kami." |
+| 28.98 | | CS 11:59.6 — klimaks sayap (slow-mo 0.6×) | "Terus bersinar, selamanya" |
+| 31.21 | END | 4 polaroid jatuh ikut beat: Tokoh Murid Lelaki, Tokoh Murid Perempuan (gambar asal), penari "Di sebalik tabir", kumpulan atas pentas mendarat atas hit akhir lagu (33.19) | "Tahun 2026" · "Tahniah, kalian kebanggaan kami." |
 
 Choral Speaking: guna bahagian paling best = finale formasi "sayap" (11:44–12:04), crop potret 9:16 dengan pan perlahan + slow-mo supaya ikut mood balada di hujung lagu ("Membasuh perih di hatimu" → ending).
 

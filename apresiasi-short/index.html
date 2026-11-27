@@ -87,13 +87,13 @@
       #polA .pol-photo { width: 510px; height: 340px; } #polA .pol-cap { top: 376px; font-size: 32px; }
       #polB { left: 586px; top: 205px; width: 384px; height: 520px; }
       #polB .pol-photo { width: 340px; height: 408px; } #polB .pol-cap { top: 446px; font-size: 30px; }
-      #polC { left: 110px; top: 515px; width: 524px; height: 470px; }
+      #polC { left: 110px; top: 430px; width: 524px; height: 470px; }
       #polC .pol-photo { width: 480px; height: 360px; } #polC .pol-cap { top: 400px; font-size: 32px; }
-      #polD { left: 150px; top: 330px; width: 760px; height: 610px; }
+      #polD { left: 150px; top: 315px; width: 760px; height: 610px; }
       #polD .pol-photo { left: 24px; top: 24px; width: 712px; height: 475px; } #polD .pol-cap { top: 516px; font-size: 50px; }
-      #ec-line { position: absolute; left: 80px; right: 300px; top: 1010px; text-align: center; font-family: var(--font-display);
+      #ec-line { position: absolute; left: 80px; right: 300px; top: 975px; text-align: center; font-family: var(--font-display);
         font-size: 56px; line-height: 1.18; color: var(--color-ink); }
-      #ec-cred { position: absolute; left: 80px; right: 300px; top: 1160px; text-align: center; font-family: var(--font-cap); font-weight: 500;
+      #ec-cred { position: absolute; left: 80px; right: 300px; top: 1120px; text-align: center; font-family: var(--font-cap); font-weight: 500;
         font-size: 28px; letter-spacing: 0.04em; line-height: 1.45; color: rgba(251,247,239,0.72); }
     </style>
   </head>
@@ -156,10 +156,10 @@
 
       <div id="endcard" class="clip" data-start="31.207" data-duration="4.393" data-track-index="6" data-track-kind="graphics">
         <div id="ec-glow"></div>
-        <div id="polA" class="pol"><div class="pol-photo"><img id="img-a" src="assets/img/tokoh_l.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap">Tokoh Murid Lelaki</div></div>
-        <div id="polB" class="pol"><div class="pol-photo"><img id="img-b" src="assets/img/tokoh_p.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap">Tokoh Murid Perempuan</div></div>
-        <div id="polC" class="pol"><div class="pol-photo"><img id="img-c" src="assets/img/penari.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap">Di sebalik tabir</div></div>
-        <div id="polD" class="pol"><div class="pol-photo"><img id="img-d" src="assets/img/kumpulan.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap">Tahun 2026</div></div>
+        <div id="polA" class="pol" data-layout-allow-overlap><div class="pol-photo"><img id="img-a" src="assets/img/tokoh_l.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap" data-layout-allow-overlap>Tokoh Murid Lelaki</div></div>
+        <div id="polB" class="pol" data-layout-allow-overlap><div class="pol-photo"><img id="img-b" src="assets/img/tokoh_p.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap" data-layout-allow-overlap data-layout-allow-safe-zone>Tokoh Murid Perempuan</div></div>
+        <div id="polC" class="pol" data-layout-allow-overlap><div class="pol-photo"><img id="img-c" src="assets/img/penari.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap" data-layout-allow-overlap>Di sebalik tabir</div></div>
+        <div id="polD" class="pol" data-layout-allow-overlap><div class="pol-photo"><img id="img-d" src="assets/img/kumpulan.jpg" alt="" /><div class="pol-dev"></div></div><div class="pol-cap">Tahun 2026</div></div>
         <div id="ec-line">Tahniah, kalian<br/>kebanggaan kami.</div>
         <div id="ec-cred">MAJLIS APRESIASI<br/>KECEMERLANGAN MURID 2026<br/>SK BUNUT PAYONG</div>
       </div>
@@ -260,9 +260,10 @@
       });
       tl.fromTo("#img-d", { scale: 1.06 }, { scale: 1.0, duration: 2.3, ease: "none" }, T.drops[3]);
       const h = T.drops[3];
+      tl.to(["#polA .pol-cap", "#polB .pol-cap", "#polC .pol-cap"], { opacity: 0, duration: 0.2, ease: "power1.in" }, h - 0.05);
       tl.fromTo("#ec-line", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, h + 0.25);
-      tl.fromTo("#ec-cred", { opacity: 0 }, { opacity: 1, duration: 0.4 }, h + 0.35);
-      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.in" }, T.total - 0.47);
+      tl.fromTo("#ec-cred", { opacity: 0 }, { opacity: 1, duration: 0.3 }, h + 0.15);
+      tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.in" }, T.total - 0.32);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
