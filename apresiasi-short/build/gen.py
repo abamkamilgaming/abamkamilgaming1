@@ -11,9 +11,10 @@ SHOTS = [
  ("t1", 6, 4, -0.22), ("p3", 10, 2, -0.16), ("tk", 12, 4, -0.12), ("tr", 16, 2, -0.06),
  ("pk", 18, 4, -0.10), ("pd", 22, 5, -0.10),
  ("g1", 27, 3, -0.08), ("g2", 30, 3, -0.08),
- ("c1", 33, 4, -0.12), ("c2", 37, 3, -0.12), ("c3", 40, 4, -0.12),
+ ("c1", 33, 4, -0.12), ("c2", 37, 2, -0.12), ("c3", 39, 3, -0.12),
 ]
-END0 = bt(44)          # 32.69 end card, lands on the song's final hit
+END0 = bt(42)          # 31.21 end card: four polaroids drop on the beat
+HIT = 33.19            # song's final hit -> group photo lands
 TOTAL = 35.6
 REVEAL = bt(30) + 1.0  # box lifts ~0.5 s of source into the 0.5x slow-mo shot
 
@@ -34,8 +35,8 @@ CAPS = [
  ("cap-tr",  bt(16) + 0.08, bt(18) - 0.08, 'Bakat yang bersinar', ""),
  ("cap-g1",  bt(27) + 0.1, bt(30) - 0.08, 'Saat yang dinanti…', ""),
  ("cap-c1",  bt(33) + 0.15, bt(37) - 0.08, '<span class="kick">CHORAL SPEAKING</span><br/>Suara yang bersatu', ""),
- ("cap-c2",  bt(37) + 0.1, bt(40) - 0.08, 'Satu hati, satu irama', ""),
- ("cap-c3",  bt(40) + 0.1, bt(44) - 0.1, 'Terus bersinar, selamanya', ""),
+ ("cap-c2",  bt(37) + 0.1, bt(39) - 0.08, 'Satu hati, satu irama', ""),
+ ("cap-c3",  bt(39) + 0.1, bt(42) - 0.1, 'Terus bersinar, selamanya', ""),
 ]
 
 SFX = [  # id, file, start, dur, vol
@@ -48,7 +49,10 @@ SFX = [  # id, file, start, dur, vol
  ("sfx-hit", "impact-bass-1.mp3", REVEAL, 2.1, 0.42),
  ("sfx-spark", "sparkle.mp3", REVEAL + 0.05, 1.8, 0.32),
  ("sfx-w4", "whoosh-short.mp3", END0 - 0.2, 0.57, 0.22),
- ("sfx-chime", "chime.mp3", END0 + 0.3, 2.5, 0.22),
+ ("sfx-drop1", "pop.mp3", END0 + 0.05, 0.72, 0.12),
+ ("sfx-drop2", "pop.mp3", round(bt(43), 3) + 0.05, 0.72, 0.12),
+ ("sfx-drop3", "pop.mp3", round(bt(44), 3) - 0.25, 0.72, 0.12),
+ ("sfx-chime", "chime.mp3", HIT, 2.4, 0.24),
 ]
 
 # deterministic sparkle burst for the reveal
@@ -73,7 +77,7 @@ sparks = "".join(f'<i id="spk-{i}" class="spk" style="width:{s}px;height:{s}px">
 
 T = dict(total=TOTAL, shots=[dict(id=s, start=bt(a), end=bt(a + n)) for s, a, n, _ in SHOTS],
          caps=[dict(id=c, start=round(s,3), end=round(e,3)) for c, s, e, _, _ in CAPS],
-         sparks=[[x, y] for x, y, _ in SPARKS], end0=END0, reveal=round(REVEAL,3), title=[bt(6), bt(10)], pk=[bt(18), bt(22)], pd=[bt(22), bt(27)], cuts=[bt(6), bt(27), END0])
+         sparks=[[x, y] for x, y, _ in SPARKS], drops=[END0 + 0.02, bt(43) + 0.02, bt(44) - 0.28, HIT - 0.06], end0=END0, reveal=round(REVEAL,3), title=[bt(6), bt(10)], pk=[bt(18), bt(22)], pd=[bt(22), bt(27)], cuts=[bt(6), bt(27), END0])
 
 tpl = open(os.path.join(os.path.dirname(__file__), "template.html"), encoding="utf-8").read()
 out = (tpl.replace("{{TOTAL}}", str(TOTAL)).replace("{{VIDEOS}}", "\n".join(vids))
