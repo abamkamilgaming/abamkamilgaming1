@@ -3,3 +3,6 @@ node_modules/
 *.log
 .*.hf-transaction-*/
 work-*/
+apresiasi-short/snapshots/
+apresiasi-short/preview/
+apresiasi-short/renders/

@@ -1,0 +1,63 @@
+{
+ "UcapanTuanPPDDrNazri.wav": [
+  {
+   "s": 0.0,
+   "e": 5.74,
+   "t": "Yang besar cikgu Suzila binti Daruss",
+   "w": [
+    [
+     0.0,
+     2.0,
+     " Yang"
+    ],
+    [
+     2.0,
+     2.86,
+     " besar"
+    ],
+    [
+     2.86,
+     3.64,
+     " cikgu"
+    ],
+    [
+     3.64,
+     4.78,
+     " Suzila"
+    ],
+    [
+     4.78,
+     5.2,
+     " binti"
+    ],
+    [
+     5.2,
+     5.74,
+     " Daruss"
+    ]
+   ]
+  },
+  {
+   "s": 5.74,
+   "e": 12.32,
+   "t": "Yang besar cikgu",
+   "w": [
+    [
+     5.74,
+     6.82,
+     " Yang"
+    ],
+    [
+     6.82,
+     7.32,
+     " besar"
+    ],
+    [
+     7.32,
+     12.32,
+     " cikgu"
+    ]
+   ]
+  }
+ ]
+}

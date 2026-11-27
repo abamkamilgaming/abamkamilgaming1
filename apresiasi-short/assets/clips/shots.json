@@ -1,0 +1,182 @@
+{
+ "h1": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 719.0,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   994,
+   1770,
+   1039,
+   0
+  ]
+ },
+ "h2": {
+  "file": "tarian.mov",
+  "src_start": 176.0,
+  "dur": 1.49,
+  "speed": 1.0,
+  "crop": [
+   516,
+   918,
+   433,
+   162
+  ]
+ },
+ "h3": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 528.0,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   994,
+   1770,
+   1231,
+   0
+  ]
+ },
+ "t1": {
+  "file": "Perarakan masuk",
+  "src_start": 0.5,
+  "dur": 2.97,
+  "speed": 1.0,
+  "crop": [
+   1214,
+   2160,
+   775,
+   0
+  ]
+ },
+ "p3": {
+  "file": "Perarakan masuk",
+  "src_start": 9.5,
+  "dur": 1.49,
+  "speed": 1.0,
+  "crop": [
+   1214,
+   2160,
+   429,
+   0
+  ]
+ },
+ "tk": {
+  "file": "Tokoh Murid Lelaki",
+  "src_start": 2.5,
+  "dur": 2.97,
+  "speed": 1.0,
+  "crop": [
+   1032,
+   1836,
+   1020,
+   270
+  ]
+ },
+ "tr": {
+  "file": "tarian.mov",
+  "src_start": 60.5,
+  "dur": 1.49,
+  "speed": 1.0,
+  "crop": [
+   424,
+   756,
+   652,
+   291
+  ]
+ },
+ "pk": {
+  "file": "Ucapan PKP",
+  "src_start": 0.3,
+  "dur": 2.97,
+  "speed": 1.0,
+  "crop": [
+   728,
+   1296,
+   1172,
+   432
+  ]
+ },
+ "pd": {
+  "file": "Ucapan Tuan PPD, Dr Nazri",
+  "src_start": 5.6,
+  "dur": 3.73,
+  "speed": 1.0,
+  "crop": [
+   728,
+   1296,
+   1018,
+   432
+  ]
+ },
+ "g1": {
+  "file": "Gimik pelancaran",
+  "src_start": 37.0,
+  "dur": 2.23,
+  "speed": 1.0,
+  "crop": [
+   1404,
+   2496,
+   378,
+   364
+  ]
+ },
+ "g2": {
+  "file": "Gimik pelancaran",
+  "src_start": 39.9,
+  "dur": 2.97,
+  "speed": 0.5,
+  "crop": [
+   1404,
+   2496,
+   378,
+   364
+  ]
+ },
+ "c1": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 352.0,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   994,
+   1770,
+   1231,
+   0
+  ]
+ },
+ "c2": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 484.0,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   994,
+   1770,
+   1115,
+   0
+  ]
+ },
+ "c3": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 708.0,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   994,
+   1770,
+   1231,
+   0
+  ]
+ },
+ "c4": {
+  "file": "CS APRESIASI 2026",
+  "src_start": 494.5,
+  "dur": 1.49,
+  "speed": 0.8,
+  "crop": [
+   1068,
+   1900,
+   1462,
+   22
+  ]
+ }
+}

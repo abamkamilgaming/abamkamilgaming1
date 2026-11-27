@@ -1,0 +1,199 @@
+{
+ "Gimikpelancaran.wav": [
+  {
+   "s": 0.05,
+   "e": 4.63,
+   "t": "Yang boleh, saya akan menganggap jenis saya adalah penyusupan.",
+   "w": [
+    [
+     0.05,
+     0.75,
+     " Yang"
+    ],
+    [
+     0.75,
+     1.19,
+     " boleh,"
+    ],
+    [
+     1.45,
+     1.65,
+     " saya"
+    ],
+    [
+     1.65,
+     1.93,
+     " akan"
+    ],
+    [
+     1.93,
+     2.57,
+     " menganggap"
+    ],
+    [
+     2.57,
+     3.01,
+     " jenis"
+    ],
+    [
+     3.01,
+     3.25,
+     " saya"
+    ],
+    [
+     3.25,
+     3.55,
+     " adalah"
+    ],
+    [
+     3.55,
+     4.63,
+     " penyusupan."
+    ]
+   ]
+  },
+  {
+   "s": 4.75,
+   "e": 9.45,
+   "t": "Dan yang boleh, saya akan menganggap jenis saya adalah penyusupan.",
+   "w": [
+    [
+     4.75,
+     5.21,
+     " Dan"
+    ],
+    [
+     5.21,
+     5.43,
+     " yang"
+    ],
+    [
+     5.43,
+     6.03,
+     " boleh,"
+    ],
+    [
+     6.43,
+     6.59,
+     " saya"
+    ],
+    [
+     6.59,
+     7.03,
+     " akan"
+    ],
+    [
+     7.03,
+     7.45,
+     " menganggap"
+    ],
+    [
+     7.45,
+     8.09,
+     " jenis"
+    ],
+    [
+     8.09,
+     8.09,
+     " saya"
+    ],
+    [
+     8.09,
+     8.31,
+     " adalah"
+    ],
+    [
+     8.31,
+     9.45,
+     " penyusupan."
+    ]
+   ]
+  },
+  {
+   "s": 9.67,
+   "e": 10.79,
+   "t": "Di Persilakan.",
+   "w": [
+    [
+     9.67,
+     9.95,
+     " Di"
+    ],
+    [
+     9.95,
+     10.79,
+     " Persilakan."
+    ]
+   ]
+  },
+  {
+   "s": 14.72,
+   "e": 17.26,
+   "t": "Sekarang, mari kita menganggap langkah kita,",
+   "w": [
+    [
+     14.72,
+     15.18,
+     " Sekarang,"
+    ],
+    [
+     15.48,
+     15.8,
+     " mari"
+    ],
+    [
+     15.8,
+     15.94,
+     " kita"
+    ],
+    [
+     15.94,
+     16.42,
+     " menganggap"
+    ],
+    [
+     16.42,
+     17.06,
+     " langkah"
+    ],
+    [
+     17.06,
+     17.26,
+     " kita,"
+    ]
+   ]
+  },
+  {
+   "s": 17.5,
+   "e": 21.0,
+   "t": "menonton persembahan LASKTV di Perkembang.",
+   "w": [
+    [
+     17.5,
+     18.0,
+     " menonton"
+    ],
+    [
+     18.0,
+     18.54,
+     " persembahan"
+    ],
+    [
+     18.54,
+     19.72,
+     " LASKTV"
+    ],
+    [
+     19.72,
+     20.12,
+     " di"
+    ],
+    [
+     20.12,
+     21.0,
+     " Perkembang."
+    ]
+   ]
+  }
+ ]
+}
